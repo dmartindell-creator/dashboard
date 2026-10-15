@@ -1,115 +1,1362 @@
-<!doctype html><html><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Darius Dashboard</title>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Darius Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
 <style>
-body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#f3f4f6;margin:0;padding:12px;color:#111}
-h1{font-size:22px;margin:0 0 4px} h2{font-size:18px;margin:20px 0 8px}
-.sub{color:#6b7280;font-size:13px;margin-bottom:12px}
-.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.one{border-left:6px solid #2563eb}
-.badge{color:#fff;font-size:11px;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em}
-.step{display:flex;gap:10px;padding:10px 0;border-top:1px solid #eee}
-.step:first-child{border-top:none}
-.num{font-weight:700;font-size:18px;color:#9ca3af;min-width:28px}
-.title{font-weight:600} .meta{color:#6b7280;font-size:13px;margin-top:2px}
-.detail{font-size:14px;margin-top:4px}
-.blocker{color:#dc2626;font-size:13px}
-.dead{display:flex;justify-content:space-between;padding:6px 0}
-.days{font-weight:700;font-size:20px}
-.proj{padding:10px 0;border-top:1px solid #eee} .proj:first-child{border-top:none}
-ul{margin:4px 0 0 18px;padding:0} li{margin:3px 0}
-a{color:#2563eb;text-decoration:none}
-.links a{margin-right:14px}
-</style></head><body>
-<h1>Darius Dashboard</h1>
-<div class="sub">Updated October 15, 2026 by Tumii. One screen, everything.</div>
+:root{
+  --bg:#EEF2F7; --surface:#FFFFFF; --raised:#F4F7FB; --line:#D5DDE8; --line-soft:#E4EAF2;
+  --text:#152031; --muted:#5B6B82; --faint:#8794A8;
+  --blue:#2F6FEB; --ice:#0E8BD6; --amber:#C27A00; --coral:#D64545; --mint:#1F9D74;
+  --grid:rgba(21,32,49,.05); --weekend:rgba(21,32,49,.035);
+  --glow:rgba(47,111,235,.18);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10161F; --surface:#17202C; --raised:#1E2937; --line:#2A384A; --line-soft:#223042;
+    --text:#E4EAF3; --muted:#8C9BB0; --faint:#647389;
+    --blue:#5B9BFF; --ice:#7CC8FF; --amber:#FFB547; --coral:#FF6B6B; --mint:#3DD6A3;
+    --grid:rgba(140,155,176,.07); --weekend:rgba(140,155,176,.045);
+    --glow:rgba(91,155,255,.22);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10161F; --surface:#17202C; --raised:#1E2937; --line:#2A384A; --line-soft:#223042;
+  --text:#E4EAF3; --muted:#8C9BB0; --faint:#647389;
+  --blue:#5B9BFF; --ice:#7CC8FF; --amber:#FFB547; --coral:#FF6B6B; --mint:#3DD6A3;
+  --grid:rgba(140,155,176,.07); --weekend:rgba(140,155,176,.045);
+  --glow:rgba(91,155,255,.22);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.45;font-variant-numeric:tabular-nums;min-height:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+.muted{color:var(--muted)}
 
-<div class="card one"><h2 style="margin-top:0">Today's One Thing</h2>
-<div class="title">Sign in to Healthy Habits preview as a client and a Health Professional. Confirm the Terms screen (v0.2 text, HP checkbox, footer) and the Request data copy buttons.</div>
-<div class="meta">Done looks like: Both roles tested, gaps written in the Build Log</div></div>
-<div class="card"><h2 style="margin-top:0">Deadlines</h2>
-<div class="dead"><div>Healthy Habits beta testers in (Doug)<div class="meta">November 02, 2026</div></div><div class="days">18 days</div></div>
-<div class="dead"><div>Healthy Habits full build<div class="meta">January 15, 2027</div></div><div class="days">92 days</div></div>
-<div class="dead"><div>Attorney review feedback (Nutri-Strength packet)<div class="meta">October 28, 2026</div></div><div class="days">13 days</div></div>
+/* Top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:20px;padding:12px 24px}
+.brand{font-stretch:125%;font-weight:800;font-size:17px;letter-spacing:-.01em;white-space:nowrap}
+.brand span{color:var(--blue)}
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
+.tab{border:0;background:none;padding:6px 14px;border-radius:7px;cursor:pointer;color:var(--muted);font-weight:600}
+.tab[aria-selected="true"]{background:var(--raised);color:var(--text);box-shadow:inset 0 0 0 1px var(--line)}
+.spacer{flex:1}
+.sync{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--mint)}
+.sync.dirty .dot{background:var(--amber)}
+.sync.err .dot{background:var(--coral)}
+.btn{border:1px solid var(--line);background:var(--surface);padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;white-space:nowrap}
+.btn:hover{border-color:var(--faint)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.ghost{background:none;border-color:transparent}
+.btn.danger{color:var(--coral)}
+.icon-btn{border:1px solid var(--line);background:var(--surface);width:34px;height:34px;border-radius:8px;cursor:pointer;display:grid;place-items:center}
+
+main{padding:24px;max-width:1440px;margin:0 auto}
+.view[hidden]{display:none}
+
+/* Today */
+.today-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px}
+.hero{position:relative;overflow:hidden;border-radius:16px;padding:28px 30px 26px;background:
+  linear-gradient(var(--grid) 1px,transparent 1px) 0 0/28px 28px,
+  linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/28px 28px,
+  var(--surface);
+  border:1px solid var(--line);box-shadow:0 0 0 1px var(--glow),0 18px 50px -24px var(--glow)}
+.hero::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--blue)}
+.hero-kicker{font-size:13px;color:var(--ice);font-weight:600}
+.hero h1{font-stretch:118%;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.08;letter-spacing:-.02em;margin:10px 0 14px;max-width:22ch}
+.hero.is-done h1{color:var(--muted);text-decoration:line-through;text-decoration-thickness:3px;text-decoration-color:var(--mint)}
+.hero-done{color:var(--muted);max-width:60ch;margin:0 0 20px}
+.hero-done b{color:var(--text);font-weight:600}
+.hero-actions{display:flex;gap:8px;flex-wrap:wrap}
+@media (prefers-reduced-motion:no-preference){
+  .hero h1{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(10px);letter-spacing:.02em}to{opacity:1;transform:none}}
+}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 8px}
+.panel h2{font-size:15px;font-weight:700;margin:0 0 12px;display:flex;align-items:baseline;gap:8px}
+.panel h2 small{font-weight:500;color:var(--muted);font-size:13px}
+.stack{display:flex;flex-direction:column;gap:20px}
+
+.deadline{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:12px 0;border-top:1px solid var(--line-soft)}
+.deadline:first-of-type{border-top:0;padding-top:2px}
+.days{font-stretch:118%;font-weight:800;font-size:30px;line-height:1;text-align:right}
+.days small{display:block;font-size:11px;font-weight:600;color:var(--muted);font-stretch:100%;margin-top:4px}
+.days.soon{color:var(--amber)}
+.days.late{color:var(--coral)}
+.dl-title{font-weight:700}
+.dl-date{font-size:13px;color:var(--muted)}
+.dl-hold{font-size:13px;margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--raised);border-left:3px solid var(--amber)}
+.dl-hold b{font-weight:600}
+.meter{height:5px;border-radius:3px;background:var(--line-soft);margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--blue);border-radius:3px}
+
+.task-row{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line-soft)}
+.task-row:first-of-type{border-top:0}
+.check{width:20px;height:20px;border-radius:6px;border:2px solid var(--faint);background:none;cursor:pointer;margin-top:1px;display:grid;place-items:center;padding:0}
+.check:hover{border-color:var(--mint)}
+.check.on{background:var(--mint);border-color:var(--mint)}
+.check.on::after{content:"";width:6px;height:10px;border:solid #0b1a14;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.t-title{font-weight:600;cursor:pointer}
+.t-title:hover{color:var(--ice)}
+.t-meta{font-size:13px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+.who{display:inline-flex;align-items:center;gap:5px}
+.who i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.age{font-weight:700;font-size:13px;padding:2px 8px;border-radius:20px;background:var(--raised);white-space:nowrap}
+.age.warn{color:var(--amber)}
+.age.bad{color:var(--coral)}
+.empty{color:var(--muted);font-size:14px;padding:6px 0 14px}
+
+/* Portfolio */
+.pf-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.pf-head h1{font-stretch:118%;font-weight:800;font-size:28px;margin:0;letter-spacing:-.02em}
+.pf-sum{display:flex;gap:18px;font-size:14px;color:var(--muted)}
+.pf-sum b{color:var(--text);font-size:18px;font-stretch:115%;margin-right:4px}
+.pf-list{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.pf-row{display:grid;grid-template-columns:minmax(220px,1.1fr) minmax(200px,1fr) minmax(220px,1.2fr) auto;gap:22px;align-items:center;padding:16px 20px;border-top:1px solid var(--line-soft);position:relative}
+.pf-row:first-child{border-top:0}
+.pf-row::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:0 3px 3px 0;background:var(--pc)}
+.pf-name{font-weight:700;font-size:16px;cursor:pointer}
+.pf-name:hover{color:var(--ice)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip{font-size:12px;font-weight:600;padding:2px 8px;border-radius:20px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.active{color:var(--blue);border-color:color-mix(in srgb,var(--blue) 40%,transparent)}
+.chip.stalled{color:var(--coral);border-color:color-mix(in srgb,var(--coral) 45%,transparent)}
+.chip.last20{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 50%,transparent);background:color-mix(in srgb,var(--amber) 10%,transparent)}
+.chip.lock{color:var(--ice)}
+.track{position:relative;height:10px;border-radius:6px;background:var(--line-soft)}
+.track i{position:absolute;inset:0 auto 0 0;border-radius:6px;background:var(--pc)}
+.track .mark80{position:absolute;top:-3px;bottom:-3px;left:80%;width:2px;background:var(--faint);opacity:.6}
+.pf-pct{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:6px}
+.pf-pct b{color:var(--text)}
+.pf-next{font-size:14px}
+.pf-block{font-size:13px;color:var(--coral);margin-top:4px}
+.pf-block::before{content:"Blocked by: ";color:var(--muted)}
+.lots{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.lot ul{list-style:none;margin:0;padding:0}
+.lot li{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--line-soft);font-size:14px}
+.lot li:first-child{border-top:0}
+.x{border:0;background:none;color:var(--faint);cursor:pointer;padding:0 4px}
+.x:hover{color:var(--coral)}
+.add-row{display:flex;gap:8px;padding:10px 0 12px}
+.add-row input{flex:1}
+input[type=text],input[type=date],input[type=number],input[type=password],select,textarea{background:var(--raised);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:70px}
+
+/* Timeline */
+.tl-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:2px}
+.seg button{border:0;background:none;padding:5px 10px;border-radius:6px;cursor:pointer;color:var(--muted);font-weight:600;font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--raised);color:var(--text)}
+.toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none;padding:5px 9px;border-radius:8px;border:1px solid var(--line);background:var(--surface)}
+.toggle input{accent-color:var(--blue);margin:0}
+.toggle.crit:has(input:checked){color:var(--amber);border-color:color-mix(in srgb,var(--amber) 55%,transparent)}
+.tl-bar select{width:auto;padding:6px 8px;font-size:13px}
+.tl-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tl-scroll{overflow:auto;max-height:calc(100vh - 210px);position:relative;overscroll-behavior:contain}
+.tl-head{position:sticky;top:0;z-index:6;display:flex;background:var(--surface);border-bottom:1px solid var(--line)}
+.tl-corner{position:sticky;left:0;z-index:7;background:var(--surface);flex:0 0 var(--lw);border-right:1px solid var(--line);padding:8px 14px;font-size:12px;color:var(--muted);display:flex;align-items:end}
+.tl-dates{position:relative;height:46px}
+.mo{position:absolute;top:4px;font-size:12px;font-weight:700;padding-left:6px;border-left:1px solid var(--line);height:18px;white-space:nowrap}
+.dy{position:absolute;top:24px;font-size:11px;color:var(--muted);text-align:center}
+.dy.today{color:var(--blue);font-weight:800}
+.tl-body{position:relative}
+.tl-row{display:flex;height:var(--rh)}
+.tl-label{position:sticky;left:0;z-index:4;flex:0 0 var(--lw);background:var(--surface);border-right:1px solid var(--line);padding:0 14px;display:flex;align-items:center;gap:8px;font-size:13px;overflow:hidden}
+.tl-label span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.tl-label span:hover{color:var(--ice)}
+.tl-label.done span{color:var(--faint);text-decoration:line-through}
+.tl-row.group .tl-label{font-weight:700;font-size:13px;background:var(--raised)}
+.tl-row.group{background:var(--raised)}
+.tl-row.group .gdot{width:10px;height:10px;border-radius:3px}
+.canvas{position:absolute;top:0;left:var(--lw);z-index:1}
+.col-we{position:absolute;top:0;bottom:0;background:var(--weekend)}
+.col-line{position:absolute;top:0;bottom:0;width:1px;background:var(--grid)}
+.today-line{position:absolute;top:0;bottom:0;width:2px;background:var(--blue);opacity:.7;z-index:3}
+.deps-svg{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:visible}
+.deps-svg path{fill:none;stroke:var(--faint);stroke-width:1.4;opacity:.75}
+.deps-svg path.crit{stroke:var(--amber);stroke-width:2;opacity:1}
+.deps-svg path.bad{stroke:var(--coral);stroke-dasharray:4 3;opacity:1}
+.bar{position:absolute;height:24px;border-radius:6px;z-index:3;cursor:grab;display:flex;align-items:center;gap:6px;padding:0 8px;font-size:12px;font-weight:600;color:#fff;touch-action:none;user-select:none;background:var(--blue)}
+.bar:active{cursor:grabbing}
+.bar .bt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.bar .av{flex:0 0 18px;height:18px;border-radius:50%;font-size:10px;font-weight:800;display:grid;place-items:center;color:#0d1520;background:var(--pcol,#fff)}
+.bar.s-doing{background:color-mix(in srgb,var(--ice) 85%,#000 15%);color:#06131f}
+.bar.s-waiting{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--faint) 70%,transparent) 0 6px,color-mix(in srgb,var(--faint) 45%,transparent) 6px 12px);color:var(--text)}
+.bar.s-done{background:color-mix(in srgb,var(--mint) 35%,var(--surface));color:var(--muted)}
+.bar.crit{box-shadow:0 0 0 2px var(--amber),0 0 18px -2px color-mix(in srgb,var(--amber) 70%,transparent)}
+.bar.conflict{outline:2px dashed var(--coral);outline-offset:2px}
+.bar .rz{position:absolute;right:-2px;top:0;bottom:0;width:10px;cursor:ew-resize}
+.bar-out{position:absolute;font-size:12px;color:var(--muted);white-space:nowrap;z-index:3;pointer-events:none;line-height:24px}
+.base{position:absolute;height:4px;border-radius:2px;background:var(--faint);opacity:.55;z-index:2}
+.ms{position:absolute;width:16px;height:16px;transform:rotate(45deg);background:var(--text);border-radius:2px;z-index:3;cursor:grab;touch-action:none}
+.ms.crit{background:var(--amber);box-shadow:0 0 14px color-mix(in srgb,var(--amber) 80%,transparent)}
+.ms.done{background:var(--mint)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line)}
+.legend i{display:inline-block;width:18px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* Drawer + modal */
+.scrim{position:fixed;inset:0;background:rgba(5,10,18,.5);z-index:50}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:51;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.drawer header{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.drawer header h3{margin:0;font-size:16px;flex:1}
+.drawer .body{padding:18px 20px;overflow:auto;display:grid;gap:14px;flex:1}
+.drawer footer{display:flex;gap:8px;padding:14px 20px;border-top:1px solid var(--line)}
+label.f{display:grid;gap:5px;font-size:13px;color:var(--muted);font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two[hidden]{display:none}
+body.viewer #addTask,body.viewer #setBaseline,body.viewer #addProj,body.viewer [data-editproj],body.viewer .add-row,body.viewer .x,body.viewer #oneDone,body.viewer #oneEdit,body.viewer #saveBtn,body.viewer .rz{display:none!important}
+body.viewer .check{pointer-events:none;opacity:.7}
+body.viewer .bar,body.viewer .ms{cursor:pointer}
+.deps-list{max-height:180px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--raised)}
+.deps-list label{display:flex;gap:8px;align-items:center;font-size:13px;padding:3px 0;color:var(--text);font-weight:500}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(520px,calc(100% - 32px));max-height:calc(100% - 40px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;z-index:51;padding:22px}
+.modal h3{margin:0 0 6px}
+.modal p{color:var(--muted);font-size:14px;margin:0 0 14px}
+.modal .grid{display:grid;gap:12px}
+.modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600;z-index:60;max-width:calc(100% - 32px)}
+
+
+/* Detail sheets */
+.sheet{position:fixed;top:0;right:0;bottom:0;width:min(860px,100%);background:var(--bg);border-left:1px solid var(--line);z-index:51;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:-30px 0 60px -30px rgba(0,0,0,.5)}
+.sh-top{position:relative;padding:20px 26px 0;background:
+  linear-gradient(var(--grid) 1px,transparent 1px) 0 0/28px 28px,
+  linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/28px 28px,var(--surface);border-bottom:1px solid var(--line)}
+.sh-top::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--pc,var(--blue))}
+.sh-crumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.sh-crumb button{border:0;background:none;padding:0;color:var(--ice);cursor:pointer;font-weight:600}
+.sh-close{margin-left:auto}
+.sh-title{font-stretch:115%;font-weight:800;font-size:clamp(22px,2.6vw,30px);line-height:1.12;letter-spacing:-.015em;margin:10px 0 10px;max-width:30ch}
+.sh-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 16px}
+.sh-tabs{display:flex;gap:2px;overflow-x:auto;margin:0 -4px}
+.sh-tabs button{border:0;background:none;padding:10px 12px 11px;cursor:pointer;color:var(--muted);font-weight:600;font-size:14px;border-bottom:2px solid transparent;white-space:nowrap}
+.sh-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--blue)}
+.sh-tabs .n{font-size:12px;color:var(--faint);margin-left:4px}
+.sh-body{flex:1;overflow:auto;padding:22px 26px 40px}
+.sh-sec{margin-bottom:24px}
+.sh-sec h4{font-size:13px;color:var(--muted);font-weight:700;margin:0 0 8px}
+.prose{font-size:16px;line-height:1.6;max-width:66ch;margin:0}
+.prose.empty-p{color:var(--faint);font-size:14px}
+.done-box{border-left:3px solid var(--mint);background:color-mix(in srgb,var(--mint) 9%,var(--surface));padding:12px 14px;border-radius:0 8px 8px 0;max-width:66ch}
+.done-box b{display:block;font-size:13px;color:var(--mint);margin-bottom:3px}
+.warn-box{border-left:3px solid var(--amber);background:color-mix(in srgb,var(--amber) 9%,var(--surface));padding:12px 14px;border-radius:0 8px 8px 0;max-width:66ch;margin-bottom:10px}
+.bad-box{border-left-color:var(--coral);background:color-mix(in srgb,var(--coral) 9%,var(--surface))}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.fact{padding:11px 14px;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+.fact span{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.fact b{display:block;font-size:15px;font-weight:700;margin-top:2px}
+.fact b small{font-weight:500;color:var(--muted);font-size:12px}
+.pos{color:var(--coral)}.neg{color:var(--mint)}
+.feeds{display:flex;flex-direction:column;gap:8px}
+.feed{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;text-align:left;width:100%}
+.feed:hover{border-color:var(--faint)}
+.feed .dia{width:10px;height:10px;transform:rotate(45deg);background:var(--text);flex:0 0 10px;border-radius:1px}
+.feed.crit .dia{background:var(--amber)}
+.feed .ft{flex:1;font-weight:600}
+.feed .fd{font-size:13px;color:var(--muted)}
+table.sheet-t{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sheet-t th{text-align:left;font-size:12px;color:var(--muted);font-weight:700;padding:9px 10px;background:var(--raised);border-bottom:1px solid var(--line);white-space:nowrap}
+.sheet-t td{padding:9px 10px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+.sheet-t tr:last-child td{border-bottom:0}
+.sheet-t tbody tr{cursor:pointer}
+.sheet-t tbody tr:hover td{background:var(--raised)}
+.sheet-t td.num{color:var(--faint);width:34px}
+.sheet-t td.nm{font-weight:600;min-width:220px}
+.sheet-t tr.is-done td.nm{color:var(--muted);text-decoration:line-through}
+.sheet-t tr.is-crit td.num{color:var(--amber);font-weight:800}
+.sheet-t .nowrap{white-space:nowrap}
+.tbl-wrap{overflow-x:auto;border-radius:10px}
+.st{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}
+.st i{width:8px;height:8px;border-radius:2px;background:var(--blue)}
+.st.doing i{background:var(--ice)}.st.waiting i{background:var(--faint)}.st.done i{background:var(--mint)}
+.cl-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line-soft);font-size:15px}
+.cl-item.on span{color:var(--muted);text-decoration:line-through}
+.log{position:relative;padding-left:22px}
+.log::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.log-e{position:relative;padding:0 0 18px}
+.log-e::before{content:"";position:absolute;left:-21px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--blue)}
+.log-e .lm{font-size:12px;color:var(--muted);font-weight:600}
+.log-e p{margin:2px 0 0;max-width:66ch}
+.links a{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ice);text-decoration:none;font-weight:600;margin-bottom:8px}
+.links a:hover{border-color:var(--faint)}
+.note-p{white-space:pre-wrap;font-size:15px;line-height:1.6;max-width:66ch;margin:0}
+.t-desc{font-size:13px;color:var(--muted);margin-top:3px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;max-width:60ch}
+.tl-row.group .tl-label{cursor:pointer}
+.tl-row.group .tl-label:hover{color:var(--ice)}
+body.viewer .owner-only{display:none!important}
+@media (max-width:640px){.sh-top{padding:16px 16px 0}.sh-body{padding:18px 16px 36px}}
+
+
+/* v3: health, grid, phases */
+:root{--violet:#7C5CE0}
+:root[data-theme="dark"]{--violet:#A78BFA}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--violet:#A78BFA}}
+.hp{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap;line-height:1.5}
+.hp::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.hp.ok{color:var(--mint);background:color-mix(in srgb,var(--mint) 12%,transparent)}
+.hp.risk{color:var(--amber);background:color-mix(in srgb,var(--amber) 13%,transparent)}
+.hp.behind{color:var(--coral);background:color-mix(in srgb,var(--coral) 13%,transparent)}
+.hp.blocked{color:var(--violet);background:color-mix(in srgb,var(--violet) 15%,transparent)}
+.hp.done{color:var(--faint);background:var(--raised)}
+.hp.idle{color:var(--muted);background:var(--raised)}
+.pri{font-size:12px;font-weight:800;padding:1px 6px;border-radius:5px;border:1px solid var(--line);white-space:nowrap}
+.pri.p1{color:#fff;background:var(--coral);border-color:var(--coral)}
+.pri.p2{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 55%,transparent)}
+.pri.p3{color:var(--muted)}
+.pri.p4{color:var(--faint);border-style:dashed}
+.why-box{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:10px;border:1px solid var(--line);background:var(--surface);margin-bottom:12px;max-width:72ch}
+.why-box .hp{margin-top:2px}
+.why-box b{display:block;font-size:15px}
+.why-box span.sub{font-size:14px;color:var(--muted)}
+.g-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.g-bar select{width:auto;padding:6px 8px;font-size:13px}
+.g-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:calc(100vh - 200px)}
+table.grid{border-collapse:separate;border-spacing:0;width:100%;font-size:14px;min-width:1100px}
+.grid th{position:sticky;top:0;z-index:2;background:var(--raised);text-align:left;font-size:12px;color:var(--muted);font-weight:700;padding:10px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.grid td{padding:7px 10px;border-bottom:1px solid var(--line-soft);vertical-align:middle;white-space:nowrap}
+.grid td.c-num{color:var(--faint);width:36px;font-size:13px}
+.grid td.c-name{white-space:normal;min-width:280px}
+.grid tr.r-proj td{background:color-mix(in srgb,var(--pc) 10%,var(--surface));font-weight:800}
+.grid tr.r-ph td{background:var(--raised);font-weight:700}
+.grid tr.r-task td.c-name{padding-left:38px}
+.grid tr.r-task:hover td{background:color-mix(in srgb,var(--blue) 5%,transparent)}
+.grid tr.r-task.is-done .nm{color:var(--muted);text-decoration:line-through}
+.grid tr.r-task.h-behind td.c-num{box-shadow:inset 3px 0 0 var(--coral)}
+.grid tr.r-task.h-blocked td.c-num{box-shadow:inset 3px 0 0 var(--violet)}
+.grid tr.r-task.h-risk td.c-num{box-shadow:inset 3px 0 0 var(--amber)}
+.grid .nm{cursor:pointer;font-weight:600}
+.grid .nm:hover{color:var(--ice)}
+.caret{border:0;background:none;cursor:pointer;color:var(--muted);padding:0 6px 0 0;font-size:12px;width:18px;display:inline-block;text-align:center}
+.circ{width:20px;height:20px;border-radius:50%;border:2px solid var(--faint);background:none;cursor:pointer;padding:0;display:inline-grid;place-items:center;vertical-align:middle}
+.circ.on{background:var(--mint);border-color:var(--mint)}
+.circ.on::after{content:"";width:5px;height:9px;border:solid #0b1a14;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.circ:disabled{cursor:default}
+.dchip{display:inline-block;min-width:24px;text-align:center;padding:1px 6px;margin-right:3px;border-radius:5px;background:var(--raised);border:1px solid var(--line);font-size:12px;cursor:pointer}
+.dchip:hover{border-color:var(--ice)}
+.dchip.open{border-color:color-mix(in srgb,var(--violet) 60%,transparent)}
+.grid select.g-in,.grid input.g-in{background:transparent;border:1px solid transparent;border-radius:6px;padding:4px 6px;font-size:13px;width:auto}
+.grid .g-in:hover,.grid .g-in:focus{border-color:var(--line);background:var(--raised)}
+input.g-in.dur{width:52px;text-align:right}
+.minibar{display:inline-block;width:56px;height:6px;border-radius:3px;background:var(--line-soft);vertical-align:middle;margin-right:6px;overflow:hidden}
+.minibar i{display:block;height:100%;background:var(--mint)}
+.pin{color:var(--faint);font-size:11px;margin-left:4px}
+.g-add td{padding:4px 10px 6px 38px}
+.g-add input{background:transparent;border:1px dashed var(--line);font-size:13px;padding:6px 10px;max-width:360px}
+.sumbar{position:absolute;height:8px;z-index:3;background:var(--text);border-radius:2px;opacity:.85}
+.sumbar::before,.sumbar::after{content:"";position:absolute;bottom:-5px;border:5px solid transparent;border-top-color:var(--text)}
+.sumbar::before{left:0;border-left-color:var(--text)}
+.sumbar::after{right:0;border-right-color:var(--text)}
+.sumbar i{position:absolute;inset:0 auto 0 0;background:var(--mint);border-radius:2px}
+.tl-row.ph .tl-label{font-weight:700;padding-left:24px}
+.tl-label.ind{padding-left:34px}
+.reason-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.reason-grid button{border:1px solid var(--line);background:var(--raised);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:13px;font-weight:600}
+.reason-grid button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.hbar{display:grid;grid-template-columns:180px 1fr 60px;gap:10px;align-items:center;font-size:14px;padding:5px 0}
+.hbar .tr{height:10px;border-radius:5px;background:var(--line-soft);overflow:hidden}
+.hbar .tr i{display:block;height:100%;border-radius:5px}
+.hbar b{text-align:right}
+.attn{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 0;border-top:1px solid var(--line-soft)}
+.attn:first-of-type{border-top:0}
+.attn .why{grid-column:1/-1;font-size:13px;color:var(--muted)}
+.cal-days{display:flex;gap:6px;flex-wrap:wrap}
+.cal-days label{display:flex;gap:5px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:13px;cursor:pointer}
+@media (max-width:980px){
+  .today-grid{grid-template-columns:1fr}
+  .pf-row{grid-template-columns:1fr;gap:12px}
+  .lots{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .top{flex-wrap:wrap;padding:10px 14px;gap:10px}
+  .tabs{order:3;width:100%}
+  .tab{flex:1}
+  main{padding:14px}
+  .sync .label{display:none}
+  .hero{padding:22px 20px}
+  .tl-scroll{max-height:calc(100vh - 250px)}
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand">Darius <span>Projects</span></div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-view="today" aria-selected="true">Today</button>
+    <button class="tab" role="tab" data-view="portfolio" aria-selected="false">Portfolio</button>
+    <button class="tab" role="tab" data-view="grid" aria-selected="false">Grid</button>
+    <button class="tab" role="tab" data-view="timeline" aria-selected="false">Timeline</button>
+  </div>
+  <div class="spacer"></div>
+  <div class="sync" id="sync"><span class="dot"></span><span class="label" id="syncLabel">Loading</span></div>
+  <button class="btn primary" id="saveBtn" hidden>Save to GitHub</button>
+  <button class="btn" id="shareBtn">Share</button>
+  <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+  </button>
 </div>
-<div class="card"><h2 style="margin-top:0">Healthy Habits: path to November 2</h2><div class="detail">App renamed Healthy Habits to Nutri-Strength (beta Nov 2 unchanged). Doug confirmed Oct 15: Nutri-Strength stays fully part of Optimal Health Systems, not a separate company; Phase 2 (post-beta) plan drafted: HP access sold via the OHS Shopify store, app on Apple/Google stores, HPs charge clients via Stripe Connect/PayPal, Klaviyo for opt-in marketing only. Attorney review packet is now complete in Google Drive (8 sections including a new Payments/App Store/Email addendum); Kurt is scheduling the attorney, feedback requested by Oct 28. Terms v0.3 (Beta) and Privacy Policy v0.3 / Consumer Health Data Privacy Policy v0.3 are drafted with in-app consent text; two placeholders remain: the HIPAA-eligible database provider name and the attorney&#x27;s confirmation of Optimal Health Systems&#x27; HIPAA role. IT is choosing the new HIPAA-eligible database, migration targeted end of October; beta launches on the new database so real client data never touches the old one. Manus passed the Download my data / Delete my account test on a fake client in the practice copy (nothing real touched) and rotated preview-only passwords as a safety step; the Stripe subscription-cancellation test is still waiting on a Stripe test-mode key from Darius. Manus also sent preview work renaming Healthy Habits to Nutri-Strength everywhere, removing em dashes, and rewriting text in a more professional voice, plus loading the v0.3 terms and privacy text into preview, for Darius to review. Decision Oct 15: app access and payment move to a Shopify product instead of in-app Stripe; account emails move to Shopify/Klaviyo instead of Resend, both for the November 2 beta. Darius coordinating with Skyler. Manus update: the Healthy Habits to Nutri-Strength rename and voice pass is now deployed to preview (release 552b5d7), including a new client/patient terminology setting (default Clients, org owners and Health Professionals can override it); client-facing and legal screens are unchanged. Tests, build, and health checks all passed; production was not touched. Darius should review the preview before it goes live. Manus ran a planning-only beta readiness audit (no app changes) against Doug&#x27;s feature list: food logging, meal plans, progress photos and Bluetooth device support are solid; main gaps are guided intake and goal-based calorie calculation, reusable workout templates, a weekly AI coaching score, and any reviewed medical-condition program library (back/neck, neuropathy, concussion).</div><div class="links" style="margin-top:8px">
-<a href="https://docs.google.com/document/d/180HSWNTkPHI3gppeAVogNeltFUyvkucxoEPTxJECP5o/edit">Build Log</a>
-<a href="https://healthy-habits-preview-clean.104.248.8.233.nip.io">Preview app</a>
-<a href="https://app.healthyhabitstracker.com">Live app</a>
-</div><h2>Do these in order</h2>
-<div class="step"><div class="num">1</div><div style="flex:1">
-<div class="title">Preview sign-in test (client + Health Professional) <span class="badge" style="background:#059669">done</span></div>
-<div class="meta">Darius · 30 min</div>
-<div class="detail">Done. Terms screen shows for client and Health Professional.</div></div></div>
-<div class="step"><div class="num">2</div><div style="flex:1">
-<div class="title">Send Claude&#x27;s 4 decisions to Manus <span class="badge" style="background:#059669">done</span></div>
-<div class="meta">Darius · 10 min</div>
-<div class="detail">Done. Manus answered with the data inventory (last sections still coming).</div></div></div>
-<div class="step"><div class="num">3</div><div style="flex:1">
-<div class="title">Meet Doug: define &#x27;fully live&#x27; for November 2 <span class="badge" style="background:#16a34a">ready</span></div>
-<div class="meta">Darius · 45 min</div>
-<div class="detail">Exact feature list beta testers need. Becomes the checklist here. Manus beta readiness audit now done (planning-only): solid on food logging, meal plans, photos, device sync; gaps in guided intake, goal-based calorie calc, workout templates, coaching score, medical-condition programs.</div></div></div>
-<div class="step"><div class="num">4</div><div style="flex:1">
-<div class="title">Send Claude&#x27;s privacy policies and fixed terms v0.2 to Manus <span class="badge" style="background:#16a34a">ready</span></div>
-<div class="meta">Darius · 10 min</div>
-<div class="detail">Replace the /privacy and /health-data-privacy placeholder pages; update terms text to the org-access fix version. Note: newer Terms v0.3 (Beta) / Privacy Policy v0.3 for Nutri-Strength now drafted (HIPAA-regulated decision) and not yet sent to Manus. Preview only.</div></div></div>
-<div class="step"><div class="num">5</div><div style="flex:1">
-<div class="title">Push Terms gate to production <span class="badge" style="background:#d97706">waiting</span></div>
-<div class="meta">Manus · Manus task, approx 150 credits</div>
-<div class="detail">Beta users are on the live app with no terms acceptance. Go after step 1 is clean.</div><div class="blocker">Waiting on: Doug scope meeting</div></div></div>
-<div class="step"><div class="num">6</div><div style="flex:1">
-<div class="title">Fill in names: breach plan + retention policy <span class="badge" style="background:#16a34a">ready</span></div>
-<div class="meta">Darius · 10 min</div>
-<div class="detail">Incident lead, technical lead, decision maker, communications, policy owner, backups.</div></div></div>
-<div class="step"><div class="num">7</div><div style="flex:1">
-<div class="title">Claude writes Privacy Policy + Health Data Privacy Policy <span class="badge" style="background:#059669">done</span></div>
-<div class="meta">Claude · 1 Claude session</div>
-<div class="detail">Done. Privacy Policy v0.2 + Consumer Health Data Privacy Policy v0.2 in the inbox.</div><div class="blocker">Waiting on: Step 2</div></div></div>
-<div class="step"><div class="num">8</div><div style="flex:1">
-<div class="title">Account email via Shopify/Klaviyo (replacing Resend) <span class="badge" style="background:#16a34a">ready</span></div>
-<div class="meta">Darius + Skyler · Manus task</div>
-<div class="detail">Invite, reset and status emails route through Shopify&#x27;s email or Klaviyo instead of a dedicated Resend account. No personal or health data in these emails, status notices only (e.g. access granted). Open question: confirm with Skyler/Manus whether Shopify/Klaviyo can handle account-security email like password reset, or whether that one still needs a dedicated sender.</div><div class="blocker">Waiting on: Darius to set up with Skyler</div></div></div>
-<div class="step"><div class="num">9</div><div style="flex:1">
-<div class="title">App access sold as Shopify product (replacing in-app Stripe subscription) <span class="badge" style="background:#16a34a">ready</span></div>
-<div class="meta">Darius + Skyler · Manus task</div>
-<div class="detail">Nutri-Strength access sold as a Shopify product, same payment platform as supplements, instead of building Stripe checkout inside the app. Replaces the in-app Stripe subscription flow for the November 2 beta.</div><div class="blocker">Waiting on: Darius to set up with Skyler</div></div></div>
-<div class="step"><div class="num">10</div><div style="flex:1">
-<div class="title">Restore reminders as separate scheduled service <span class="badge" style="background:#d97706">waiting</span></div>
-<div class="meta">Manus · Manus task</div>
-<div class="detail">DigitalOcean scheduled service. Validate independently.</div><div class="blocker">Waiting on: Step 9 (Resend)</div></div></div>
-<div class="step"><div class="num">11</div><div style="flex:1">
-<div class="title">Production test accounts (all 5 roles) + launch checklist <span class="badge" style="background:#d97706">waiting</span></div>
-<div class="meta">Darius · 2 hours</div>
-<div class="detail">Through the live invite flow. Then end-to-end run.</div><div class="blocker">Waiting on: Step 8</div></div></div>
-<div class="step"><div class="num">12</div><div style="flex:1">
-<div class="title">Fix database certificate check (rejectUnauthorized) <span class="badge" style="background:#d97706">waiting</span></div>
-<div class="meta">Manus · Manus task</div>
-<div class="detail">Found by Claude&#x27;s review. Goes into the production security plan.</div><div class="blocker">Waiting on: Production security plan drafted, awaiting Doug&#x27;s review and a test Spaces bucket; also waiting on IT to confirm the new HIPAA-eligible database (fix targets the new DB, not the old one)</div></div></div>
-<h2>Parked (not now)</h2><ul>
-<li>Passkeys / managed identity provider</li>
-<li>Support role with ticket-scoped access</li>
-<li>Real account deletion and data export</li>
-<li>Phase 2 AI Workout Builder</li>
-<li>TestFlight / mobile release</li>
-<li>HIPAA and AWS migration: Darius handles with Kurt, separate track, not on this list</li>
-</ul></div>
-<div class="card"><h2 style="margin-top:0">Everything else</h2>
-<div class="proj"><div class="title">Stairway to Health <span class="badge" style="background:#dc2626">stalled</span></div><div class="meta">Darius</div><div class="detail">Next: Ship the current version. No restarts.</div><div class="blocker">Blocker: Perfectionism, restarts</div></div>
-<div class="proj"><div class="title">Sales reporting automation <span class="badge" style="background:#6b7280">handed off</span></div><div class="meta">Skyler + Darius</div><div class="detail">Next: Skyler builds; Darius hands off Daily RIS Sales.</div></div>
-<div class="proj"><div class="title">HP Partnership <span class="badge" style="background:#16a34a">active</span></div><div class="meta">Darius</div><div class="detail">Next: Agreements + Addendum 1 to DocuSign (Doug signs). Build no-show waitlist.</div><div class="blocker">Blocker: Doug signature</div></div>
-<div class="proj"><div class="title">Formula and Marketing Mastery seminar <span class="badge" style="background:#16a34a">active</span></div><div class="meta">Darius</div><div class="detail">Next: Merge the master deck. Muscle testing flyer.</div></div>
-<div class="proj"><div class="title">GoHighLevel transition <span class="badge" style="background:#6b7280">long term</span></div><div class="meta">Darius</div><div class="detail">Next: Nothing this week.</div></div>
-<div class="proj"><div class="title">Raise the autoship floor <span class="badge" style="background:#16a34a">active</span></div><div class="meta">Leadership</div><div class="detail">Next: Joint growth and sales effort.</div></div>
-<div class="proj"><div class="title">Tumii (assistant) <span class="badge" style="background:#16a34a">active</span></div><div class="meta">Tumii</div><div class="detail">Next: Project dashboard v1 today. Hosted v2 later this week.</div></div>
-<div class="proj"><div class="title">School (ASU Kinesiology) <span class="badge" style="background:#16a34a">active</span></div><div class="meta">Darius</div><div class="detail">Next: Tuesday class 6 to 9 PM. Homework after family time.</div></div>
-</div>
-<div class="card"><h2 style="margin-top:0">Idea Parking Lot (Friday review)</h2><ul>
-<li>Project management tool v2: hosted web address, calendar fill, time estimates per step</li>
-<li>Five specialist bots or spaces</li>
-<li>Compare Grok bot setup with friend&#x27;s</li>
-<li>Docker sandbox so Tumii can code on Healthy Habits</li>
-<li>Connect Tumii to Doug&#x27;s Manus</li>
-<li>Automate the monthly reporting spreadsheet</li>
-<li>Daily Floor (work must-do + home must-do + workout check)</li>
-<li>Onboarding automation for new clients and Health Professionals</li>
-</ul></div></body></html>
+
+<main>
+  <section class="view" id="v-today"></section>
+  <section class="view" id="v-portfolio" hidden></section>
+  <section class="view" id="v-grid" hidden></section>
+  <section class="view" id="v-timeline" hidden>
+    <div class="tl-bar">
+      <div class="seg" id="groupSeg">
+        <button data-g="project" aria-pressed="true">By project</button>
+        <button data-g="person" aria-pressed="false">By person</button>
+      </div>
+      <select id="projFilter" aria-label="Project filter"></select>
+      <label class="toggle crit"><input type="checkbox" id="tCrit" checked> Critical path</label>
+      <select id="critTarget" aria-label="Critical path deadline"></select>
+      <label class="toggle"><input type="checkbox" id="tDeps" checked> Dependencies</label>
+      <label class="toggle"><input type="checkbox" id="tBase"> Baseline</label>
+      <div class="seg" id="zoomSeg">
+        <button data-z="30" aria-pressed="true">Days</button>
+        <button data-z="12" aria-pressed="false">Weeks</button>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn" id="setBaseline" title="Save current dates as the plan to measure slips against">Set baseline</button>
+      <button class="btn primary" id="addTask">Add task</button>
+    </div>
+    <div class="tl-wrap">
+      <div class="tl-scroll" id="tlScroll"></div>
+      <div class="legend">
+        <span><i style="background:var(--blue)"></i>To do</span>
+        <span><i style="background:color-mix(in srgb,var(--ice) 85%,#000 15%)"></i>In progress</span>
+        <span><i style="background:repeating-linear-gradient(135deg,var(--faint) 0 3px,transparent 3px 6px)"></i>Waiting on someone</span>
+        <span><i style="background:color-mix(in srgb,var(--mint) 35%,var(--surface))"></i>Done</span>
+        <span><i style="background:transparent;box-shadow:0 0 0 2px var(--amber)"></i>Critical path</span>
+        <span><i style="background:transparent;outline:2px dashed var(--coral)"></i>Starts before its dependency ends</span>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="layer"></div><div id="layer2"></div>
+
+<script>
+const SEED = {"meta":{"version":3,"updated":"2026-10-15T23:00:00Z","by":"Darius"},"today":{"taskId":"ns-03","text":"Meet Doug: define 'fully live' for November 2","doneLooksLike":"Exact beta feature list written down. It becomes the launch checklist.","done":false},"people":[{"id":"darius","name":"Darius","kind":"human","color":"#5B9BFF"},{"id":"manus","name":"Manus","kind":"ai","color":"#A78BFA"},{"id":"claude","name":"Claude","kind":"ai","color":"#E879A6"},{"id":"tumii","name":"Tumii","kind":"ai","color":"#2DD4BF"},{"id":"doug","name":"Doug","kind":"human","color":"#9BD25E"},{"id":"skyler","name":"Skyler","kind":"human","color":"#38BDF8"},{"id":"it","name":"IT","kind":"human","color":"#94A3B8"},{"id":"kurt","name":"Kurt","kind":"human","color":"#C084FC"},{"id":"leadership","name":"Leadership","kind":"human","color":"#7DD3FC"}],"projects":[{"id":"ns","name":"Nutri-Strength (Healthy Habits)","status":"active","owner":"darius","color":"#5B9BFF","next":"Meet Doug to define 'fully live' for November 2.","blocker":"IT choosing the HIPAA-eligible database","shipLock":false,"summary":"The Healthy Habits app, renamed Nutri-Strength. Being treated as HIPAA-regulated. Beta launches November 2 on a new HIPAA-eligible database; full build by January 15.","links":[{"label":"Build Log","url":"https://docs.google.com/document/d/180HSWNTkPHI3gppeAVogNeltFUyvkucxoEPTxJECP5o/edit"}],"phases":[{"id":"ph-legal","name":"Legal and compliance"},{"id":"ph-db","name":"Database"},{"id":"ph-app","name":"Launch features"},{"id":"ph-beta","name":"Beta launch"},{"id":"ph-full","name":"Full build"}]},{"id":"sw","name":"Stairway to Health","status":"stalled","owner":"darius","color":"#FF8A65","next":"Ship the current version. No restarts.","blocker":"Perfectionism, restarts","shipLock":true,"summary":"Stairway to Health. The current version is close; it has been restarted several times to match where the team is. The goal now is to ship it as is.","phases":[{"id":"ph-sw-build","name":"Build"},{"id":"ph-sw-ship","name":"Ship"}]},{"id":"hp","name":"HP Partnership","status":"active","owner":"darius","color":"#3DD6A3","next":"Agreements + Addendum 1 to DocuSign (Doug signs). Build no-show waitlist.","blocker":"Doug signature","shipLock":false,"summary":"Recruiting and onboarding Health Professionals as partners: agreements, call flow, and onboarding.","phases":[{"id":"ph-hp-on","name":"Onboarding"},{"id":"ph-hp-legal","name":"Agreements"}]},{"id":"fmm","name":"Formula and Marketing Mastery seminar","status":"active","owner":"darius","color":"#C084FC","next":"Merge the master deck. Muscle testing flyer.","blocker":"","shipLock":false,"summary":"Darius teaches the Optimal Health Systems tools segment at the Formula and Marketing Mastery seminar."},{"id":"sr","name":"Sales reporting automation","status":"handed-off","owner":"skyler","color":"#38BDF8","next":"Skyler builds; Darius hands off Daily RIS Sales.","blocker":"","shipLock":false,"summary":"Automating Optimal Health Systems sales reporting by moving the manual HP RIS data sheet into the reports dashboard."},{"id":"tu","name":"Tumii (assistant)","status":"active","owner":"tumii","color":"#2DD4BF","next":"Deploy to DigitalOcean. Feature freeze on the app until after the Nov 2 beta.","blocker":"","shipLock":false,"summary":"Tumii, Darius's always-on assistant, running as a Telegram bot. It manages this plan."},{"id":"fl","name":"Raise the autoship floor","status":"active","owner":"leadership","color":"#A3E635","next":"Joint growth and sales effort.","blocker":"","shipLock":false,"summary":"A Q4 leadership rock: raise the autoship floor."},{"id":"school","name":"School (ASU Kinesiology)","status":"active","owner":"darius","color":"#94A3B8","next":"Tuesday class 6 to 9 PM. Homework after family time.","blocker":"","shipLock":false,"summary":"ASU Kinesiology coursework on the path toward physical therapy."},{"id":"ghl","name":"GoHighLevel transition","status":"long-term","owner":"darius","color":"#64748B","next":"Nothing this week.","blocker":"","shipLock":false,"summary":"Long-term move from Marketing Rx to Optimal Health Systems' own GoHighLevel."}],"tasks":[{"id":"ns-01","project":"ns","title":"Preview sign-in test (client + Health Professional)","owner":"darius","status":"done","start":"2026-10-13","end":"2026-10-13","est":0.5,"deps":[],"doneAt":"2026-10-14","note":"Terms screen shows for client and Health Professional.","description":"Sign in to the preview app as a client and as a Health Professional to confirm the Terms screen (v0.2 text, HP checkbox, footer) and the Request data copy buttons.","doneWhen":"Both roles tested, gaps written in the Build Log.","phase":"ph-app","priority":3,"dur":1,"baselineStart":"2026-10-13","baselineEnd":"2026-10-13"},{"id":"ns-02","project":"ns","title":"Send Claude's 4 decisions to Manus","owner":"darius","status":"done","start":"2026-10-13","end":"2026-10-13","est":0.2,"deps":[],"doneAt":"2026-10-13","phase":"ph-app","priority":3,"dur":1,"baselineStart":"2026-10-13","baselineEnd":"2026-10-13"},{"id":"ns-07","project":"ns","title":"Write Privacy Policy + Health Data Privacy Policy","owner":"claude","status":"done","start":"2026-10-13","end":"2026-10-14","est":1,"deps":["ns-02"],"doneAt":"2026-10-14","description":"Claude drafted the Privacy Policy and the Consumer Health Data Privacy Policy.","log":[{"date":"2026-10-14","by":"Claude","text":"v0.2 of both policies delivered to the inbox."}],"phase":"ph-legal","priority":3,"dur":2,"baselineStart":"2026-10-13","baselineEnd":"2026-10-14"},{"id":"ns-03","project":"ns","title":"Meet Doug: define 'fully live' for Nov 2","owner":"darius","status":"todo","start":"2026-10-16","end":"2026-10-16","est":0.75,"deps":[],"baselineStart":"2026-10-14","baselineEnd":"2026-10-14","note":"Exact feature list beta testers need. Becomes the launch checklist.","description":"Sit down with Doug and agree on exactly what 'fully live' means for the November 2 beta: which features beta testers need on day one, and which can wait. Manus can't push the Terms gate until this is settled, so the rest of the launch chain waits on it.","doneWhen":"A written beta feature list Doug agrees with, added here as the launch checklist.","checklist":[{"text":"Book 45 minutes with Doug","done":false},{"text":"List every feature testers touch on day one","done":false},{"text":"Mark each one: needed for Nov 2, or can wait","done":false},{"text":"Get Doug's yes on the list","done":false},{"text":"Add the list as the launch checklist","done":false}],"log":[{"date":"2026-10-15","by":"Tumii","text":"Set as today's one thing. It drives the Nov 2 chain."},{"date":"2026-10-14","by":"Tumii","text":"Moved from Oct 14 to Oct 16 to fit Doug's calendar."}],"phase":"ph-app","priority":1,"slips":[{"date":"2026-10-14","days":2,"reason":"Waiting on someone","note":"Moved to fit Doug's calendar","by":"Tumii"}],"notBefore":"2026-10-16","dur":1},{"id":"ns-04","project":"ns","title":"Send privacy policies + Terms v0.3 to Manus","owner":"darius","status":"todo","start":"2026-10-16","end":"2026-10-16","est":0.2,"deps":["ns-07"],"note":"Preview only. Replace the /privacy and /health-data-privacy placeholder pages.","description":"Replace the /privacy and /health-data-privacy placeholder pages in the preview app and update the Terms text to the org-access fix version. Newer v0.3 documents for the HIPAA-regulated decision are drafted and not yet sent.","doneWhen":"Manus confirms the preview shows the new pages and Terms text.","checklist":[{"text":"Privacy Policy","done":false},{"text":"Consumer Health Data Privacy Policy","done":false},{"text":"Terms with the org-access fix","done":false}],"phase":"ph-legal","priority":2,"notBefore":"2026-10-16","dur":1,"baselineStart":"2026-10-16","baselineEnd":"2026-10-16"},{"id":"ns-06","project":"ns","title":"Fill in names: breach plan + retention policy","owner":"darius","status":"todo","start":"2026-10-16","end":"2026-10-16","est":0.2,"deps":[],"description":"Fill in the people for the breach response plan and the data retention policy.","doneWhen":"Every role has a name and a backup.","checklist":[{"text":"Incident lead","done":false},{"text":"Technical lead","done":false},{"text":"Decision maker","done":false},{"text":"Communications","done":false},{"text":"Policy owner","done":false},{"text":"Backups for each role","done":false}],"phase":"ph-legal","priority":3,"notBefore":"2026-10-16","dur":1,"baselineStart":"2026-10-16","baselineEnd":"2026-10-16"},{"id":"ns-15","project":"ns","title":"Add Stripe test-mode key to preview server","owner":"darius","status":"todo","start":"2026-10-19","end":"2026-10-19","est":0.25,"deps":[],"note":"Add the key directly on the server. Never paste keys into chat, this plan, or the Build Log.","description":"Manus finished the approved preview-only secret rotation (database password, JWT secret, data request outbox key) and both preview health checks pass. It's now blocked until a Stripe test-mode secret key is added to the preview server by hand, so it can run the two fake-client subscription cancellation and deletion tests.","doneWhen":"Key is on the preview server and Manus reports both Stripe tests passing.","phase":"ph-app","priority":1,"needs":"Stripe test-mode secret key and access to the preview server","notBefore":"2026-10-17","dur":1,"baselineStart":"2026-10-19","baselineEnd":"2026-10-19"},{"id":"ns-16","project":"ns","title":"Attorney review of the legal packet","owner":"kurt","status":"doing","start":"2026-10-13","end":"2026-10-27","est":0,"deps":[],"description":"Kurt is scheduling the attorney. The packet holds Terms v0.3 (Beta), Privacy Policy v0.3, and the Consumer Health Data Privacy Policy v0.3 with in-app consent text. Two placeholders remain: the HIPAA-eligible database provider name, and the attorney's confirmation of Optimal Health Systems' HIPAA role.","doneWhen":"Written feedback back from the attorney.","checklist":[{"text":"Packet sent","done":true},{"text":"Database provider name filled in","done":false},{"text":"Attorney confirms Optimal Health Systems' HIPAA role","done":false},{"text":"Feedback received","done":false}],"phase":"ph-legal","priority":2,"statusHistory":[{"status":"doing","at":"2026-10-13"}],"dur":11,"baselineStart":"2026-10-13","baselineEnd":"2026-10-27"},{"id":"ns-m1","project":"ns","title":"Attorney feedback due","owner":"kurt","status":"todo","start":"2026-10-28","end":"2026-10-28","est":0,"deps":["ns-16"],"milestone":true,"description":"Attorney feedback on the Nutri-Strength legal packet is requested by this date.","phase":"ph-legal","baselineStart":"2026-10-28","baselineEnd":"2026-10-28"},{"id":"ns-13","project":"ns","title":"IT picks HIPAA-eligible database","owner":"it","status":"waiting","start":"2026-10-13","end":"2026-10-22","est":0,"deps":[],"waitingOn":"IT decision","waitingSince":"2026-10-12","description":"Nutri-Strength is being treated as HIPAA-regulated, so it needs a HIPAA-eligible database. IT is choosing the provider. Its name is also one of the two placeholders left in the legal packet, and Manus is holding all database security work until IT confirms.","doneWhen":"Provider chosen, named in the legal packet, and confirmed to Manus.","log":[{"date":"2026-10-12","by":"Darius","text":"Asked IT for a HIPAA-eligible database pick."},{"date":"2026-10-14","by":"Tumii","text":"Manus drafted an IT-facing database handoff spec."}],"phase":"ph-db","priority":1,"statusHistory":[{"status":"todo","at":"2026-10-08"},{"status":"waiting","at":"2026-10-12"}],"notBefore":"2026-10-13","dur":8,"baselineStart":"2026-10-13","baselineEnd":"2026-10-22"},{"id":"ns-14","project":"ns","title":"Migrate to the new database","owner":"it","status":"todo","start":"2026-10-23","end":"2026-10-29","est":8,"deps":["ns-13"],"note":"Beta launches on the new database so real client data never touches the old one.","description":"Move the app to the new HIPAA-eligible database before beta, so real client data never touches the old one. Targeted for the end of October.","doneWhen":"Preview and production both run on the new database; health checks pass.","phase":"ph-db","priority":1,"needs":"HIPAA-eligible database account (IT)","notBefore":"2026-10-23","dur":5,"baselineStart":"2026-10-23","baselineEnd":"2026-10-29"},{"id":"ns-05","project":"ns","title":"Push Terms gate to production","owner":"manus","status":"todo","start":"2026-10-19","end":"2026-10-20","est":2,"deps":["ns-01","ns-03"],"baselineStart":"2026-10-15","baselineEnd":"2026-10-16","note":"About 150 Manus credits. Beta users are on the live app with no terms acceptance.","description":"Beta users are on the live app with no Terms acceptance. This puts the Terms acceptance screen in front of every client and Health Professional on production.","doneWhen":"Every live user must accept the current Terms before using the app, verified with a test client and a test Health Professional.","checklist":[{"text":"Preview sign-in test is clean","done":true},{"text":"Doug scope meeting done","done":false},{"text":"Run the Manus task (about 150 credits)","done":false},{"text":"Verify on production in both roles","done":false}],"log":[{"date":"2026-10-15","by":"Tumii","text":"Moved from Oct 15 to Oct 19 while it waits on the Doug scope meeting."}],"phase":"ph-app","priority":1,"needs":"About 150 Manus credits","slips":[{"date":"2026-10-15","days":2,"reason":"Waiting on a decision","note":"Can't push until Doug defines 'fully live'","by":"Tumii"}],"notBefore":"2026-10-19","dur":2},{"id":"ns-08","project":"ns","title":"Resend email: invites + password reset","owner":"manus","status":"todo","start":"2026-10-21","end":"2026-10-22","est":2,"deps":["ns-05"],"description":"Set up Resend for invitation and password reset emails.","doneWhen":"Invites and resets arrive from the right sender for controlled test accounts.","checklist":[{"text":"Sender domain","done":false},{"text":"Invitation email","done":false},{"text":"Password reset email","done":false},{"text":"Test with controlled accounts","done":false}],"phase":"ph-app","priority":2,"notBefore":"2026-10-21","dur":2,"baselineStart":"2026-10-21","baselineEnd":"2026-10-22"},{"id":"ns-09","project":"ns","title":"Stripe test mode: checkout, webhooks, subscriptions","owner":"manus","status":"todo","start":"2026-10-23","end":"2026-10-26","est":3,"deps":["ns-08","ns-15"],"note":"No live payments yet.","description":"Get Stripe working in test mode. No live payments yet.","doneWhen":"A test subscription moves through checkout, webhooks, and cancellation correctly.","checklist":[{"text":"Checkout","done":false},{"text":"Webhooks","done":false},{"text":"Subscription state","done":false}],"phase":"ph-app","priority":2,"needs":"Stripe test-mode key on the preview server","notBefore":"2026-10-23","dur":2,"baselineStart":"2026-10-23","baselineEnd":"2026-10-26"},{"id":"ns-10","project":"ns","title":"Restore reminders as a scheduled service","owner":"manus","status":"todo","start":"2026-10-27","end":"2026-10-28","est":2,"deps":["ns-09"],"description":"Bring reminders back as their own DigitalOcean scheduled service, validated on its own.","doneWhen":"Reminders fire on schedule in production.","phase":"ph-app","priority":2,"notBefore":"2026-10-27","dur":2,"baselineStart":"2026-10-27","baselineEnd":"2026-10-28"},{"id":"ns-12","project":"ns","title":"Fix database certificate check","owner":"manus","status":"todo","start":"2026-10-30","end":"2026-10-30","est":1,"deps":["ns-14"],"note":"Targets the new database, not the old one.","description":"Found in Claude's review. Part of the production security plan, which is waiting on Doug's review, a test storage bucket, and IT's database pick. The fix targets the new database, not the old one.","phase":"ph-db","priority":2,"notBefore":"2026-10-30","dur":1,"baselineStart":"2026-10-30","baselineEnd":"2026-10-30"},{"id":"ns-11","project":"ns","title":"Production test accounts (all 5 roles) + launch checklist","owner":"darius","status":"todo","start":"2026-10-29","end":"2026-10-30","est":2,"deps":["ns-08","ns-10"],"description":"Create test accounts for all 5 roles through the live invite flow, then run the whole app end to end.","doneWhen":"Every role works end to end and the launch checklist is signed off.","checklist":[{"text":"Create all 5 role accounts via invite","done":false},{"text":"End-to-end run","done":false},{"text":"Launch checklist signed off","done":false}],"phase":"ph-beta","priority":1,"notBefore":"2026-10-29","dur":2,"baselineStart":"2026-10-29","baselineEnd":"2026-10-30"},{"id":"ns-m2","project":"ns","title":"Beta live with testers","owner":"doug","status":"todo","start":"2026-11-02","end":"2026-11-02","est":0,"deps":["ns-05","ns-11","ns-12","ns-14"],"milestone":true,"description":"Beta testers start using Nutri-Strength (Doug's date).","doneWhen":"Beta testers are signed in on the new database with Terms acceptance in place.","phase":"ph-beta","baselineStart":"2026-11-02","baselineEnd":"2026-11-02"},{"id":"ns-17","project":"ns","title":"Full build: post-beta features","owner":"manus","status":"todo","start":"2026-11-03","end":"2027-01-12","est":40,"deps":["ns-m2"],"description":"Everything after beta through the full build. Parked items (passkeys, support role, data export, AI Workout Builder, TestFlight) are deliberately not in here yet.","phase":"ph-full","priority":3,"notBefore":"2026-11-03","dur":46,"baselineStart":"2026-11-03","baselineEnd":"2027-01-12"},{"id":"ns-m3","project":"ns","title":"Full build complete","owner":"darius","status":"todo","start":"2027-01-15","end":"2027-01-15","est":0,"deps":["ns-17"],"milestone":true,"description":"Full build of the app complete.","phase":"ph-full","baselineStart":"2027-01-15","baselineEnd":"2027-01-15"},{"id":"sw-01","project":"sw","title":"Build current page flow","owner":"darius","status":"done","start":"2026-09-29","end":"2026-10-08","est":12,"deps":[],"doneAt":"2026-10-08","description":"Built the current Stairway to Health page flow.","phase":"ph-sw-build","priority":3,"dur":8,"baselineStart":"2026-09-29","baselineEnd":"2026-10-08"},{"id":"sw-02","project":"sw","title":"Final copy pass (no new sections)","owner":"darius","status":"todo","start":"2026-10-19","end":"2026-10-20","est":2,"deps":["sw-01"],"description":"Wording fixes only. Any new section idea goes to the idea parking lot, not into this version.","doneWhen":"Copy reads clean; no new sections added.","phase":"ph-sw-ship","priority":1,"notBefore":"2026-10-19","dur":2,"baselineStart":"2026-10-19","baselineEnd":"2026-10-20"},{"id":"sw-03","project":"sw","title":"Ship current version to the team","owner":"darius","status":"todo","start":"2026-10-21","end":"2026-10-21","est":1,"deps":["sw-02"],"description":"Ship the current version to the team. No restarts.","doneWhen":"The team has the link and is using it.","phase":"ph-sw-ship","priority":1,"notBefore":"2026-10-21","dur":1,"baselineStart":"2026-10-21","baselineEnd":"2026-10-21"},{"id":"sw-m1","project":"sw","title":"Stairway shipped","owner":"darius","status":"todo","start":"2026-10-23","end":"2026-10-23","est":0,"deps":["sw-03"],"milestone":true,"description":"Stairway to Health is in the team's hands.","phase":"ph-sw-ship","baselineStart":"2026-10-23","baselineEnd":"2026-10-23"},{"id":"hp-01","project":"hp","title":"Build onboarding call flow","owner":"darius","status":"done","start":"2026-10-01","end":"2026-10-07","est":6,"deps":[],"doneAt":"2026-10-07","description":"Built the HP Partnership onboarding call flow.","phase":"ph-hp-on","priority":3,"dur":5,"baselineStart":"2026-10-01","baselineEnd":"2026-10-07"},{"id":"hp-02","project":"hp","title":"Agreements + Addendum 1 into DocuSign","owner":"darius","status":"todo","start":"2026-10-16","end":"2026-10-16","est":1,"deps":[],"description":"Put the HP Partnership agreements and Addendum 1 into DocuSign for Doug to sign.","doneWhen":"Envelope sent to Doug.","phase":"ph-hp-legal","priority":2,"needs":"DocuSign account","notBefore":"2026-10-16","dur":1,"baselineStart":"2026-10-16","baselineEnd":"2026-10-16"},{"id":"hp-03","project":"hp","title":"Doug signs agreements","owner":"doug","status":"waiting","start":"2026-10-19","end":"2026-10-20","est":0,"deps":["hp-02"],"waitingOn":"Doug signature","waitingSince":"2026-10-06","description":"Doug signs the agreements and Addendum 1.","log":[{"date":"2026-10-06","by":"Darius","text":"Waiting on Doug's signature."}],"phase":"ph-hp-legal","priority":2,"statusHistory":[{"status":"todo","at":"2026-10-01"},{"status":"waiting","at":"2026-10-06"}],"notBefore":"2026-10-17","dur":2,"baselineStart":"2026-10-19","baselineEnd":"2026-10-20"},{"id":"hp-04","project":"hp","title":"Build no-show waitlist","owner":"darius","status":"todo","start":"2026-10-20","end":"2026-10-22","est":2,"deps":[],"description":"A waitlist for Health Professionals who no-show their onboarding calls, so they get rebooked instead of lost.","phase":"ph-hp-on","priority":3,"notBefore":"2026-10-20","dur":3,"baselineStart":"2026-10-20","baselineEnd":"2026-10-22"},{"id":"fmm-01","project":"fmm","title":"Merge the master deck","owner":"darius","status":"todo","start":"2026-10-16","end":"2026-10-19","est":3,"deps":[],"description":"Merge everyone's slides into the one master deck for the seminar.","priority":2,"needs":"Everyone's slides","notBefore":"2026-10-16","dur":2,"baselineStart":"2026-10-16","baselineEnd":"2026-10-19"},{"id":"fmm-02","project":"fmm","title":"Muscle testing flyer","owner":"darius","status":"todo","start":"2026-10-19","end":"2026-10-20","est":1.5,"deps":[],"description":"Flyer for the muscle testing system at the seminar.","priority":3,"notBefore":"2026-10-19","dur":2,"baselineStart":"2026-10-19","baselineEnd":"2026-10-20"},{"id":"sr-01","project":"sr","title":"Move HP RIS data into the reports dashboard","owner":"skyler","status":"doing","start":"2026-10-13","end":"2026-10-30","est":12,"deps":[],"description":"Skyler moves the manual HP RIS data sheet into the reports dashboard.","priority":3,"statusHistory":[{"status":"doing","at":"2026-10-13"}],"dur":14,"baselineStart":"2026-10-13","baselineEnd":"2026-10-30"},{"id":"sr-02","project":"sr","title":"Hand off Daily RIS Sales","owner":"darius","status":"todo","start":"2026-10-20","end":"2026-10-20","est":1,"deps":[],"description":"Hand the Daily RIS Sales report off to Skyler.","priority":2,"notBefore":"2026-10-20","dur":1,"baselineStart":"2026-10-20","baselineEnd":"2026-10-20"},{"id":"tu-01","project":"tu","title":"Project dashboard v1","owner":"tumii","status":"done","start":"2026-10-15","end":"2026-10-15","est":1,"deps":[],"doneAt":"2026-10-15","description":"Tumii's first project dashboard on GitHub Pages.","priority":3,"dur":1,"baselineStart":"2026-10-15","baselineEnd":"2026-10-15"},{"id":"tu-02","project":"tu","title":"Build project control app (v3 + DigitalOcean server)","owner":"darius","status":"done","start":"2026-10-15","end":"2026-10-16","est":4,"deps":["tu-01"],"description":"This app: the hosted project dashboard, managed by Tumii, shareable as view-only.","checklist":[{"text":"Build v1","done":true},{"text":"Tumii uploads the files","done":false},{"text":"Add a token on each device","done":false},{"text":"Fix the dates and set the baseline","done":false},{"text":"Reword anything not meant to be public","done":false}],"priority":2,"dur":2,"baselineStart":"2026-10-15","baselineEnd":"2026-10-16","doneAt":"2026-10-15","statusHistory":[{"status":"doing","at":"2026-10-15"},{"status":"done","at":"2026-10-15"}],"log":[{"date":"2026-10-15","by":"Darius","text":"Build finished. Feature freeze starts now; no more changes unless they directly help finish projects."}]},{"id":"tu-03","project":"tu","title":"Tumii deploys the app to DigitalOcean (SETUP.md steps 1 to 4)","owner":"tumii","status":"todo","start":"2026-10-19","end":"2026-10-19","est":2,"deps":["tu-02"],"description":"Put the code in a private GitHub repo, create the App Platform app with its database, set the three generated secrets, and confirm /healthz shows postgres.","priority":2,"notBefore":"2026-10-18","dur":1,"baselineStart":"2026-10-19","baselineEnd":"2026-10-19","doneWhen":"The app URL loads a Log in box and /healthz shows postgres.","needs":"DigitalOcean account decision from Darius; GitHub repo access"},{"id":"fl-01","project":"fl","title":"Joint growth and sales plan","owner":"leadership","status":"doing","start":"2026-10-12","end":"2026-10-30","est":6,"deps":[],"description":"Leadership's joint growth and sales effort to raise the autoship floor.","priority":2,"dur":15,"baselineStart":"2026-10-12","baselineEnd":"2026-10-30"},{"id":"tu-04","project":"tu","title":"Darius: pick the DigitalOcean account, set password, set baseline","owner":"darius","status":"todo","priority":2,"dur":1,"est":1,"deps":["tu-03"],"description":"Decide company or personal DigitalOcean account (ask Doug if company), set OWNER_PASSWORD yourself, log in, install the app, mark personal projects Private, check the dates, click Set baseline.","doneWhen":"Logged in on phone and laptop, baseline set, share link sent to Doug."},{"id":"tu-05","project":"tu","title":"Retire the GitHub Pages dashboard (SETUP.md step 7)","owner":"tumii","status":"todo","priority":3,"dur":1,"est":0.5,"deps":["tu-04"],"description":"Redirect the old dashboard to the new app and remove projects.json from the public repo."}],"parked":["Passkeys / managed identity provider","Support role with ticket-scoped access","Real account deletion and data export","Phase 2 AI Workout Builder","TestFlight / mobile release","HIPAA and AWS migration: Darius handles with Kurt, separate track","Project app, after Nov 2: multiple logins with roles. Skyler and Doug update their own tasks and change their own passwords","Project app, after Nov 2: auto-schedule tasks onto dmartindell@optimalhealthsystems.com Google Calendar (Motion-style)"],"ideas":["Five specialist bots or spaces","Compare Grok bot setup with friend's","Docker sandbox so Tumii can code on Healthy Habits","Connect Tumii to Doug's Manus","Automate the monthly reporting spreadsheet","Daily Floor (work must-do + home must-do + workout check)","Onboarding automation for new clients and Health Professionals"],"calendar":{"workdays":[1,2,3,4,5],"daysOff":[{"date":"2026-11-26","label":"Thanksgiving"},{"date":"2026-11-27","label":"Day after Thanksgiving"},{"date":"2026-12-24","label":"Christmas Eve"},{"date":"2026-12-25","label":"Christmas"},{"date":"2027-01-01","label":"New Year's Day"}]}};
+const LS_DATA='dp.data.v1', LS_GH='dp.github.v1', LS_UI='dp.ui.v1';
+const DAY=86400000, RH=40, STATUS={todo:'To do',doing:'In progress',waiting:'Waiting',done:'Done'};
+const PSTATUS={active:'Active',stalled:'Stalled','handed-off':'Handed off','long-term':'Long term',paused:'Paused',done:'Done'};
+
+let data=null, dirty=false, sha=null, source='seed', syncErr='';
+let ui={view:'today',group:'project',crit:true,deps:true,base:false,zoom:30,critTarget:'',proj:'all'};
+try{Object.assign(ui,JSON.parse(localStorage.getItem(LS_UI)||'{}'))}catch(e){}
+let gh={owner:'dmartindell-creator',repo:'dashboard',branch:'main',path:'projects.json',token:'',local:false};
+let apiMode=false, role=null, version=null, shareUrl='', saveTimer=null, saving=false;
+const shareKey=new URLSearchParams(location.search).get('key');
+const viewer=()=>apiMode?role!=='owner':(!gh.token&&!gh.local);
+const EMPTY=()=>({meta:{},today:{},people:[],projects:[],tasks:[],parked:[],ideas:[],calendar:{workdays:[1,2,3,4,5],daysOff:[]}});
+try{Object.assign(gh,JSON.parse(localStorage.getItem(LS_GH)||'{}'))}catch(e){}
+
+/* ---------- dates ---------- */
+const toD=s=>{const[y,m,d]=s.split('-').map(Number);return Date.UTC(y,m-1,d)};
+const fromD=t=>new Date(t).toISOString().slice(0,10);
+const todayStr=()=>{const n=new Date();return fromD(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate()))};
+const addDays=(s,n)=>fromD(toD(s)+n*DAY);
+const diff=(a,b)=>Math.round((toD(b)-toD(a))/DAY);
+const fmt=(s,o={month:'short',day:'numeric'})=>new Date(toD(s)).toLocaleDateString('en-US',{...o,timeZone:'UTC'});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=p=>p+'-'+Math.random().toString(36).slice(2,7);
+
+/* ---------- model helpers ---------- */
+const T=id=>data.tasks.find(t=>t.id===id);
+const P=id=>data.projects.find(p=>p.id===id);
+const person=id=>data.people.find(p=>p.id===id)||{id,name:id||'Unassigned',color:'#94A3B8'};
+const done=t=>t&&t.status==='done';
+const depsOpen=t=>(t.deps||[]).map(T).filter(d=>d&&!done(d));
+const conflict=t=>(t.deps||[]).map(T).some(d=>d&&!done(d)&&toD(d.end)>toD(t.start)&&!(d.milestone&&d.end===t.start));
+function projStats(pid){
+  const ts=data.tasks.filter(t=>t.project===pid&&!t.milestone);
+  const w=t=>Math.max(+t.est||0,0.25);
+  const total=ts.reduce((a,t)=>a+w(t),0), dn=ts.filter(done).reduce((a,t)=>a+w(t),0);
+  const lastDone=ts.filter(t=>t.doneAt).map(t=>t.doneAt).sort().pop()||null;
+  return {count:ts.length,doneCount:ts.filter(done).length,pct:total?dn/total:0,lastDone};
+}
+function chainFor(id,seen=new Set()){
+  const t=T(id); if(!t||seen.has(id)) return []; seen.add(id);
+  const preds=depsOpen(t).sort((a,b)=>toD(b.end)-toD(a.end));
+  return [id,...(preds.length?chainFor(preds[0].id,seen):[])];
+}
+const milestones=()=>data.tasks.filter(t=>t.milestone).sort((a,b)=>toD(a.end)-toD(b.end));
+
+/* ---------- v3: calendar, scheduling engine, health ---------- */
+const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const PRI={1:'P1 Urgent',2:'P2 High',3:'P3 Normal',4:'P4 Low'};
+const REASONS=['Waiting on someone','Waiting on a decision','Scope grew','Underestimated','Interrupted by other work','Restarted or redone','Missing tool or access','Days off','Other'];
+const RCOL=['var(--violet)','var(--violet)','var(--amber)','var(--amber)','var(--coral)','var(--coral)','var(--ice)','var(--faint)','var(--muted)'];
+let offSet=new Set();
+function cal(){data.calendar=data.calendar||{workdays:[1,2,3,4,5],daysOff:[]};return data.calendar}
+const isWork=s=>cal().workdays.includes(new Date(toD(s)).getUTCDay())&&!offSet.has(s);
+function nextWork(s){let i=0;while(!isWork(s)&&i++<400)s=addDays(s,1);return s}
+function addWork(s,n){s=nextWork(s);let k=1,i=0;while(k<n&&i++<3000){s=addDays(s,1);if(isWork(s))k++}return s}
+function workDays(a,b){if(!a||!b||toD(b)<toD(a))return 0;let n=0;for(let t=toD(a);t<=toD(b);t+=DAY){if(isWork(fromD(t)))n++}return n}
+const isAuto=t=>!t.milestone&&t.schedule!=='manual';
+function schedule(){
+  offSet=new Set((cal().daysOff||[]).map(d=>d.date));
+  const st={},order=[];
+  const visit=t=>{if(st[t.id])return;st[t.id]=1;(t.deps||[]).map(T).filter(Boolean).forEach(visit);order.push(t)};
+  data.tasks.forEach(visit);
+  order.forEach(t=>{
+    if(!t.milestone&&!t.dur) t.dur=Math.max(1,workDays(t.start,t.end)||1);
+    if(!isAuto(t)||done(t)) return;
+    let s;
+    if(t.status==='doing') s=t.start;
+    else{
+      const preds=(t.deps||[]).map(T).filter(Boolean);
+      s=t.notBefore||(preds.length?null:t.start);
+      preds.forEach(p=>{const c=addDays(p.end,1);if(!s||toD(c)>toD(s))s=c});
+    }
+    t.start=nextWork(s); t.end=addWork(t.start,t.dur);
+  });
+}
+function setStatus(t,s){
+  if(t.status===s)return; t.statusHistory=t.statusHistory||[];
+  if(!t.statusHistory.length) t.statusHistory.push({status:t.status,at:t.waitingSince||t.start});
+  t.status=s; t.statusHistory.push({status:s,at:todayStr()});
+  if(s==='done')t.doneAt=todayStr(); else delete t.doneAt;
+  if(s==='waiting')t.waitingSince=t.waitingSince||todayStr(); else delete t.waitingSince;
+}
+function timeInStatus(t){
+  const h=(t.statusHistory||[]).slice().sort((a,b)=>a.at.localeCompare(b.at)), out={todo:0,doing:0,waiting:0}, td=todayStr();
+  if(!h.length){if(t.status==='waiting'&&t.waitingSince)out.waiting=diff(t.waitingSince,td);else if(t.status==='doing'&&toD(t.start)<=toD(td))out.doing=diff(t.start,td);return out}
+  h.forEach((e,i)=>{const end=h[i+1]?h[i+1].at:(e.status==='done'?e.at:td);if(out[e.status]!==undefined)out[e.status]+=Math.max(0,diff(e.at,end))});
+  return out;
+}
+function health(t){
+  const td=todayStr();
+  if(done(t)) return {k:'done',label:'Done',why:t.doneAt?`Finished ${fmt(t.doneAt)}`:'Finished'};
+  if(t.milestone){
+    const late=(t.deps||[]).map(T).filter(d=>d&&!done(d)&&toD(d.end)>toD(t.end)).sort((a,b)=>toD(b.end)-toD(a.end))[0];
+    if(toD(t.end)<toD(td)) return {k:'behind',label:`${diff(t.end,td)}d late`,why:`Deadline was ${fmt(t.end)}`};
+    if(late) return {k:'behind',label:'Will miss',why:`${late.title} finishes ${fmt(late.end)}, after this ${fmt(t.end)} deadline`,days:diff(t.end,late.end)};
+    return {k:'ok',label:'On track',why:'Everything feeding it finishes in time'};
+  }
+  const open=depsOpen(t);
+  if(t.status==='waiting'){const a=t.waitingSince?diff(t.waitingSince,td):0;return {k:'blocked',label:'Blocked',why:`Waiting on ${t.waitingOn||person(t.owner).name}${a?` for ${a} day${a===1?'':'s'}`:''}`}}
+  if(open.length&&toD(t.start)<=toD(td)) return {k:'blocked',label:'Blocked',why:`Can't start until "${open[0].title}" (${person(open[0].owner).name}) is done`};
+  if(toD(t.end)<toD(td)){const n=workDays(addDays(t.end,1),td);return {k:'behind',label:`${n||1}d late`,why:`Was due ${fmt(t.end)} and is still open`,days:n}}
+  if(t.status==='todo'&&toD(t.start)<toD(td)&&!open.length) return {k:'risk',label:'Not started',why:`Should have started ${fmt(t.start)}`};
+  if(t.status==='doing'){const d=t.dur||1,el=workDays(t.start,td<t.end?td:t.end),exp=Math.min(1,el/d),pct=taskPct(t)/100;
+    if((t.checklist||[]).length&&exp-pct>.34) return {k:'risk',label:'Behind pace',why:`${Math.round(exp*100)}% of the time used, ${Math.round(pct*100)}% of the steps done`}}
+  const bv=t.baselineEnd?workDays(addDays(t.baselineEnd,1),t.end):0;
+  if(bv>0) return {k:'risk',label:`${bv}d slip`,why:`Now finishing ${fmt(t.end)}, ${bv} working day${bv===1?'':'s'} after the baseline (${fmt(t.baselineEnd)})`,days:bv};
+  if(t.status==='todo'&&toD(t.start)>toD(td)) return {k:'ok',label:'On track',why:`Starts ${fmt(t.start)}`};
+  return {k:'ok',label:'On track',why:'On schedule'};
+}
+const HRANK={behind:4,blocked:3,risk:2,ok:1,done:0,idle:0};
+const hpHtml=(h,title=true)=>`<span class="hp ${h.k}" ${title?`title="${esc(h.why||'')}"`:''}>${esc(h.label)}</span>`;
+const priHtml=t=>`<span class="pri p${t.priority||3}" title="${PRI[t.priority||3]}">P${t.priority||3}</span>`;
+function worst(ts){const open=ts.filter(t=>!done(t));if(!ts.length)return {k:'idle',label:'No tasks'};if(!open.length)return {k:'done',label:'Done'};
+  const hs=open.map(health).sort((a,b)=>HRANK[b.k]-HRANK[a.k]);const w=hs[0];const n=hs.filter(h=>h.k===w.k).length;
+  const lbl={behind:'Behind',blocked:'Blocked',risk:'At risk',ok:'On track'}[w.k];return {k:w.k,label:lbl+(w.k!=='ok'&&n>1?` (${n})`:''),why:w.why}}
+function projRows(pid){
+  const p=P(pid)||{}, ts=data.tasks.filter(t=>t.project===pid), phs=p.phases||[];
+  const so=a=>a.slice().sort((x,y)=>toD(x.start)-toD(y.start)||(x.milestone?1:0)-(y.milestone?1:0));
+  const out=phs.map(ph=>({ph,tasks:so(ts.filter(t=>t.phase===ph.id))}));
+  const rest=so(ts.filter(t=>!t.phase||!phs.some(ph=>ph.id===t.phase)));
+  if(rest.length) out.push({ph:phs.length?{id:'',name:'Other'}:null,tasks:rest});
+  return out;
+}
+function rollup(ts){
+  if(!ts.length)return null;
+  const w=t=>Math.max(+t.est||0,0.25), work=ts.filter(t=>!t.milestone);
+  const start=ts.map(t=>t.start).sort()[0], end=ts.map(t=>t.end).sort().pop();
+  const tot=work.reduce((a,t)=>a+w(t),0), dn=work.reduce((a,t)=>a+w(t)*taskPct(t)/100,0);
+  const left=work.reduce((a,t)=>a+(+t.est||0)*(1-taskPct(t)/100),0);
+  return {start,end,dur:workDays(start,end),pct:tot?Math.round(dn/tot*100):0,left:Math.round(left*10)/10,h:worst(ts)};
+}
+function moveTask(t,n){const ns=addDays(t.start,n);
+  if(t.milestone){t.start=t.end=ns}else if(!isAuto(t)){t.start=ns;t.end=addDays(t.end,n)}else{t.notBefore=ns;t.start=ns}}
+function resizeTask(t,ne){if(toD(ne)<toD(t.start))ne=t.start;if(!t.milestone){t.dur=Math.max(1,workDays(t.start,ne)||1);if(!isAuto(t))t.end=ne}}
+function askSlip(t,oldEnd){
+  schedule(); if(toD(t.end)<=toD(oldEnd)) return;
+  const days=workDays(addDays(oldEnd,1),t.end)||diff(oldEnd,t.end);
+  const l2=document.getElementById('layer2'); let pick='';
+  l2.innerHTML=`<div class="scrim" style="z-index:55"></div><div class="modal" style="z-index:56" role="dialog" aria-modal="true"><h3>Why did this move?</h3>
+    <p>"${esc(t.title)}" now finishes ${fmt(t.end)}, ${days} working day${days===1?'':'s'} later than ${fmt(oldEnd)}. Logging the reason is how the plan learns where time goes.</p>
+    <div class="reason-grid">${REASONS.map(r=>`<button data-r="${esc(r)}" aria-pressed="false">${esc(r)}</button>`).join('')}</div>
+    <label class="f">Details (optional)<input type="text" id="slipNote" placeholder="Doug was out until Monday"></label>
+    <div class="actions"><button class="btn" id="slipSkip">Skip</button><button class="btn primary" id="slipSave" disabled>Log it</button></div></div>`;
+  l2.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{pick=b.dataset.r;l2.querySelectorAll('[data-r]').forEach(x=>x.setAttribute('aria-pressed',x===b));l2.querySelector('#slipSave').disabled=false});
+  l2.querySelector('#slipSkip').onclick=()=>{l2.innerHTML=''};
+  l2.querySelector('#slipSave').onclick=()=>{const note=l2.querySelector('#slipNote').value.trim();
+    t.slips=t.slips||[];t.slips.push({date:todayStr(),days,reason:pick,note,by:'Darius'});
+    t.log=t.log||[];t.log.push({date:todayStr(),by:'Darius',text:`Finish moved to ${fmt(t.end)} (+${days}d). ${pick}${note?': '+note:''}.`});
+    l2.innerHTML='';touch();toast('Delay logged')};
+}
+
+/* ---------- storage + sync ---------- */
+function saveUI(){try{localStorage.setItem(LS_UI,JSON.stringify(ui))}catch(e){}}
+function persistLocal(){try{localStorage.setItem(LS_DATA,JSON.stringify({data,dirty,sha,version,api:apiMode,ts:Date.now()}))}catch(e){}}
+function touch(){data.meta=data.meta||{};data.meta.updated=new Date().toISOString();data.meta.by='Darius';dirty=true;persistLocal();render();queueSave()}
+const b64e=s=>btoa(unescape(encodeURIComponent(s)));
+const b64d=s=>decodeURIComponent(escape(atob(s.replace(/\n/g,''))));
+const ghUrl=()=>`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/${gh.path}`;
+const ghHeaders=()=>({Authorization:'Bearer '+gh.token,Accept:'application/vnd.github+json'});
+async function ghGet(){
+  const r=await fetch(ghUrl()+'?ref='+encodeURIComponent(gh.branch),{headers:ghHeaders(),cache:'no-store'});
+  if(!r.ok) throw new Error('GitHub said '+r.status+(r.status===404?' (file or repo not found)':r.status===401?' (token rejected)':''));
+  const j=await r.json(); return {data:JSON.parse(b64d(j.content)),sha:j.sha};
+}
+async function apiFetch(path,opt={}){
+  const u=path+(shareKey&&!path.includes('?')?`?key=${encodeURIComponent(shareKey)}`:'');
+  return fetch(u,{cache:'no-store',credentials:'same-origin',...opt,headers:{'Content-Type':'application/json',...(opt.headers||{})}});
+}
+async function loadApi(){
+  try{const me=await apiFetch('/api/me');if(!me.ok)return false;const j=await me.json();role=j.role;shareUrl=j.shareUrl||'';}catch(e){return false}
+  apiMode=true; source='server';
+  if(!document.querySelector('link[rel=manifest]')){const l=document.createElement('link');l.rel='manifest';l.href='/manifest.webmanifest';document.head.appendChild(l)}
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  if(!role){data=EMPTY();render();openLogin();return true}
+  try{const r=await apiFetch('/api/plan');if(!r.ok)throw new Error('Server said '+r.status);const j=await r.json();data=j.data;version=j.version;syncErr=''}
+  catch(e){syncErr='Offline';let local=null;try{local=JSON.parse(localStorage.getItem(LS_DATA)||'null')}catch(_){}data=(local&&local.data)||EMPTY()}
+  data.parked=data.parked||[];data.ideas=data.ideas||[];
+  let local=null;try{local=JSON.parse(localStorage.getItem(LS_DATA)||'null')}catch(_){}
+  if(role==='owner'&&local&&local.dirty&&local.api&&local.data){data=local.data;version=local.version;dirty=true;queueSave()}
+  render(); return true;
+}
+function queueSave(){if(!apiMode||viewer())return;clearTimeout(saveTimer);saveTimer=setTimeout(saveApi,1200)}
+async function saveApi(force){
+  if(saving){queueSave();return} saving=true; renderSync(); schedule();
+  try{
+    const r=await apiFetch('/api/plan',{method:'PUT',body:JSON.stringify({data,version:force?null:version})});
+    if(r.status===409){const j=await r.json();saving=false;
+      const c=await ask('The plan changed on the server','Someone (probably Tumii) saved a newer version while you were editing. Keep yours and overwrite theirs, or load theirs and drop your last edits?',[['theirs','Load theirs'],['mine','Keep mine','primary']]);
+      if(c==='mine'){version=j.version;return saveApi(true)} data=j.data;version=j.version;dirty=false;persistLocal();render();toast('Loaded the newer plan');return}
+    if(r.status===401){saving=false;openLogin('Your session ended. Log in again to save.');return}
+    if(!r.ok)throw new Error('Server said '+r.status);
+    const j=await r.json();version=j.version;dirty=false;syncErr='';persistLocal();
+  }catch(e){syncErr=navigator.onLine?'Save failed, retrying':'Offline, will save when back online';setTimeout(queueSave,8000)}
+  saving=false; renderSync();
+}
+function openLogin(note){
+  layer.innerHTML=`<div class="scrim"></div><div class="modal" role="dialog" aria-modal="true"><h3>Log in</h3><p>${esc(note||'This plan is private. Log in to view and edit, or open the share link you were sent.')}</p>
+    <label class="f">Password<input type="password" id="lgPw" autocomplete="current-password"></label>
+    <div class="actions"><button class="btn primary" id="lgGo">Log in</button></div></div>`;
+  const go=async()=>{const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({password:layer.querySelector('#lgPw').value})});
+    if(r.ok){closeLayer();await loadApi();toast('Logged in')}else{const j=await r.json().catch(()=>({}));toast(j.error||'Log in failed')}};
+  layer.querySelector('#lgGo').onclick=go; layer.querySelector('#lgPw').addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+  setTimeout(()=>layer.querySelector('#lgPw')?.focus(),30);
+}
+async function load(){
+  if(await loadApi()) return;
+  let remote=null;
+  try{
+    if(gh.token){const g=await ghGet();remote=g.data;sha=g.sha;source='github'}
+    else{const r=await fetch('projects.json',{cache:'no-store'});if(r.ok){remote=await r.json();source='file'}}
+  }catch(e){if(gh.token)syncErr=e.message.includes('Failed to fetch')?'Could not reach GitHub':e.message}
+  let local=null; try{local=JSON.parse(localStorage.getItem(LS_DATA)||'null')}catch(e){}
+  if(local&&local.dirty&&local.data){data=local.data;dirty=true;if(!sha)sha=local.sha||null}
+  else data=remote||(local&&local.data)||structuredClone(SEED);
+  if(!remote&&source!=='github') source=local&&local.data?'local':'seed';
+  data.parked=data.parked||[];data.ideas=data.ideas||[];
+  render();
+}
+async function saveGitHub(){
+  if(!gh.token){openSettings('Add a GitHub token to save. Until then your edits are kept in this browser.');return}
+  setSync('Saving'); schedule();
+  try{
+    let current=null; try{current=await ghGet()}catch(e){if(!/404/.test(e.message))throw e}
+    if(current&&sha&&current.sha!==sha){
+      const choice=await ask('The plan changed on GitHub','Someone (probably Tumii) saved a newer version since you loaded this page. Overwrite it with your version, or load theirs and drop your unsaved edits?',[['cancel','Cancel'],['theirs','Load theirs'],['mine','Overwrite with mine','primary']]);
+      if(choice==='theirs'){data=current.data;sha=current.sha;dirty=false;persistLocal();render();toast('Loaded the newer plan from GitHub');return}
+      if(choice!=='mine'){render();return}
+    }
+    const body={message:`Plan updated from dashboard by ${data.meta?.by||'Darius'}`,content:b64e(JSON.stringify(data,null,2)),branch:gh.branch};
+    if(current) body.sha=current.sha;
+    const r=await fetch(ghUrl(),{method:'PUT',headers:{...ghHeaders(),'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok) throw new Error('GitHub said '+r.status);
+    const j=await r.json(); sha=j.content.sha; dirty=false; source='github'; syncErr=''; persistLocal(); render(); toast('Saved to GitHub');
+  }catch(e){
+    syncErr=e.message.includes('Failed to fetch')?'Could not reach GitHub from this page':e.message;
+    render(); toast(syncErr);
+  }
+}
+function setSync(label){document.getElementById('syncLabel').textContent=label}
+function renderSync(){
+  const el=document.getElementById('sync'); el.className='sync'+(dirty?' dirty':'')+(syncErr?' err':'');
+  const by=data.meta?.by, up=data.meta?.updated;
+  if(apiMode){el.className='sync'+(dirty||saving?' dirty':'')+(syncErr?' err':'');setSync(syncErr||(viewer()?'View only':saving?'Saving':dirty?'Unsaved edits':'All changes saved'));document.getElementById('saveBtn').hidden=true;return}
+  let label = dirty?'Unsaved edits': source==='github'?'Synced with GitHub': source==='file'?'Read from projects.json':'Local copy';
+  if(syncErr&&!dirty) label=syncErr;
+  if(viewer()) label='View only';
+  if(!dirty&&by&&up) label+=` · ${by}, ${new Date(up).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
+  setSync(label.replace(' · ',', '));
+  document.getElementById('saveBtn').hidden=!dirty;
+}
+
+/* ---------- render ---------- */
+function render(){
+  schedule();
+  document.body.classList.toggle('viewer',viewer());
+  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===ui.view));
+  ['today','portfolio','grid','timeline'].forEach(v=>document.getElementById('v-'+v).hidden=v!==ui.view);
+  renderSync();
+  if(ui.view==='today') renderToday();
+  if(ui.view==='portfolio') renderPortfolio();
+  if(ui.view==='timeline') renderTimeline();
+  if(ui.view==='grid') renderGrid();
+}
+const whoHtml=id=>{const p=person(id);return `<span class="who"><i style="background:${p.color}"></i>${esc(p.name)}</span>`};
+function taskRow(t,extra=''){
+  const pr=P(t.project);
+  return `<div class="task-row">
+    <button class="check ${done(t)?'on':''}" data-toggle="${t.id}" aria-label="Mark ${esc(t.title)} ${done(t)?'not done':'done'}"></button>
+    <div><div class="t-title" data-open="${t.id}">${esc(t.title)}</div>${t.description?`<div class="t-desc">${esc(t.description)}</div>`:''}
+      <div class="t-meta">${priHtml(t)}${(()=>{const h=health(t);return h.k==='ok'||h.k==='done'?'':hpHtml(h)})()}${whoHtml(t.owner)}<span>${esc(pr?.name||'')}</span>${t.est?`<span>${t.est<1?Math.round(t.est*60)+' min':t.est+' h'}</span>`:''}<span>${t.start===t.end?fmt(t.end):fmt(t.start)+' to '+fmt(t.end)}</span></div></div>
+    ${extra}</div>`;
+}
+function renderToday(){
+  const td=todayStr(), o=data.today||{};
+  const linked=o.taskId?T(o.taskId):null;
+  const isDone=linked?done(linked):!!o.done;
+  const ms=milestones().filter(m=>!done(m)).slice(0,4);
+  const ready=data.tasks.filter(t=>!t.milestone&&!done(t)&&t.status!=='waiting'&&t.owner==='darius'&&!depsOpen(t).length&&t.id!==o.taskId)
+    .sort((a,b)=>toD(a.end)-toD(b.end)).slice(0,5);
+  const waiting=data.tasks.filter(t=>!done(t)&&t.status==='waiting').map(t=>({t,age:t.waitingSince?diff(t.waitingSince,td):0})).sort((a,b)=>b.age-a.age);
+  const others=data.tasks.filter(t=>!done(t)&&!t.milestone&&t.owner!=='darius'&&t.status==='doing');
+
+  const dl=ms.map(m=>{
+    const left=diff(td,m.end), ch=chainFor(m.id).slice(1), root=ch.length?T(ch[ch.length-1]):null;
+    const all=new Set(); (function walk(id){(T(id)?.deps||[]).forEach(d=>{if(!all.has(d)){all.add(d);walk(d)}})})(m.id);
+    const tot=[...all].map(T).filter(t=>t&&!t.milestone), pct=tot.length?tot.filter(done).length/tot.length:0;
+    return `<div class="deadline">
+      <div class="days ${left<0?'late':left<=14?'soon':''}">${Math.abs(left)}<small>${left<0?'days late':left===1?'day':'days'}</small></div>
+      <div><div class="dl-title t-title" data-open="${m.id}">${esc(m.title)}</div><div class="dl-date">${fmt(m.end,{weekday:'short',month:'short',day:'numeric',year:'numeric'})} · ${esc(P(m.project)?.name||'')}</div>
+      <div class="meter" title="${Math.round(pct*100)}% of the work feeding this deadline is done"><i style="width:${pct*100}%"></i></div>
+      ${root?`<div class="dl-hold">Holding it up: <b data-open="${root.id}" style="cursor:pointer">${esc(root.title)}</b> (${esc(person(root.owner).name)}), ${ch.length} step${ch.length>1?'s':''} in the chain</div>`:''}</div></div>`;
+  }).join('').replace(/ · /g,', ');
+
+  document.getElementById('v-today').innerHTML=`
+  <div class="today-grid">
+    <div class="stack">
+      <div class="hero ${isDone?'is-done':''}">
+        <div class="hero-kicker">${fmt(td,{weekday:'long',month:'long',day:'numeric'})}. Today's one thing</div>
+        <h1>${esc(linked?linked.title:o.text||'Pick the one thing for today')}</h1>
+        <p class="hero-done"><b>Done looks like:</b> ${esc(o.doneLooksLike||'Say what finished means before you start.')}</p>
+        <div class="hero-actions">
+          <button class="btn ${isDone?'':'primary'}" id="oneDone">${isDone?'Reopen':'Mark done'}</button>
+          <button class="btn" id="oneEdit">Change</button>
+          ${linked?`<button class="btn ghost" data-open="${linked.id}">Open task</button>`:''}
+        </div>
+      </div>
+      <div class="panel"><h2>Up next for you <small>unblocked, soonest first</small></h2>
+        ${ready.map(t=>taskRow(t)).join('')||'<div class="empty">Nothing unblocked. Check the waiting list.</div>'}</div>
+      <div class="panel"><h2>Moving without you <small>in progress with others</small></h2>
+        ${others.map(t=>taskRow(t)).join('')||'<div class="empty">No one else has work in progress.</div>'}</div>
+    </div>
+    <div class="stack">
+      ${(()=>{const at=data.tasks.filter(t=>!done(t)).map(t=>({t,h:health(t)})).filter(x=>x.h.k!=='ok').sort((a,b)=>HRANK[b.h.k]-HRANK[a.h.k]||(a.t.priority||3)-(b.t.priority||3)).slice(0,6);
+        return `<div class="panel"><h2>Needs attention <small>behind, blocked, at risk</small></h2>${at.map(({t,h})=>`<div class="attn"><div class="t-title" data-open="${t.id}">${esc(t.title)}</div>${hpHtml(h,false)}<div class="why">${esc(h.why)}. ${esc(P(t.project)?.name||'')}, ${esc(person(t.owner).name)}</div></div>`).join('')||'<div class="empty">Everything is on track.</div>'}</div>`})()}
+      <div class="panel"><h2>Deadlines</h2>${dl||'<div class="empty">No milestones yet. Add one on the Timeline.</div>'}</div>
+      <div class="panel"><h2>Waiting on others <small>oldest first</small></h2>
+        ${waiting.map(({t,age})=>taskRow(t,`<span class="age ${age>=14?'bad':age>=7?'warn':''}" title="Waiting on ${esc(t.waitingOn||person(t.owner).name)}">${age}d</span>`)).join('')||'<div class="empty">Nothing is stuck on anyone.</div>'}</div>
+    </div>
+  </div>`;
+}
+function renderPortfolio(){
+  const td=todayStr();
+  const rows=data.projects.map(p=>{
+    const s=projStats(p.id), pct=Math.round(s.pct*100);
+    const stale=s.lastDone?diff(s.lastDone,td):null;
+    const last20=s.pct>=.8&&s.pct<1&&(stale===null||stale>=5);
+    return `<div class="pf-row" style="--pc:${p.color||'var(--blue)'}">
+      <div><div class="pf-name" data-pdetail="${p.id}">${esc(p.name)}</div>
+        <div class="chips">${(()=>{const ts=data.tasks.filter(t=>t.project===p.id);return ts.length?hpHtml(worst(ts)):''})()}<span class="chip ${p.status}">${PSTATUS[p.status]||p.status}</span>${last20?`<span class="chip last20" title="80% done and nothing finished in ${stale??'a while'} days">Last 20%</span>`:''}${p.shipLock?'<span class="chip lock" title="Ship the current version before any restart">Ship lock on</span>':''}${p.private?'<span class="chip">🔒 Private</span>':''}<span class="chip">${esc(person(p.owner).name)}</span></div></div>
+      <div>${s.count?`<div class="track"><i style="width:${pct}%"></i><span class="mark80"></span></div>
+        <div class="pf-pct"><span><b>${pct}%</b> by effort</span><span>${s.doneCount} of ${s.count} steps</span></div>`:'<div class="muted" style="font-size:13px">No steps on the plan</div>'}</div>
+      <div><div class="pf-next">${esc(p.next||'')}</div>${p.blocker?`<div class="pf-block">${esc(p.blocker)}</div>`:''}</div>
+      <div style="display:flex;gap:6px"><button class="btn" data-editproj="${p.id}">Edit</button><button class="btn" data-gridproj="${p.id}">Grid</button><button class="btn" data-proj="${p.id}">Timeline</button></div>
+    </div>`;
+  }).join('');
+  const act=data.projects.filter(p=>p.status==='active').length, st=data.projects.filter(p=>p.status==='stalled').length;
+  const wt=data.tasks.filter(t=>t.status==='waiting').length;
+  document.getElementById('v-portfolio').innerHTML=`
+    <div class="pf-head"><h1>Every project, one screen</h1>
+      <div class="pf-sum"><span><b>${act}</b>active</span><span><b style="color:${st?'var(--coral)':''}">${st}</b>stalled</span><span><b>${wt}</b>waiting on others</span>
+      <button class="btn" id="addProj">Add project</button></div></div>
+    <div class="pf-list">${rows}</div>
+    <div class="lots">
+      <div class="panel lot"><h2>Idea parking lot <small>reviewed Fridays, not before</small></h2>
+        <div class="add-row"><input type="text" id="ideaIn" placeholder="Park an idea so it stops pulling at you"><button class="btn" id="ideaAdd">Park it</button></div>
+        <ul>${data.ideas.map((x,i)=>`<li><span>${esc(x)}</span><button class="x" data-delidea="${i}" aria-label="Remove idea">✕</button></li>`).join('')}</ul></div>
+      <div class="panel lot"><h2>Parked <small>deliberately not now</small></h2>
+        <ul>${data.parked.map((x,i)=>`<li><span>${esc(x)}</span><button class="x" data-delpark="${i}" aria-label="Remove">✕</button></li>`).join('')}</ul></div>
+    </div>`;
+}
+
+/* ---------- timeline ---------- */
+let tlGeom=null;
+function renderTimeline(){
+  const td=todayStr(), dw=+ui.zoom;
+  const pf=document.getElementById('projFilter');
+  pf.innerHTML=`<option value="all">All projects</option>`+data.projects.filter(p=>data.tasks.some(t=>t.project===p.id)).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  pf.value=ui.proj;
+  const ms=milestones(); const ct=document.getElementById('critTarget');
+  if(!ui.critTarget||!T(ui.critTarget)) ui.critTarget=(ms.filter(m=>!done(m)&&toD(m.end)>=toD(td)&&diff(td,m.end)<=45).sort((a,b)=>chainFor(b.id).length-chainFor(a.id).length)[0]||ms[0]||{}).id||'';
+  ct.innerHTML=ms.map(m=>`<option value="${m.id}">${esc(m.title)} (${fmt(m.end)})</option>`).join(''); ct.value=ui.critTarget; ct.disabled=!ui.crit;
+  document.getElementById('tCrit').checked=ui.crit; document.getElementById('tDeps').checked=ui.deps; document.getElementById('tBase').checked=ui.base;
+  document.querySelectorAll('#groupSeg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.g===ui.group));
+  document.querySelectorAll('#zoomSeg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.z==ui.zoom));
+
+  const tasks=data.tasks.filter(t=>ui.proj==='all'||t.project===ui.proj);
+  const crit=new Set(ui.crit&&ui.critTarget?chainFor(ui.critTarget):[]);
+  const rows=[];
+  const sortT=a=>a.slice().sort((x,y)=>toD(x.start)-toD(y.start)||(x.milestone?1:0)-(y.milestone?1:0));
+  if(ui.group==='project'){
+    data.projects.forEach(p=>{const ts=tasks.filter(t=>t.project===p.id);if(!ts.length)return;rows.push({g:true,label:p.name,color:p.color,pid:p.id});
+      projRows(p.id).forEach(g=>{const gt=g.tasks.filter(t=>ts.includes(t));if(!gt.length)return;if(g.ph){rows.push({ph:g.ph,phTasks:gt})}gt.forEach(t=>rows.push({t,ind:!!g.ph}))})});
+  }else{
+    data.people.forEach(p=>{const ts=tasks.filter(t=>t.owner===p.id&&!t.milestone);if(!ts.length)return;
+      const hrs=ts.filter(t=>!done(t)).reduce((a,t)=>a+(+t.est||0),0);
+      rows.push({g:true,label:`${p.name}${hrs?`, ${hrs} h open`:''}`,color:p.color});sortT(ts).forEach(t=>rows.push({t}))});
+  }
+  if(!tasks.length){document.getElementById('tlScroll').innerHTML='<div class="empty" style="padding:30px">No tasks yet. Use Add task to start the plan.</div>';return}
+  let min=toD(td)-5*DAY, max=toD(td)+30*DAY;
+  tasks.forEach(t=>{min=Math.min(min,toD(t.start));max=Math.max(max,toD(t.end))});
+  const r0=fromD(min-3*DAY), n=Math.round((max-min)/DAY)+14, W=n*dw, H=rows.length*RH;
+  const lw=window.innerWidth<640?170:290;
+  const x=s=>diff(r0,s)*dw;
+  tlGeom={r0,dw,rows};
+
+  let dates='',cols='';
+  for(let i=0;i<n;i++){
+    const s=addDays(r0,i), d=new Date(toD(s)), dow=d.getUTCDay();
+    if(d.getUTCDate()===1||i===0) dates+=`<div class="mo" style="left:${i*dw}px">${fmt(s,{month:'long',year:'numeric'})}</div>`;
+    const show=dw>=24||dow===1;
+    if(show) dates+=`<div class="dy ${s===td?'today':''}" style="left:${i*dw}px;width:${dw>=24?dw:dw*7}px;${dw<24?'text-align:left':''}">${dw>=24?d.getUTCDate():fmt(s)}</div>`;
+    if(dow===0||dow===6) cols+=`<div class="col-we" style="left:${i*dw}px;width:${dw}px"></div>`;
+    else if(dw>=24||dow===1) cols+=`<div class="col-line" style="left:${i*dw}px"></div>`;
+  }
+  const pos={}; rows.forEach((r,i)=>{if(r.t)pos[r.t.id]=i});
+  let bars='',paths='';
+  rows.forEach((r,i)=>{
+    if(r.ph){const ru=rollup(r.phTasks);if(ru)bars+=`<div class="sumbar" style="left:${x(ru.start)+2}px;top:${i*RH+RH/2-6}px;width:${(diff(ru.start,ru.end)+1)*dw-4}px" title="${esc(r.ph.name)}: ${ru.pct}% done, ${fmt(ru.start)} to ${fmt(ru.end)}"><i style="width:${ru.pct}%"></i></div>`;return}
+    if(!r.t)return; const t=r.t, y=i*RH, p=person(t.owner), isC=crit.has(t.id), bad=conflict(t);
+    if(ui.base&&t.baselineStart&&!t.milestone) bars+=`<div class="base" style="left:${x(t.baselineStart)+2}px;top:${y+RH-7}px;width:${(diff(t.baselineStart,t.baselineEnd||t.baselineStart)+1)*dw-4}px" title="Baseline ${fmt(t.baselineStart)} to ${fmt(t.baselineEnd)}"></div>`;
+    if(t.milestone){
+      bars+=`<div class="ms ${isC?'crit':''} ${done(t)?'done':''}" data-bar="${t.id}" style="left:${x(t.end)+dw/2-8}px;top:${y+RH/2-8}px" title="${esc(t.title)}, ${fmt(t.end)}" tabindex="0" role="button" aria-label="${esc(t.title)}"></div>`;
+      bars+=`<div class="bar-out" style="left:${x(t.end)+dw/2+14}px;top:${y+RH/2-12}px;font-weight:700;color:var(--text)">${esc(t.title)}, ${fmt(t.end)}</div>`;
+    }else{
+      const w=(diff(t.start,t.end)+1)*dw-4, inside=w>=120;
+      const hh=health(t);
+      bars+=`<div class="bar s-${t.status} ${isC?'crit':''} ${bad?'conflict':''}" data-bar="${t.id}" style="left:${x(t.start)+2}px;top:${y+(RH-24)/2}px;width:${w}px;--pcol:${p.color}" tabindex="0" role="button" aria-label="${esc(t.title)}, ${fmt(t.start)} to ${fmt(t.end)}" title="${esc(t.title)}\n${esc(p.name)}, ${fmt(t.start)} to ${fmt(t.end)}${bad?'\nStarts before a dependency ends':''}">
+        <span class="av">${esc(p.name[0])}</span>${inside?`<span class="bt">${esc(t.title)}</span>`:''}<span class="rz" data-rz="1"></span></div>`;
+    }
+    if(ui.deps)(t.deps||[]).forEach(did=>{
+      const d=T(did); if(!d||done(d)||pos[did]===undefined)return;
+      const y1=pos[did]*RH+RH/2, y2=y+RH/2;
+      const x1=d.milestone?x(d.end)+dw/2+8:x(d.end)+dw-2, x2=t.milestone?x(t.end)+dw/2-9:x(t.start)+2;
+      const c=Math.max(18,Math.min(60,Math.abs(x2-x1)/2));
+      const cls=(crit.has(t.id)&&crit.has(did))?'crit':(!done(d)&&toD(d.end)>toD(t.start)&&!(d.milestone&&d.end===t.start))?'bad':'';
+      paths+=`<path class="${cls}" d="M${x1} ${y1} C ${x1+c} ${y1}, ${x2-c} ${y2}, ${x2} ${y2}" marker-end="url(#ah${cls?'-'+cls:''})"/>`;
+    });
+  });
+  const mk=(id,c)=>`<marker id="${id}" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" style="fill:${c};stroke:none"/></marker>`;
+  const labels=rows.map(r=>r.g
+    ?`<div class="tl-row group"><div class="tl-label" ${r.pid?`data-pdetail="${r.pid}"`:''}><span class="gdot" style="background:${r.color}"></span>${esc(r.label)}</div></div>`
+    :r.ph?`<div class="tl-row ph"><div class="tl-label">${esc(r.ph.name)}</div></div>`
+    :`<div class="tl-row"><div class="tl-label ${done(r.t)?'done':''} ${r.ind?'ind':''}"><span data-open="${r.t.id}" title="${esc(r.t.title)}">${r.t.milestone?'◆ ':''}${esc(r.t.title)}</span></div></div>`).join('');
+  const sc=document.getElementById('tlScroll'), keepX=sc.scrollLeft, keepY=sc.scrollTop, first=!sc.dataset.ready;
+  sc.style.setProperty('--lw',lw+'px'); sc.style.setProperty('--rh',RH+'px');
+  sc.innerHTML=`<div class="tl-head" style="width:${lw+W}px"><div class="tl-corner">${ui.group==='project'?'Project and task':'Person and task'}</div><div class="tl-dates" style="width:${W}px">${dates}</div></div>
+    <div class="tl-body" style="width:${lw+W}px;height:${H}px">${labels}
+      <div class="canvas" id="canvas" style="width:${W}px;height:${H}px">${cols}
+        <div class="today-line" style="left:${x(td)+dw/2}px" title="Today"></div>
+        <svg class="deps-svg" width="${W}" height="${H}"><defs>${mk('ah','var(--faint)')}${mk('ah-crit','var(--amber)')}${mk('ah-bad','var(--coral)')}</defs>${paths}</svg>
+        ${bars}</div></div>`;
+  if(first){sc.scrollLeft=Math.max(0,x(td)-dw*4);sc.dataset.ready=1}else{sc.scrollLeft=keepX;sc.scrollTop=keepY}
+}
+
+/* drag + resize */
+let drag=null;
+document.addEventListener('pointerdown',e=>{
+  const b=e.target.closest('[data-bar]'); if(!b||e.button>0)return;
+  const t=T(b.dataset.bar); if(!t)return;
+  drag={el:b,t,mode:e.target.dataset.rz&&!t.milestone?'rz':'mv',sx:e.clientX,left:parseFloat(b.style.left),width:parseFloat(b.style.width)||0,moved:false,dd:0};
+  b.setPointerCapture(e.pointerId);
+});
+document.addEventListener('pointermove',e=>{
+  if(!drag)return; if(viewer())return; const dx=e.clientX-drag.sx; if(Math.abs(dx)>4)drag.moved=true; if(!drag.moved)return;
+  const dw=tlGeom.dw; drag.dd=Math.round(dx/dw);
+  if(drag.mode==='mv') drag.el.style.left=(drag.left+drag.dd*dw)+'px';
+  else drag.el.style.width=Math.max(dw-4,drag.width+drag.dd*dw)+'px';
+});
+document.addEventListener('pointerup',()=>{
+  if(!drag)return; const d=drag; drag=null;
+  if(!d.moved){openDetail(d.t.id,'general');return}
+  if(!d.dd){render();return}
+  const oldEnd=d.t.end;
+  if(d.mode==='mv') moveTask(d.t,d.dd); else resizeTask(d.t,addDays(d.t.end,d.dd));
+  touch(); toast(`${d.t.title}: ${fmt(d.t.start)}${d.t.start!==d.t.end?' to '+fmt(d.t.end):''}`); askSlip(d.t,oldEnd);
+});
+document.addEventListener('keydown',e=>{
+  const b=e.target.closest&&e.target.closest('[data-bar]');
+  if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openDetail(b.dataset.bar,'general')}
+  if(b&&!viewer()&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){const t=T(b.dataset.bar),n=e.key==='ArrowLeft'?-1:1;
+    if(e.shiftKey&&!t.milestone){resizeTask(t,addDays(t.end,n))}else{moveTask(t,n)}
+    touch();requestAnimationFrame(()=>document.querySelector(`[data-bar="${t.id}"]`)?.focus())}
+  if(e.key==='Escape'){if(document.getElementById('layer2').innerHTML)document.getElementById('layer2').innerHTML='';else closeLayer()}
+});
+
+
+/* ---------- detail sheets (Microsoft Project style task information) ---------- */
+const successors=id=>data.tasks.filter(t=>(t.deps||[]).includes(id));
+function feedsMs(id){const out=new Map(),seen=new Set();const walk=i=>successors(i).forEach(s=>{if(seen.has(s.id))return;seen.add(s.id);if(s.milestone)out.set(s.id,s);walk(s.id)});walk(id);return [...out.values()].sort((a,b)=>toD(a.end)-toD(b.end))}
+const critOf=id=>milestones().filter(m=>!done(m)&&m.id!==id&&chainFor(m.id).includes(id));
+const projOrder=pid=>projRows(pid).flatMap(g=>g.tasks);
+const rowNum=id=>{const t=T(id);return projOrder(t?.project).findIndex(x=>x.id===id)+1};
+function taskPct(t){if(done(t))return 100;const c=t.checklist||[];if(c.length)return Math.round(c.filter(x=>x.done).length/c.length*100);return +t.pct||0}
+const stHtml=t=>`<span class="st ${t.status}"><i></i>${STATUS[t.status]}</span>`;
+const durTxt=t=>t.milestone?'Milestone':(()=>{const w=t.dur||workDays(t.start,t.end)||1;return `${w} working day${w===1?'':'s'}`})();
+const fmtLong=s=>fmt(s,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+let sheetTab='general';
+function timingLine(t){
+  const td=todayStr(); if(done(t)) return `Finished${t.doneAt?' '+fmt(t.doneAt):''}`;
+  const toStart=diff(td,t.start), toEnd=diff(td,t.end);
+  if(toEnd<0) return `<span class="pos">${-toEnd} day${toEnd===-1?'':'s'} overdue</span>`;
+  if(t.milestone) return toEnd===0?'Due today':`Due in ${toEnd} day${toEnd===1?'':'s'}`;
+  if(toStart>0) return `Starts in ${toStart} day${toStart===1?'':'s'}`;
+  return toEnd===0?'Due today':`${toEnd} day${toEnd===1?'':'s'} left`;
+}
+function depTable(list,mode,t){
+  if(!list.length) return `<p class="prose empty-p">${mode==='pred'?'Nothing has to finish first. This can start any time.':'Nothing waits on this directly.'}</p>`;
+  return `<div class="tbl-wrap"><table class="sheet-t"><thead><tr><th>#</th><th>Task</th><th>Owner</th><th>${mode==='pred'?'Finish':'Start'}</th><th>Status</th><th>Gap</th></tr></thead><tbody>${list.map(x=>{
+    const gap=mode==='pred'?diff(x.end,t.start):diff(t.end,x.start);
+    const g=x.milestone&&mode==='pred'?diff(x.end,t.start)+1:gap;
+    const gapTxt=done(mode==='pred'?x:t)&&mode==='pred'?'<span class="muted">Done</span>':g<0?`<span class="pos">Overlaps ${-g}d</span>`:g<=1?'<span class="muted">Back to back</span>':`${g-1}d slack`;
+    return `<tr data-detail="${x.id}"><td class="num">${rowNum(x.id)}</td><td class="nm">${x.milestone?'◆ ':''}${esc(x.title)}</td><td class="nowrap">${whoHtml(x.owner)}</td><td class="nowrap">${fmt(mode==='pred'?x.end:x.start)}</td><td>${stHtml(x)}</td><td class="nowrap">${gapTxt}</td></tr>`}).join('')}</tbody></table></div>`;
+}
+function openDetail(id,tab){
+  const t=T(id); if(!t) return; const p=P(t.project)||{};
+  if(tab) sheetTab=tab; else if(!['general','deps','delays','check','notes','activity'].includes(sheetTab)) sheetTab='general';
+  const H=health(t);
+  const preds=(t.deps||[]).map(T).filter(Boolean), succ=successors(t.id), feeds=feedsMs(t.id), crit=critOf(t.id);
+  const chk=t.checklist||[], log=(t.log||[]).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')), links=t.links||[];
+  const age=t.status==='waiting'&&t.waitingSince?diff(t.waitingSince,todayStr()):null;
+  const varDays=t.baselineEnd?diff(t.baselineEnd,t.end):null, pct=taskPct(t), bad=conflict(t);
+  const chips=`<div class="chips">${hpHtml(H)}${t.milestone?'':priHtml(t)}${stHtml(t).replace('class="st','class="chip st')}${t.milestone?'<span class="chip">Milestone</span>':''}${crit.length?`<span class="chip last20">Critical path</span>`:''}${age!==null?`<span class="chip ${age>=14?'stalled':age>=7?'last20':''}">Waiting ${age}d</span>`:''}</div>`;
+  const tabs=[['general','General'],['deps','Predecessors and successors',preds.length+succ.length],['delays','Delays',(t.slips||[]).length||''],['check','Checklist',chk.length?`${chk.filter(c=>c.done).length}/${chk.length}`:''],['notes','Notes and links',''],['activity','Activity',log.length||'']];
+  let body='';
+  if(sheetTab==='general'){
+    body=`
+    <div class="why-box">${hpHtml(H,false)}<div><b>${esc({ok:'On track',done:'Done',risk:'At risk',behind:'Behind',blocked:'Blocked'}[H.k]||H.label)}</b><span class="sub">${esc(H.why)}.</span></div></div>
+    ${bad?`<div class="warn-box bad-box">This starts before something it depends on is finished. Move it later or adjust the dependency.</div>`:''}
+    ${crit.length?`<div class="warn-box">On the critical path to ${crit.map(m=>`<b>${esc(m.title)}</b> (${fmt(m.end)})`).join(' and ')}. A day lost here is a day lost there.</div>`:''}
+    <div class="sh-sec"><h4>What this is</h4>${t.description?`<p class="prose">${esc(t.description)}</p>`:`<p class="prose empty-p">No description yet.<span class="owner-only"> Add one with Edit, or ask Tumii to fill it in.</span></p>`}</div>
+    ${t.doneWhen?`<div class="sh-sec"><div class="done-box"><b>Done when</b>${esc(t.doneWhen)}</div></div>`:''}
+    <div class="sh-sec"><h4>Schedule and work</h4><div class="facts">
+      <div class="fact"><span>Owner</span><b>${whoHtml(t.owner)}</b></div>
+      ${t.milestone?'':`<div class="fact"><span>Priority</span><b>${PRI[t.priority||3]}</b></div>`}
+      <div class="fact"><span>Start</span><b>${fmtLong(t.start)}${isAuto(t)?` <small>${t.notBefore?'not before '+fmt(t.notBefore):'auto'}</small>`:''}</b></div>
+      <div class="fact"><span>Finish</span><b>${fmtLong(t.end)}</b></div>
+      <div class="fact"><span>Duration</span><b>${durTxt(t)}</b></div>
+      <div class="fact"><span>Work</span><b>${t.est?(t.est<1?Math.round(t.est*60)+' min':t.est+' h'):'Not estimated'}</b></div>
+      <div class="fact"><span>Timing</span><b>${timingLine(t)}</b></div>
+      ${t.milestone?'':`<div class="fact"><span>Complete</span><b>${pct}%${chk.length&&!done(t)?' <small>from checklist</small>':''}</b></div>`}
+      <div class="fact"><span>Baseline finish</span><b>${t.baselineEnd?`${fmt(t.baselineEnd)} <small class="${varDays>0?'pos':varDays<0?'neg':''}">${varDays>0?varDays+'d late':varDays<0?(-varDays)+'d early':'on plan'}</small>`:'<small>Not set</small>'}</b></div>
+      ${t.status==='waiting'?`<div class="fact"><span>Waiting on</span><b>${esc(t.waitingOn||person(t.owner).name)} <small>since ${fmt(t.waitingSince||todayStr())}</small></b></div>`:''}
+    </div></div>
+    ${t.needs?`<div class="sh-sec"><h4>Needs (tools, access, money)</h4><p class="prose">${esc(t.needs)}</p></div>`:''}
+    <div class="sh-sec"><h4>Why it matters</h4>${feeds.length?`<div class="feeds">${feeds.map(m=>`<button class="feed ${crit.includes(m)?'crit':''}" data-detail="${m.id}"><span class="dia"></span><span class="ft">${esc(m.title)}</span><span class="fd">${fmtLong(m.end)}, ${diff(todayStr(),m.end)} days</span></button>`).join('')}</div><p class="muted" style="font-size:13px;margin:8px 0 0">${succ.length} task${succ.length===1?'':'s'} wait${succ.length===1?'s':''} directly on this one.</p>`:`<p class="prose empty-p">Doesn't feed a deadline yet. Link it to a milestone with Edit so you can see what it holds up.</p>`}</div>`;
+  }
+  if(sheetTab==='deps') body=`<div class="sh-sec"><h4>Must finish before this starts</h4>${depTable(preds,'pred',t)}</div><div class="sh-sec"><h4>Waiting on this</h4>${depTable(succ,'succ',t)}</div>`;
+  if(sheetTab==='delays'){
+    const slips=t.slips||[], own=slips.reduce((a,s)=>a+(+s.days||0),0);
+    const bv=t.baselineEnd?workDays(addDays(t.baselineEnd,1),t.end):null;
+    const pushed=bv!==null?Math.max(0,bv-own):0, driver=preds.filter(p=>!done(p)).sort((a,b)=>toD(b.end)-toD(a.end))[0];
+    const tis=timeInStatus(t), maxT=Math.max(1,tis.todo,tis.doing,tis.waiting);
+    body=`<div class="sh-sec"><h4>Against the baseline</h4>${bv===null?'<p class="prose empty-p">No baseline yet. Set one on the Timeline once the plan looks right, then slips get measured.</p>'
+      :bv<=0?`<p class="prose">On or ahead of the baseline finish (${fmt(t.baselineEnd)}).</p>`
+      :`<p class="prose"><b>${bv} working day${bv===1?'':'s'} behind</b> the baseline finish of ${fmt(t.baselineEnd)}. ${own?`${Math.min(own,bv)} from this task's own delays`:'None from this task itself'}${pushed?`, ${pushed} pushed by work before it${driver?` (mainly "${esc(driver.title)}")`:''}`:''}.</p>`}</div>
+    <div class="sh-sec"><h4>Delays logged</h4>${slips.length?`<div class="tbl-wrap"><table class="sheet-t"><thead><tr><th>Date</th><th>Days</th><th>Reason</th><th>Details</th><th>By</th></tr></thead><tbody>${slips.slice().reverse().map(s=>`<tr style="cursor:default"><td class="nowrap">${fmt(s.date)}</td><td>+${s.days}</td><td class="nowrap">${esc(s.reason)}</td><td style="white-space:normal">${esc(s.note||'')}</td><td>${esc(s.by||'')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="prose empty-p">No delays logged. When a finish date moves later, the app asks why.</p>'}</div>
+    <div class="sh-sec"><h4>Where its days went</h4>${tis.todo+tis.doing+tis.waiting===0?'<p class="prose empty-p">No time tracked yet. The clock starts when its status changes.</p>':[['To do',tis.todo,'var(--blue)'],['In progress',tis.doing,'var(--ice)'],['Waiting on someone',tis.waiting,'var(--violet)']].map(([l,v,c])=>`<div class="hbar"><span>${l}</span><span class="tr"><i style="width:${v/maxT*100}%;background:${c}"></i></span><b>${v}d</b></div>`).join('')}</div>
+    <div class="sh-sec"><h4>Estimate vs actual</h4><div class="facts"><div class="fact"><span>Estimated</span><b>${t.est?t.est+' h':'Not set'}</b></div><div class="fact"><span>Actual</span><b>${t.actual?t.actual+' h':'Not logged'}</b></div><div class="fact"><span>Difference</span><b>${t.est&&t.actual?`<span class="${t.actual>t.est?'pos':'neg'}">${t.actual>t.est?'+':''}${Math.round((t.actual-t.est)*10)/10} h</span>`:'<small>Needs both</small>'}</b></div></div></div>`;
+  }
+  if(sheetTab==='check') body=`<div class="sh-sec">${chk.length?`<div class="meter" style="height:8px;margin:0 0 10px"><i style="width:${Math.round(chk.filter(c=>c.done).length/chk.length*100)}%;background:var(--mint)"></i></div>`+chk.map((c,i)=>`<div class="cl-item ${c.done?'on':''}"><button class="check ${c.done?'on':''}" data-cl="${i}" aria-label="${esc(c.text)}"></button><span style="flex:1">${esc(c.text)}</span><button class="x owner-only" data-cldel="${i}" aria-label="Remove step">✕</button></div>`).join(''):`<p class="prose empty-p">No steps yet. Break the task into the moves that finish it.</p>`}
+    <div class="add-row owner-only"><input type="text" id="clIn" placeholder="Add a step"><button class="btn" id="clAdd">Add step</button></div></div>`;
+  if(sheetTab==='notes') body=`<div class="sh-sec"><h4>Notes</h4>${t.note?`<p class="note-p">${esc(t.note)}</p>`:'<p class="prose empty-p">No notes.</p>'}</div>
+    <div class="sh-sec links"><h4>Links</h4>${links.length?links.map((l,i)=>`<div style="display:flex;gap:6px;align-items:center"><a href="${esc(l.url)}" target="_blank" rel="noopener" style="flex:1">${esc(l.label||l.url)}</a><button class="x owner-only" data-lkdel="${i}" aria-label="Remove link">✕</button></div>`).join(''):'<p class="prose empty-p">No links. Add the doc, ticket, or thread this task lives in.</p>'}
+    <div class="add-row owner-only"><input type="text" id="lkLabel" placeholder="Label" style="max-width:160px"><input type="text" id="lkUrl" placeholder="https://"><button class="btn" id="lkAdd">Add link</button></div></div>`;
+  if(sheetTab==='activity') body=`<div class="sh-sec owner-only"><div class="add-row" style="padding-top:0"><input type="text" id="logIn" placeholder="Post an update on this task"><button class="btn" id="logAdd">Post</button></div></div>
+    ${log.length?`<div class="log">${log.map(e=>`<div class="log-e"><div class="lm">${e.date?fmtLong(e.date):''}, ${esc(e.by||'')}</div><p>${esc(e.text)}</p></div>`).join('')}</div>`:'<p class="prose empty-p">No updates yet.</p>'}`;
+  layer.innerHTML=`<div class="scrim" data-close></div><aside class="sheet" role="dialog" aria-modal="true" aria-label="${esc(t.title)}" style="--pc:${p.color||'var(--blue)'}">
+    <div class="sh-top">
+      <div class="sh-crumb"><button data-pdetail="${p.id}">${esc(p.name||'')}</button><span>Task ${rowNum(t.id)}</span><button class="icon-btn sh-close" data-close aria-label="Close">✕</button></div>
+      <h2 class="sh-title">${esc(t.title)}</h2>${chips}
+      <div class="sh-actions owner-only">${t.milestone?'':`<button class="btn ${done(t)?'':'primary'}" id="dDone">${done(t)?'Reopen':'Mark done'}</button>`}<button class="btn" id="dEdit">Edit</button>${!t.milestone&&data.today?.taskId!==t.id?'<button class="btn ghost" id="dOne">Make it today\'s one thing</button>':''}</div>
+      <div class="sh-tabs" role="tablist">${tabs.map(([k,l,n])=>`<button role="tab" data-stab="${k}" aria-selected="${sheetTab===k}">${l}${n!==''&&n!==undefined&&n!==0?`<span class="n">${n}</span>`:''}</button>`).join('')}</div>
+    </div>
+    <div class="sh-body">${body}</div></aside>`;
+  if(viewer()) document.querySelector('.sh-actions')?.remove();
+  const $=s=>layer.querySelector(s), re=()=>openDetail(t.id);
+  layer.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeLayer);
+  layer.querySelectorAll('[data-stab]').forEach(b=>b.onclick=()=>openDetail(t.id,b.dataset.stab));
+  layer.querySelectorAll('[data-detail]').forEach(b=>b.onclick=()=>openDetail(b.dataset.detail,'general'));
+  layer.querySelectorAll('[data-pdetail]').forEach(b=>b.onclick=()=>openProjectDetail(b.dataset.pdetail));
+  if(viewer()) return;
+  const logIt=txt=>{t.log=t.log||[];t.log.push({date:todayStr(),by:'Darius',text:txt})};
+  if($('#dDone'))$('#dDone').onclick=()=>{logIt(done(t)?'Reopened.':'Marked done.');setStatus(t,done(t)?'todo':'done');touch();re()};
+  $('#dEdit').onclick=()=>openTask(t.id);
+  if($('#dOne'))$('#dOne').onclick=()=>{data.today={taskId:t.id,text:t.title,doneLooksLike:t.doneWhen||data.today?.doneLooksLike||'',done:false};touch();re();toast("Set as today's one thing")};
+  layer.querySelectorAll('[data-cl]').forEach(b=>b.onclick=()=>{const c=chk[+b.dataset.cl];c.done=!c.done;touch();re()});
+  layer.querySelectorAll('[data-cldel]').forEach(b=>b.onclick=()=>{chk.splice(+b.dataset.cldel,1);touch();re()});
+  layer.querySelectorAll('[data-lkdel]').forEach(b=>b.onclick=()=>{links.splice(+b.dataset.lkdel,1);t.links=links;touch();re()});
+  const enter=(inp,btn)=>{if($(inp))$(inp).addEventListener('keydown',e=>{if(e.key==='Enter')$(btn).click()})};
+  if($('#clAdd')){$('#clAdd').onclick=()=>{const v=$('#clIn').value.trim();if(!v)return;t.checklist=chk;chk.push({text:v,done:false});touch();re();setTimeout(()=>layer.querySelector('#clIn')?.focus(),20)};enter('#clIn','#clAdd')}
+  if($('#lkAdd')){$('#lkAdd').onclick=()=>{let u=$('#lkUrl').value.trim();if(!u)return;if(!/^https?:\/\//.test(u))u='https://'+u;t.links=links;links.push({label:$('#lkLabel').value.trim()||u,url:u});touch();re()};enter('#lkUrl','#lkAdd')}
+  if($('#logAdd')){$('#logAdd').onclick=()=>{const v=$('#logIn').value.trim();if(!v)return;logIt(v);touch();re()};enter('#logIn','#logAdd')}
+}
+let pTab='overview';
+function openProjectDetail(pid,tab){
+  const p=P(pid); if(!p) return; if(tab) pTab=tab;
+  const ts=data.tasks.filter(t=>t.project===pid), s=projStats(pid), td=todayStr();
+  const ms=ts.filter(t=>t.milestone).sort((a,b)=>toD(a.end)-toD(b.end));
+  const critSet=new Set(); ms.filter(m=>!done(m)).forEach(m=>chainFor(m.id).forEach(i=>critSet.add(i)));
+  const open=ts.filter(t=>!done(t)&&!t.milestone), hrs=open.reduce((a,t)=>a+(+t.est||0),0);
+  const waiting=ts.filter(t=>t.status==='waiting');
+  const span=ts.length?[ts.map(t=>t.start).sort()[0],ts.map(t=>t.end).sort().pop()]:null;
+  const nextMs=ms.find(m=>!done(m));
+  const links=p.links||[];
+  let body='';
+  if(pTab==='overview') body=`
+    <div class="sh-sec"><h4>About</h4>${p.summary?`<p class="prose">${esc(p.summary)}</p>`:'<p class="prose empty-p">No summary yet.</p>'}</div>
+    <div class="sh-sec"><div class="done-box" style="border-left-color:var(--blue);background:color-mix(in srgb,var(--blue) 9%,var(--surface))"><b style="color:var(--blue)">Next action</b>${esc(p.next||'Not set')}</div>
+    ${p.blocker?`<div class="warn-box bad-box" style="margin-top:10px"><b style="display:block;font-size:13px;color:var(--coral)">Blocked by</b>${esc(p.blocker)}</div>`:''}</div>
+    ${(()=>{const hs=ts.filter(t=>!done(t)).map(health);const c=k=>hs.filter(h=>h.k===k).length;
+      const slips={};ts.forEach(t=>(t.slips||[]).forEach(s=>slips[s.reason]=(slips[s.reason]||0)+(+s.days||0)));
+      const wait=ts.reduce((a,t)=>a+timeInStatus(t).waiting,0); if(wait)slips['Time spent waiting (total)']=wait;
+      const ent=Object.entries(slips).sort((a,b)=>b[1]-a[1]), mx=Math.max(1,...ent.map(e=>e[1]));
+      return `<div class="sh-sec"><h4>Health</h4><div class="facts"><div class="fact"><span>Overall</span><b>${hpHtml(worst(ts))}</b></div><div class="fact"><span>On track</span><b>${c('ok')}</b></div><div class="fact"><span>At risk</span><b style="color:var(--amber)">${c('risk')}</b></div><div class="fact"><span>Behind</span><b style="color:var(--coral)">${c('behind')}</b></div><div class="fact"><span>Blocked</span><b style="color:var(--violet)">${c('blocked')}</b></div></div></div>
+      <div class="sh-sec"><h4>Where the time went</h4>${ent.length?ent.map(([r,v])=>`<div class="hbar"><span>${esc(r)}</span><span class="tr"><i style="width:${v/mx*100}%;background:${RCOL[REASONS.indexOf(r)]||'var(--violet)'}"></i></span><b>${v}d</b></div>`).join(''):'<p class="prose empty-p">No delays logged yet.</p>'}</div>`})()}
+    <div class="sh-sec"><h4>Status</h4><div class="facts">
+      <div class="fact"><span>Owner</span><b>${whoHtml(p.owner)}</b></div>
+      <div class="fact"><span>Complete</span><b>${Math.round(s.pct*100)}% <small>by effort</small></b></div>
+      <div class="fact"><span>Steps</span><b>${s.doneCount} of ${s.count}</b></div>
+      <div class="fact"><span>Work left</span><b>${hrs?Math.round(hrs*10)/10+' h':'None estimated'}</b></div>
+      ${span?`<div class="fact"><span>Start</span><b>${fmt(span[0],{month:'short',day:'numeric',year:'numeric'})}</b></div><div class="fact"><span>Finish</span><b>${fmt(span[1],{month:'short',day:'numeric',year:'numeric'})}</b></div>`:''}
+      <div class="fact"><span>Next deadline</span><b>${nextMs?`${fmt(nextMs.end)} <small>${diff(td,nextMs.end)} days</small>`:'<small>None</small>'}</b></div>
+      <div class="fact"><span>Waiting on others</span><b>${waiting.length}</b></div>
+    </div></div>
+    ${ms.length?`<div class="sh-sec"><h4>Milestones</h4><div class="feeds">${ms.map(m=>`<button class="feed ${critSet.has(m.id)?'crit':''}" data-detail="${m.id}"><span class="dia" ${done(m)?'style="background:var(--mint)"':''}></span><span class="ft">${esc(m.title)}</span><span class="fd">${fmtLong(m.end)}${done(m)?', done':`, ${diff(td,m.end)} days`}</span></button>`).join('')}</div></div>`:''}
+    ${waiting.length?`<div class="sh-sec"><h4>Waiting on others</h4><div class="feeds">${waiting.map(w=>`<button class="feed" data-detail="${w.id}"><span class="ft">${esc(w.title)}</span><span class="fd">${esc(w.waitingOn||person(w.owner).name)}, ${w.waitingSince?diff(w.waitingSince,td):0}d</span></button>`).join('')}</div></div>`:''}
+    <div class="sh-sec links"><h4>Links</h4>${links.length?links.map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label||l.url)}</a>`).join(''):'<p class="prose empty-p">No links yet.</p>'}</div>`;
+  if(pTab==='sheet'){
+    const ordered=projOrder(pid);
+    body=ordered.length?`<p class="muted" style="font-size:13px;margin:0 0 10px">Amber numbers are on the critical path to an open milestone. Click any row for full details.</p><div class="tbl-wrap"><table class="sheet-t"><thead><tr><th>#</th><th>Task name</th><th>Duration</th><th>Start</th><th>Finish</th><th>Predecessors</th><th>Resource</th><th>% done</th><th>Status</th></tr></thead><tbody>${ordered.map(t=>`<tr data-detail="${t.id}" class="${done(t)?'is-done':''} ${critSet.has(t.id)&&!done(t)?'is-crit':''}">
+      <td class="num">${rowNum(t.id)}</td><td class="nm">${t.milestone?'◆ ':''}${esc(t.title)}</td><td class="nowrap">${t.milestone?'0 days':(()=>{const w=workDays(t.start,t.end)||1;return w+(w===1?' day':' days')})()}</td><td class="nowrap">${fmt(t.start)}</td><td class="nowrap">${fmt(t.end)}</td>
+      <td class="nowrap">${(t.deps||[]).map(d=>T(d)?.project===pid?rowNum(d):'').filter(Boolean).join(', ')}</td><td class="nowrap">${whoHtml(t.owner)}</td><td>${t.milestone?'':taskPct(t)+'%'}</td><td>${stHtml(t)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="prose empty-p">No tasks on this project yet.</p>';
+  }
+  layer.innerHTML=`<div class="scrim" data-close></div><aside class="sheet" role="dialog" aria-modal="true" aria-label="${esc(p.name)}" style="--pc:${p.color||'var(--blue)'}">
+    <div class="sh-top">
+      <div class="sh-crumb"><span>Project</span><button class="icon-btn sh-close" data-close aria-label="Close">✕</button></div>
+      <h2 class="sh-title">${esc(p.name)}</h2>
+      <div class="chips"><span class="chip ${p.status}">${PSTATUS[p.status]||p.status}</span>${p.shipLock?'<span class="chip lock">Ship lock on</span>':''}</div>
+      ${s.count?`<div class="track" style="--pc:${p.color};margin-top:14px;max-width:420px"><i style="width:${Math.round(s.pct*100)}%"></i><span class="mark80"></span></div>`:''}
+      <div class="sh-actions"><button class="btn owner-only" id="pEdit">Edit project</button><button class="btn owner-only" id="pAddT">Add task</button><button class="btn" id="pGrid">Open grid</button><button class="btn" id="pTl">Open in timeline</button></div>
+      <div class="sh-tabs" role="tablist"><button role="tab" data-ptab="overview" aria-selected="${pTab==='overview'}">Overview</button><button role="tab" data-ptab="sheet" aria-selected="${pTab==='sheet'}">Task sheet<span class="n">${ts.length}</span></button></div>
+    </div><div class="sh-body">${body}</div></aside>`;
+  layer.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeLayer);
+  layer.querySelectorAll('[data-ptab]').forEach(b=>b.onclick=()=>openProjectDetail(pid,b.dataset.ptab));
+  layer.querySelectorAll('[data-detail]').forEach(b=>b.onclick=()=>openDetail(b.dataset.detail,'general'));
+  layer.querySelector('#pGrid').onclick=()=>{closeLayer();ui.view='grid';ui.gridProj=pid;saveUI();render()};
+  layer.querySelector('#pTl').onclick=()=>{closeLayer();ui.view='timeline';ui.proj=pid;ui.group='project';saveUI();render()};
+  if(viewer()) return;
+  layer.querySelector('#pEdit').onclick=()=>openProject(pid);
+  layer.querySelector('#pAddT').onclick=()=>{const t={id:uid(pid),project:pid,title:'New task',owner:'darius',status:'todo',priority:3,start:td,end:addDays(td,1),dur:2,notBefore:td,est:1,deps:[]};data.tasks.push(t);touch();openTask(t.id,true)};
+}
+
+
+/* ---------- Grid view (Microsoft Project style) ---------- */
+ui.collapsed=ui.collapsed||{};
+function renderGrid(){
+  const withTasks=data.projects.filter(p=>data.tasks.some(t=>t.project===p.id));
+  if(!ui.gridProj||!P(ui.gridProj)) ui.gridProj=(withTasks[0]||data.projects[0]||{}).id;
+  const pid=ui.gridProj, p=P(pid)||{}, groups=projRows(pid), all=data.tasks.filter(t=>t.project===pid), V=viewer();
+  const filt=t=>(!ui.hideDone||!done(t))&&(!ui.problems||['behind','blocked','risk'].includes(health(t).k));
+  const pr=rollup(all);
+  const rowsHtml=[];
+  rowsHtml.push(`<tr class="r-proj" style="--pc:${p.color||'var(--blue)'}"><td class="c-num">0</td><td></td><td class="c-name">${esc(p.name||'')}</td><td></td><td>${pr?hpHtml(pr.h):''}</td><td>${whoHtml(p.owner)}</td><td>${pr?pr.dur+' days':''}</td><td>${pr?fmt(pr.start):''}</td><td>${pr?fmt(pr.end):''}</td><td></td><td>${pr?`<span class="minibar"><i style="width:${pr.pct}%"></i></span>${pr.pct}%`:''}</td><td>${pr?pr.left+' h':''}</td></tr>`);
+  groups.forEach(g=>{
+    const key=pid+':'+(g.ph?g.ph.id:'_'), col=!!ui.collapsed[key], ru=rollup(g.tasks);
+    if(g.ph) rowsHtml.push(`<tr class="r-ph"><td class="c-num"></td><td></td><td class="c-name"><button class="caret" data-collapse="${key}" aria-label="${col?'Expand':'Collapse'} ${esc(g.ph.name)}">${col?'▸':'▾'}</button><span ${g.ph.id&&!V?`data-editphase="${g.ph.id}" style="cursor:pointer"`:''}>${esc(g.ph.name)}</span></td><td></td><td>${ru?hpHtml(ru.h):''}</td><td></td><td>${ru?ru.dur+' days':''}</td><td>${ru?fmt(ru.start):''}</td><td>${ru?fmt(ru.end):''}</td><td></td><td>${ru?`<span class="minibar"><i style="width:${ru.pct}%"></i></span>${ru.pct}%`:''}</td><td>${ru?ru.left+' h':''}</td></tr>`);
+    if(col) return;
+    g.tasks.filter(filt).forEach(t=>{
+      const h=health(t), pct=taskPct(t);
+      const deps=(t.deps||[]).map(T).filter(Boolean).map(d=>`<span class="dchip ${done(d)?'':'open'}" data-open="${d.id}" title="${esc(d.title)}">${d.project===pid?rowNum(d.id):'↗'}</span>`).join('');
+      rowsHtml.push(`<tr class="r-task h-${h.k} ${done(t)?'is-done':''}">
+        <td class="c-num">${rowNum(t.id)}</td>
+        <td>${t.milestone?'':`<button class="circ ${done(t)?'on':''}" data-toggle="${t.id}" ${V?'disabled':''} aria-label="Mark ${esc(t.title)} ${done(t)?'not done':'done'}"></button>`}</td>
+        <td class="c-name"><span class="nm" data-open="${t.id}">${t.milestone?'◆ ':''}${esc(t.title)}</span></td>
+        <td>${t.milestone?'':V?priHtml(t):`<select class="g-in" data-gpri="${t.id}" aria-label="Priority">${opts([['1','P1'],['2','P2'],['3','P3'],['4','P4']],String(t.priority||3))}</select>`}</td>
+        <td>${hpHtml(h)}</td>
+        <td>${V?whoHtml(t.owner):`<select class="g-in" data-gown="${t.id}" aria-label="Owner">${opts(data.people.map(x=>[x.id,x.name]),t.owner)}</select>`}</td>
+        <td>${t.milestone?'0 days':V||!isAuto(t)||done(t)?`${t.dur||1} days`:`<input class="g-in dur" type="number" min="1" data-gdur="${t.id}" value="${t.dur||1}" aria-label="Duration in working days"> d`}</td>
+        <td>${fmt(t.start)}${t.notBefore&&isAuto(t)?'<span class="pin" title="Start no earlier than this date">📌</span>':!isAuto(t)&&!t.milestone?'<span class="pin" title="Manually scheduled">✎</span>':''}</td>
+        <td>${fmt(t.end)}</td>
+        <td>${deps}</td>
+        <td>${t.milestone?'':`<span class="minibar"><i style="width:${pct}%"></i></span>${pct}%`}</td>
+        <td>${t.milestone?'':Math.round((+t.est||0)*(1-pct/100)*10)/10+' h'}</td></tr>`);
+    });
+    if(!V) rowsHtml.push(`<tr class="g-add"><td colspan="12"><input type="text" data-gadd="${g.ph?g.ph.id:''}" placeholder="Add a task${g.ph?' to '+esc(g.ph.name):''}, press Enter"></td></tr>`);
+  });
+  if(!groups.length&&!V) rowsHtml.push(`<tr class="g-add"><td colspan="12"><input type="text" data-gadd="" placeholder="Add the first task, press Enter"></td></tr>`);
+  document.getElementById('v-grid').innerHTML=`
+    <div class="g-bar">
+      <select id="gProj" aria-label="Project">${opts(data.projects.map(x=>[x.id,x.name]),pid)}</select>
+      <label class="toggle"><input type="checkbox" id="gHide" ${ui.hideDone?'checked':''}> Hide done</label>
+      <label class="toggle crit"><input type="checkbox" id="gProb" ${ui.problems?'checked':''}> Only problems</label>
+      <div class="spacer"></div>
+      <button class="btn" data-pdetail="${pid}">Project overview</button>
+      <button class="btn owner-only" id="gCal">Work calendar</button>
+      <button class="btn owner-only" id="gPhase">Add phase</button>
+    </div>
+    <div class="g-wrap"><table class="grid"><thead><tr><th>#</th><th></th><th>Task name</th><th>Priority</th><th>Health</th><th>Assigned to</th><th>Duration</th><th>Start</th><th>Finish</th><th>Depends on</th><th>% done</th><th>Work left</th></tr></thead><tbody>${rowsHtml.join('')}</tbody></table></div>
+    <div class="legend" style="border:0;padding:10px 2px">
+      <span>Durations are working days. Start and finish dates calculate from dependencies, your work calendar, and days off.</span>
+      <span>📌 pinned start date</span><span>✎ manually scheduled</span></div>`;
+  const $=id=>document.getElementById(id);
+  $('gProj').onchange=e=>{ui.gridProj=e.target.value;saveUI();render()};
+  $('gHide').onchange=e=>{ui.hideDone=e.target.checked;saveUI();render()};
+  $('gProb').onchange=e=>{ui.problems=e.target.checked;saveUI();render()};
+  if(V) return;
+  $('gCal').onclick=openCalendar;
+  $('gPhase').onclick=()=>editPhase(pid,null);
+}
+document.addEventListener('change',e=>{
+  const d=e.target.dataset||{}; if(viewer())return;
+  if(d.gpri){T(d.gpri).priority=+e.target.value;touch()}
+  if(d.gown){T(d.gown).owner=e.target.value;touch()}
+  if(d.gdur){const t=T(d.gdur),old=t.end;t.dur=Math.max(1,parseInt(e.target.value)||1);touch();askSlip(t,old)}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter'||!e.target.dataset||e.target.dataset.gadd===undefined)return;
+  const title=e.target.value.trim(); if(!title)return; const pid=ui.gridProj, ph=e.target.dataset.gadd, td=todayStr();
+  const t={id:uid(pid),project:pid,title,owner:'darius',status:'todo',priority:3,start:nextWork(td),end:nextWork(td),dur:1,notBefore:nextWork(td),est:1,deps:[]};
+  if(ph)t.phase=ph; data.tasks.push(t); touch(); setTimeout(()=>document.querySelector(`[data-gadd="${ph}"]`)?.focus(),20);
+});
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-collapse]'); if(c){ui.collapsed[c.dataset.collapse]=!ui.collapsed[c.dataset.collapse];saveUI();render();return}
+  const ep=e.target.closest('[data-editphase]'); if(ep&&!viewer()){editPhase(ui.gridProj,ep.dataset.editphase)}
+});
+function editPhase(pid,phid){
+  const p=P(pid); p.phases=p.phases||[]; const ph=phid?p.phases.find(x=>x.id===phid):null;
+  layer.innerHTML=`<div class="scrim" data-close></div><div class="modal" role="dialog" aria-modal="true"><h3>${ph?'Phase':'New phase'}</h3><p>Phases group the work, like Design, Build, Test, Launch. Each one rolls up its own dates, progress, and health.</p>
+    <label class="f">Name<input type="text" id="phName" value="${esc(ph?.name||'')}"></label>
+    <div class="actions">${ph?'<button class="btn danger" id="phDel">Delete phase</button>':''}<button class="btn" data-close>Cancel</button><button class="btn primary" id="phSave">${ph?'Save':'Add phase'}</button></div></div>`;
+  layer.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeLayer);
+  setTimeout(()=>layer.querySelector('#phName')?.focus(),20);
+  layer.querySelector('#phSave').onclick=()=>{const n=layer.querySelector('#phName').value.trim();if(!n)return;if(ph)ph.name=n;else p.phases.push({id:uid('ph'),name:n});closeLayer();touch()};
+  if(ph)layer.querySelector('#phDel').onclick=()=>{p.phases=p.phases.filter(x=>x!==ph);data.tasks.forEach(t=>{if(t.phase===ph.id)delete t.phase});closeLayer();touch();toast('Phase removed. Its tasks moved to Other.')};
+}
+function openCalendar(){
+  const c=cal();
+  layer.innerHTML=`<div class="scrim" data-close></div><div class="modal" role="dialog" aria-modal="true"><h3>Work calendar</h3><p>Scheduling only counts working days. Days off push every affected task automatically.</p>
+    <div class="f">Working days<div class="cal-days">${DOW.map((d,i)=>`<label><input type="checkbox" data-wd="${i}" ${c.workdays.includes(i)?'checked':''}>${d}</label>`).join('')}</div></div>
+    <div class="f" style="margin-top:14px">Days off<div class="deps-list" style="max-height:220px">${(c.daysOff||[]).slice().sort((a,b)=>a.date.localeCompare(b.date)).map(d=>`<label style="justify-content:space-between"><span>${fmtLong(d.date)}${d.label?', '+esc(d.label):''}</span><button class="x" data-offdel="${d.date}" aria-label="Remove day off">✕</button></label>`).join('')||'<span class="muted">None yet</span>'}</div></div>
+    <div class="add-row"><input type="date" id="offDate" style="max-width:170px"><input type="text" id="offLabel" placeholder="Label, like Family trip"><button class="btn" id="offAdd">Add day off</button></div>
+    <div class="actions"><button class="btn primary" data-close>Done</button></div></div>`;
+  layer.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeLayer);
+  layer.querySelectorAll('[data-wd]').forEach(b=>b.onchange=()=>{c.workdays=[...layer.querySelectorAll('[data-wd]:checked')].map(x=>+x.dataset.wd);if(!c.workdays.length)c.workdays=[1];touch();openCalendar()});
+  layer.querySelectorAll('[data-offdel]').forEach(b=>b.onclick=()=>{c.daysOff=c.daysOff.filter(d=>d.date!==b.dataset.offdel);touch();openCalendar()});
+  layer.querySelector('#offAdd').onclick=()=>{const d=layer.querySelector('#offDate').value;if(!d)return;c.daysOff=(c.daysOff||[]).filter(x=>x.date!==d);c.daysOff.push({date:d,label:layer.querySelector('#offLabel').value.trim()});touch();openCalendar()};
+}
+
+/* ---------- layers ---------- */
+const layer=document.getElementById('layer');
+function closeLayer(){layer.innerHTML=''}
+function toast(msg){const d=document.createElement('div');d.className='toast';d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+function ask(title,body,buttons){
+  return new Promise(res=>{
+    layer.innerHTML=`<div class="scrim"></div><div class="modal" role="dialog" aria-modal="true"><h3>${esc(title)}</h3><p>${esc(body)}</p><div class="actions">${buttons.map(([v,l,c])=>`<button class="btn ${c||''}" data-ans="${v}">${esc(l)}</button>`).join('')}</div></div>`;
+    layer.querySelectorAll('[data-ans]').forEach(b=>b.onclick=()=>{closeLayer();res(b.dataset.ans)});
+  });
+}
+const opts=(list,val)=>list.map(([v,l])=>`<option value="${esc(v)}" ${v===val?'selected':''}>${esc(l)}</option>`).join('');
+function openTask(id,isNew){
+  const t=T(id); if(!t)return; const p=P(t.project)||{};
+  const cand=data.tasks.filter(x=>x.id!==t.id&&(x.project===t.project||x.milestone));
+  const auto=isAuto(t);
+  layer.innerHTML=`<div class="scrim" data-close></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Edit task">
+    <header><h3>${isNew?'New task':t.milestone?'Edit milestone':'Edit task'}</h3><button class="icon-btn" data-close aria-label="Close">✕</button></header>
+    <div class="body">
+      <label class="f">Title<input type="text" id="fTitle" value="${esc(t.title)}"></label>
+      <div class="two"><label class="f">Project<select id="fProj">${opts(data.projects.map(x=>[x.id,x.name]),t.project)}</select></label>
+        <label class="f">Phase<select id="fPhase"><option value="">None</option>${opts((p.phases||[]).map(x=>[x.id,x.name]),t.phase||'')}</select></label></div>
+      <div class="two"><label class="f">Owner<select id="fOwner">${opts(data.people.map(x=>[x.id,x.name]),t.owner)}</select></label>
+        <label class="f">Priority<select id="fPri">${opts(Object.entries(PRI),String(t.priority||3))}</select></label></div>
+      <div class="two"><label class="f">Status<select id="fStatus">${opts(Object.entries(STATUS),t.status)}</select></label>
+        ${t.milestone?'':`<label class="f">Scheduling<select id="fMode">${opts([['auto','Auto (from dependencies)'],['manual','Manual (fixed dates)']],auto?'auto':'manual')}</select></label>`}</div>
+      ${t.milestone?`<label class="f">Deadline date<input type="date" id="fStart" value="${t.start}"></label>`
+        :auto?`<div class="two"><label class="f">Duration (working days)<input type="number" id="fDur" min="1" step="1" value="${t.dur||1}"></label>
+          <label class="f">Start no earlier than<input type="date" id="fNotBefore" value="${t.notBefore||(t.deps||[]).length?t.notBefore||'':t.start}"></label></div>
+          <div class="muted" style="font-size:13px">Scheduled ${fmt(t.start)} to ${fmt(t.end)}. Dates move automatically when the work before it moves.</div>`
+        :`<div class="two"><label class="f">Start<input type="date" id="fStart" value="${t.start}"></label><label class="f">End<input type="date" id="fEnd" value="${t.end}"></label></div>`}
+      ${t.milestone?'':`<div class="two"><label class="f">Estimate (hours of work)<input type="number" id="fEst" min="0" step="0.25" value="${t.est??''}"></label>
+        <label class="f">Actual hours so far<input type="number" id="fAct" min="0" step="0.25" value="${t.actual??''}"></label></div>`}
+      ${(t.checklist||[]).length||t.milestone?'':`<label class="f">Percent complete<input type="number" id="fPct" min="0" max="100" step="5" value="${t.pct||0}"></label>`}
+      <div id="waitBox" ${t.status==='waiting'?'':'hidden'} class="two"><label class="f">Waiting on<input type="text" id="fWaitOn" value="${esc(t.waitingOn||'')}" placeholder="Doug signature"></label>
+        <label class="f">Since<input type="date" id="fWaitSince" value="${t.waitingSince||todayStr()}"></label></div>
+      <label class="f" style="display:flex;align-items:center;gap:8px;color:var(--text)"><input type="checkbox" id="fMs" ${t.milestone?'checked':''}> Milestone (a deadline, not work)</label>
+      <div class="f">Can't start until these are done
+        <div class="deps-list">${cand.map(x=>`<label><input type="checkbox" value="${x.id}" ${(t.deps||[]).includes(x.id)?'checked':''}>${x.milestone?'◆ ':''}${esc(x.title)}</label>`).join('')||'<span class="muted">No other tasks in this project yet</span>'}</div></div>
+      <label class="f">What this is<textarea id="fDesc" placeholder="Explain the task so anyone can pick it up">${esc(t.description||'')}</textarea></label>
+      <label class="f">Done when<input type="text" id="fDoneWhen" value="${esc(t.doneWhen||'')}" placeholder="How you will know it is finished"></label>
+      ${t.milestone?'':`<label class="f">Needs (tools, access, money)<input type="text" id="fNeeds" value="${esc(t.needs||'')}" placeholder="Stripe test key, 150 Manus credits"></label>`}
+      <label class="f">Notes<textarea id="fNote">${esc(t.note||'')}</textarea></label>
+    </div>
+    <footer><button class="btn danger" id="fDel">Delete</button><div class="spacer"></div><button class="btn primary" id="fBack">Done</button></footer>
+  </aside>`;
+  const $=s=>layer.querySelector(s); const v=s=>$(s)?$(s).value:undefined;
+  const apply=()=>{
+    const oldEnd=t.end;
+    t.title=$('#fTitle').value.trim()||'Untitled'; t.owner=v('#fOwner'); t.phase=v('#fPhase')||undefined; t.priority=+v('#fPri');
+    const ns=v('#fStatus'); if(ns!==t.status) setStatus(t,ns);
+    if(t.milestone){t.start=t.end=v('#fStart')||t.start}
+    else if($('#fDur')){t.dur=Math.max(1,parseInt(v('#fDur'))||1);const nb=v('#fNotBefore');if(nb)t.notBefore=nb;else delete t.notBefore}
+    else if($('#fStart')){t.start=v('#fStart')||t.start;t.end=v('#fEnd')||t.end;if(toD(t.end)<toD(t.start))t.end=t.start;t.dur=Math.max(1,workDays(t.start,t.end)||1)}
+    if($('#fEst'))t.est=v('#fEst')===''?0:+v('#fEst'); if($('#fAct'))t.actual=v('#fAct')===''?undefined:+v('#fAct'); if($('#fPct'))t.pct=+v('#fPct')||0;
+    if(t.status==='waiting'){t.waitingOn=v('#fWaitOn');t.waitingSince=v('#fWaitSince')||todayStr()}
+    t.deps=[...layer.querySelectorAll('.deps-list input:checked')].map(i=>i.value);
+    t.description=v('#fDesc');t.doneWhen=v('#fDoneWhen');t.note=v('#fNote');if($('#fNeeds'))t.needs=v('#fNeeds');
+    $('#waitBox').hidden=t.status!=='waiting'; touch();
+    if(!isNew) askSlip(t,oldEnd);
+  };
+  layer.querySelectorAll('.body input,.body select,.body textarea').forEach(el=>{if(!['fMs','fMode','fProj'].includes(el.id))el.addEventListener('change',apply)});
+  $('#fMs').addEventListener('change',e=>{t.milestone=e.target.checked;t.end=t.start;touch();openTask(t.id)});
+  if($('#fMode'))$('#fMode').addEventListener('change',e=>{if(e.target.value==='manual')t.schedule='manual';else{delete t.schedule;t.notBefore=t.notBefore||((t.deps||[]).length?undefined:t.start)}touch();openTask(t.id)});
+  $('#fProj').addEventListener('change',e=>{t.project=e.target.value;delete t.phase;touch();openTask(t.id)});
+  $('#fDel').onclick=async()=>{const a=await ask('Delete this task?',`"${t.title}" will be removed from the plan and from any task that depends on it.`,[['no','Keep it'],['yes','Delete','danger']]);
+    if(a==='yes'){data.tasks=data.tasks.filter(x=>x.id!==t.id);data.tasks.forEach(x=>x.deps=(x.deps||[]).filter(d=>d!==t.id));if(data.today?.taskId===t.id)data.today.taskId=null;touch()}};
+  $('#fBack').onclick=()=>openDetail(t.id);
+  layer.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeLayer);
+  if(isNew)setTimeout(()=>$('#fTitle').select(),30);
+}
+function openProject(id){
+  const isNew=!id; const p=isNew?{id:uid('p'),name:'',status:'active',owner:'darius',color:'#5B9BFF',next:'',blocker:'',shipLock:false}:P(id);
+  layer.innerHTML=`<div class="scrim" data-close></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Edit project">
+    <header><h3>${isNew?'New project':'Project'}</h3><button class="icon-btn" data-close aria-label="Close">✕</button></header>
+    <div class="body">
+      <label class="f">Name<input type="text" id="pName" value="${esc(p.name)}"></label>
+      <div class="two"><label class="f">Status<select id="pStatus">${opts(Object.entries(PSTATUS),p.status)}</select></label>
+        <label class="f">Owner<select id="pOwner">${opts(data.people.map(x=>[x.id,x.name]),p.owner)}</select></label></div>
+      <label class="f">About<textarea id="pSum">${esc(p.summary||'')}</textarea></label>
+      <label class="f">Next action<input type="text" id="pNext" value="${esc(p.next)}"></label>
+      <label class="f">Blocker<input type="text" id="pBlock" value="${esc(p.blocker)}" placeholder="Leave blank if nothing is in the way"></label>
+      <div class="two"><label class="f">Color<input type="color" id="pColor" value="${p.color}" style="height:38px;padding:3px;width:100%;background:var(--raised);border:1px solid var(--line);border-radius:8px"></label>
+      <label class="f" style="display:flex;align-items:center;gap:8px;color:var(--text);align-self:end;padding-bottom:9px"><input type="checkbox" id="pLock" ${p.shipLock?'checked':''}> Ship lock</label></div>
+      <label class="f" style="display:flex;align-items:center;gap:8px;color:var(--text)"><input type="checkbox" id="pPriv" ${p.private?'checked':''}> Private (only you see it, never shown on share links)</label>
+      <p class="muted" style="font-size:13px;margin:0">Ship lock means the current version ships before any restart. It shows on the portfolio as a promise to yourself.</p>
+    </div>
+    <footer>${isNew?'':'<button class="btn danger" id="pDel">Delete</button>'}<div class="spacer"></div><button class="btn primary" id="pSave">${isNew?'Add project':'Done'}</button></footer></aside>`;
+  const $=s=>layer.querySelector(s);
+  $('#pSave').onclick=()=>{p.name=$('#pName').value.trim()||'Untitled project';p.status=$('#pStatus').value;p.owner=$('#pOwner').value;p.next=$('#pNext').value;p.summary=$('#pSum').value;p.blocker=$('#pBlock').value;p.color=$('#pColor').value;p.shipLock=$('#pLock').checked;p.private=$('#pPriv').checked;
+    if(isNew)data.projects.push(p); touch(); closeLayer()};
+  if($('#pDel'))$('#pDel').onclick=async()=>{const n=data.tasks.filter(t=>t.project===p.id).length;
+    const a=await ask('Delete this project?',`"${p.name}" and its ${n} task${n===1?'':'s'} will be removed. Consider setting the status to Paused instead.`,[['no','Keep it'],['yes','Delete','danger']]);
+    if(a==='yes'){const ids=new Set(data.tasks.filter(t=>t.project===p.id).map(t=>t.id));data.tasks=data.tasks.filter(t=>!ids.has(t.id));data.tasks.forEach(t=>t.deps=(t.deps||[]).filter(d=>!ids.has(d)));data.projects=data.projects.filter(x=>x.id!==p.id);touch()}};
+  layer.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeLayer);
+}
+function editOneThing(){
+  const o=data.today||{}; const open=data.tasks.filter(t=>!done(t)&&!t.milestone);
+  layer.innerHTML=`<div class="scrim" data-close></div><div class="modal" role="dialog" aria-modal="true"><h3>Today's one thing</h3><p>Pick one task, or write something that isn't on the plan.</p>
+    <div class="grid"><label class="f">From the plan<select id="oTask"><option value="">Something else</option>${opts(open.map(t=>[t.id,t.title+' ('+person(t.owner).name+')']),o.taskId||'')}</select></label>
+    <label class="f">Or write it<input type="text" id="oText" value="${esc(o.taskId?'':o.text||'')}"></label>
+    <label class="f">Done looks like<input type="text" id="oDone" value="${esc(o.doneLooksLike||'')}"></label></div>
+    <div class="actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="oSave">Set it</button></div></div>`;
+  const $=s=>layer.querySelector(s);
+  $('#oSave').onclick=()=>{const id=$('#oTask').value;data.today={taskId:id||null,text:id?T(id).title:$('#oText').value,doneLooksLike:$('#oDone').value,done:false};touch();closeLayer()};
+  layer.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeLayer);
+}
+function openSettings(note){
+  if(apiMode){
+    layer.innerHTML=`<div class="scrim" data-close></div><div class="modal" role="dialog" aria-modal="true"><h3>Settings</h3>
+      <p>${role==='owner'?'You are logged in and can edit. Changes save automatically.':'You are viewing a shared, read-only plan.'}</p>
+      <div class="grid">
+        ${role==='owner'?`<div class="f">Share a view-only link<div class="add-row" style="padding:0"><input type="text" readonly value="${esc(shareUrl)}"><button class="btn" id="sCopy">Copy</button></div><span class="muted" style="font-weight:500">Anyone with this link can see everything except projects marked Private.</span></div>`:''}
+        <label class="f">Theme<select id="sTheme">${opts([['dark','Dark slate'],['light','Light'],['system','Match system']],localStorage.getItem('dp.theme')||'dark')}</select></label>
+      </div>
+      <div class="actions">${role==='owner'?'<button class="btn" id="sOut">Log out</button>':'<button class="btn" id="sIn">Owner log in</button>'}<button class="btn primary" data-close>Done</button></div></div>`;
+    layer.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeLayer);
+    layer.querySelector('#sTheme').onchange=e=>setTheme(e.target.value);
+    if(layer.querySelector('#sCopy'))layer.querySelector('#sCopy').onclick=async()=>{try{await navigator.clipboard.writeText(shareUrl);toast('Share link copied')}catch(e){toast(shareUrl)}};
+    if(layer.querySelector('#sOut'))layer.querySelector('#sOut').onclick=async()=>{await fetch('/api/logout',{method:'POST',credentials:'same-origin'});location.href='/'};
+    if(layer.querySelector('#sIn'))layer.querySelector('#sIn').onclick=()=>openLogin();
+    return;
+  }
+  layer.innerHTML=`<div class="scrim" data-close></div><div class="modal" role="dialog" aria-modal="true"><h3>Settings</h3>
+    <p>${esc(note||'Edits save to projects.json in your GitHub repo, the same file Tumii updates. The token stays in this browser only.')}</p>
+    <div class="grid">
+      <div class="two"><label class="f">GitHub owner<input type="text" id="sOwner" value="${esc(gh.owner)}"></label><label class="f">Repo<input type="text" id="sRepo" value="${esc(gh.repo)}"></label></div>
+      <div class="two"><label class="f">Branch<input type="text" id="sBranch" value="${esc(gh.branch)}"></label><label class="f">File<input type="text" id="sPath" value="${esc(gh.path)}"></label></div>
+      <label class="f">Fine-grained token (Contents: read and write, this repo only)<input type="password" id="sToken" value="${esc(gh.token)}" autocomplete="off"></label>
+      <label class="f" style="display:flex;align-items:center;gap:8px;color:var(--text)"><input type="checkbox" id="sLocal" ${gh.local?'checked':''}> Edit without a token (changes stay in this browser)</label>
+      <div class="two"><label class="f">Theme<select id="sTheme">${opts([['dark','Dark slate'],['light','Light'],['system','Match system']],localStorage.getItem('dp.theme')||'dark')}</select></label>
+      <div class="f">Data<div style="display:flex;gap:6px"><button class="btn" id="sReload">Reload from source</button></div></div></div>
+    </div>
+    <div class="actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="sSave">Save settings</button></div></div>`;
+  const $=s=>layer.querySelector(s);
+  $('#sSave').onclick=async()=>{gh={owner:$('#sOwner').value.trim(),repo:$('#sRepo').value.trim(),branch:$('#sBranch').value.trim()||'main',path:$('#sPath').value.trim()||'projects.json',token:$('#sToken').value.trim(),local:$('#sLocal').checked};
+    try{localStorage.setItem(LS_GH,JSON.stringify(gh))}catch(e){} setTheme($('#sTheme').value); closeLayer(); render();
+    if(gh.token&&!dirty){syncErr='';await load();toast(syncErr||'Connected to GitHub')}};
+  $('#sReload').onclick=async()=>{if(dirty){const a=await ask('Drop unsaved edits?','Reloading replaces your unsaved edits with the saved plan.',[['no','Cancel'],['yes','Reload','danger']]);if(a!=='yes')return}
+    try{localStorage.removeItem(LS_DATA)}catch(e){} dirty=false; syncErr=''; closeLayer(); await load(); toast('Reloaded')};
+  layer.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeLayer);
+}
+function setTheme(v){try{localStorage.setItem('dp.theme',v)}catch(e){} if(v==='system')document.documentElement.removeAttribute('data-theme');else document.documentElement.dataset.theme=v}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const g=k=>e.target.closest(`[data-${k}]`);
+  let el;
+  if(el=g('view')&&e.target.closest('.tab')){ui.view=el.dataset.view;saveUI();render();return}
+  if(el=g('toggle')){if(viewer())return;const t=T(el.dataset.toggle);setStatus(t,done(t)?'todo':'done');touch();if(done(t))toast('Done: '+t.title);return}
+  if(el=g('open')){openDetail(el.dataset.open,'general');return}
+  if(el=g('pdetail')){openProjectDetail(el.dataset.pdetail,'overview');return}
+  if(el=g('gridproj')){ui.view='grid';ui.gridProj=el.dataset.gridproj;saveUI();render();return}
+  if(el=g('proj')){ui.view='timeline';ui.proj=el.dataset.proj;ui.group='project';saveUI();render();return}
+  if(el=g('editproj')){openProject(el.dataset.editproj);return}
+  if(el=g('delidea')){data.ideas.splice(+el.dataset.delidea,1);touch();return}
+  if(el=g('delpark')){data.parked.splice(+el.dataset.delpark,1);touch();return}
+  if(e.target.id==='ideaAdd'){const v=document.getElementById('ideaIn').value.trim();if(v){data.ideas.unshift(v);touch();toast('Parked until Friday')}return}
+  if(e.target.id==='addProj'){openProject(null);return}
+  if(e.target.id==='oneDone'){const o=data.today;const t=o.taskId&&T(o.taskId);if(t){setStatus(t,done(t)?'todo':'done')}else o.done=!o.done;touch();return}
+  if(e.target.id==='oneEdit'){editOneThing();return}
+});
+document.addEventListener('keydown',e=>{if(e.target.id==='ideaIn'&&e.key==='Enter')document.getElementById('ideaAdd').click()});
+document.getElementById('saveBtn').onclick=saveGitHub;
+document.getElementById('shareBtn').onclick=async()=>{const url=apiMode?(role==='owner'?shareUrl:location.href.split('#')[0]):location.href.split('#')[0].split('?')[0];try{if(navigator.share){await navigator.share({title:'Darius Projects',url});return}await navigator.clipboard.writeText(url);toast('Link copied')}catch(e){toast(url)}};
+document.getElementById('settingsBtn').onclick=()=>openSettings();
+document.getElementById('groupSeg').onclick=e=>{const b=e.target.closest('button');if(b){ui.group=b.dataset.g;saveUI();render()}};
+document.getElementById('zoomSeg').onclick=e=>{const b=e.target.closest('button');if(b){ui.zoom=+b.dataset.z;saveUI();document.getElementById('tlScroll').dataset.ready='';render()}};
+document.getElementById('projFilter').onchange=e=>{ui.proj=e.target.value;saveUI();render()};
+document.getElementById('critTarget').onchange=e=>{ui.critTarget=e.target.value;saveUI();render()};
+document.getElementById('tCrit').onchange=e=>{ui.crit=e.target.checked;saveUI();render()};
+document.getElementById('tDeps').onchange=e=>{ui.deps=e.target.checked;saveUI();render()};
+document.getElementById('tBase').onchange=e=>{ui.base=e.target.checked;saveUI();render()};
+document.getElementById('setBaseline').onclick=async()=>{const a=await ask('Set the baseline?','This saves every task\'s current dates as the plan. Later slips get measured against it.',[['no','Cancel'],['yes','Set baseline','primary']]);
+  if(a==='yes'){data.tasks.forEach(t=>{t.baselineStart=t.start;t.baselineEnd=t.end});ui.base=true;saveUI();touch();toast('Baseline set')}};
+document.getElementById('addTask').onclick=()=>{const proj=ui.proj!=='all'?ui.proj:data.projects[0].id;const s=todayStr();
+  const t={id:uid(proj),project:proj,title:'New task',owner:'darius',status:'todo',priority:3,start:s,end:addDays(s,1),dur:2,notBefore:s,est:1,deps:[]};data.tasks.push(t);touch();openTask(t.id,true)};
+window.addEventListener('resize',()=>{if(ui.view==='timeline')render()});
+window.addEventListener('online',()=>{if(apiMode&&dirty)queueSave()});
+window.addEventListener('beforeunload',e=>{if(dirty&&(gh.token||apiMode)){e.preventDefault();e.returnValue=''}});
+setTheme(localStorage.getItem('dp.theme')||'dark');
+load();
+</script>
+</body>
+</html>
