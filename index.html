@@ -1,0 +1,115 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Darius Dashboard</title>
+<style>
+body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#f3f4f6;margin:0;padding:12px;color:#111}
+h1{font-size:22px;margin:0 0 4px} h2{font-size:18px;margin:20px 0 8px}
+.sub{color:#6b7280;font-size:13px;margin-bottom:12px}
+.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.one{border-left:6px solid #2563eb}
+.badge{color:#fff;font-size:11px;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em}
+.step{display:flex;gap:10px;padding:10px 0;border-top:1px solid #eee}
+.step:first-child{border-top:none}
+.num{font-weight:700;font-size:18px;color:#9ca3af;min-width:28px}
+.title{font-weight:600} .meta{color:#6b7280;font-size:13px;margin-top:2px}
+.detail{font-size:14px;margin-top:4px}
+.blocker{color:#dc2626;font-size:13px}
+.dead{display:flex;justify-content:space-between;padding:6px 0}
+.days{font-weight:700;font-size:20px}
+.proj{padding:10px 0;border-top:1px solid #eee} .proj:first-child{border-top:none}
+ul{margin:4px 0 0 18px;padding:0} li{margin:3px 0}
+a{color:#2563eb;text-decoration:none}
+.links a{margin-right:14px}
+</style></head><body>
+<h1>Darius Dashboard</h1>
+<div class="sub">Updated October 14, 2026 (night) by Tumii. One screen, everything.</div>
+
+<div class="card one"><h2 style="margin-top:0">Today's One Thing</h2>
+<div class="title">Sign in to Healthy Habits preview as a client and a Health Professional. Confirm the Terms screen (v0.2 text, HP checkbox, footer) and the Request data copy buttons.</div>
+<div class="meta">Done looks like: Both roles tested, gaps written in the Build Log</div></div>
+<div class="card"><h2 style="margin-top:0">Deadlines</h2>
+<div class="dead"><div>Healthy Habits beta testers in (Doug)<div class="meta">November 02, 2026</div></div><div class="days">18 days</div></div>
+<div class="dead"><div>Healthy Habits full build<div class="meta">January 15, 2027</div></div><div class="days">92 days</div></div>
+<div class="dead"><div>Attorney review feedback (Nutri-Strength packet)<div class="meta">October 28, 2026</div></div><div class="days">13 days</div></div>
+</div>
+<div class="card"><h2 style="margin-top:0">Healthy Habits: path to November 2</h2><div class="detail">App renamed Healthy Habits to Nutri-Strength (beta Nov 2 unchanged). Decision made: treat Nutri-Strength as HIPAA-regulated. Attorney review packet sent (Kurt scheduling attorney, feedback requested by Oct 28). New Terms v0.3 (Beta) and Privacy Policy v0.3 drafted, replacing v0.2 (not yet sent to Manus). IT is choosing a new HIPAA-eligible database, migration targeted end of October, beta will launch on the new database so real client data never touches the old one. Manus: preview still at commit 7b539b8, still waiting on IT/Doug to install the test Spaces bucket credentials before it can run the fake-data export/deletion test. Manus drafted an IT-facing database handoff spec and is holding all database-security work until IT confirms the new database.</div><div class="links" style="margin-top:8px">
+<a href="https://docs.google.com/document/d/180HSWNTkPHI3gppeAVogNeltFUyvkucxoEPTxJECP5o/edit">Build Log</a>
+<a href="https://healthy-habits-preview-clean.104.248.8.233.nip.io">Preview app</a>
+<a href="https://app.healthyhabitstracker.com">Live app</a>
+</div><h2>Do these in order</h2>
+<div class="step"><div class="num">1</div><div style="flex:1">
+<div class="title">Preview sign-in test (client + Health Professional) <span class="badge" style="background:#059669">done</span></div>
+<div class="meta">Darius · 30 min</div>
+<div class="detail">Done. Terms screen shows for client and Health Professional.</div></div></div>
+<div class="step"><div class="num">2</div><div style="flex:1">
+<div class="title">Send Claude&#x27;s 4 decisions to Manus <span class="badge" style="background:#059669">done</span></div>
+<div class="meta">Darius · 10 min</div>
+<div class="detail">Done. Manus answered with the data inventory (last sections still coming).</div></div></div>
+<div class="step"><div class="num">3</div><div style="flex:1">
+<div class="title">Meet Doug: define &#x27;fully live&#x27; for November 2 <span class="badge" style="background:#16a34a">ready</span></div>
+<div class="meta">Darius · 45 min</div>
+<div class="detail">Exact feature list beta testers need. Becomes the checklist here.</div></div></div>
+<div class="step"><div class="num">4</div><div style="flex:1">
+<div class="title">Send Claude&#x27;s privacy policies and fixed terms v0.2 to Manus <span class="badge" style="background:#16a34a">ready</span></div>
+<div class="meta">Darius · 10 min</div>
+<div class="detail">Replace the /privacy and /health-data-privacy placeholder pages; update terms text to the org-access fix version. Note: newer Terms v0.3 (Beta) / Privacy Policy v0.3 for Nutri-Strength now drafted (HIPAA-regulated decision) and not yet sent to Manus. Preview only.</div></div></div>
+<div class="step"><div class="num">5</div><div style="flex:1">
+<div class="title">Push Terms gate to production <span class="badge" style="background:#d97706">waiting</span></div>
+<div class="meta">Manus · Manus task, approx 150 credits</div>
+<div class="detail">Beta users are on the live app with no terms acceptance. Go after step 1 is clean.</div><div class="blocker">Waiting on: Doug scope meeting</div></div></div>
+<div class="step"><div class="num">6</div><div style="flex:1">
+<div class="title">Fill in names: breach plan + retention policy <span class="badge" style="background:#16a34a">ready</span></div>
+<div class="meta">Darius · 10 min</div>
+<div class="detail">Incident lead, technical lead, decision maker, communications, policy owner, backups.</div></div></div>
+<div class="step"><div class="num">7</div><div style="flex:1">
+<div class="title">Claude writes Privacy Policy + Health Data Privacy Policy <span class="badge" style="background:#059669">done</span></div>
+<div class="meta">Claude · 1 Claude session</div>
+<div class="detail">Done. Privacy Policy v0.2 + Consumer Health Data Privacy Policy v0.2 in the inbox.</div><div class="blocker">Waiting on: Step 2</div></div></div>
+<div class="step"><div class="num">8</div><div style="flex:1">
+<div class="title">Resend email: invites + password reset <span class="badge" style="background:#d97706">waiting</span></div>
+<div class="meta">Manus · Manus task</div>
+<div class="detail">Sender domain, invitation email, reset email, test with controlled accounts.</div><div class="blocker">Waiting on: Step 5</div></div></div>
+<div class="step"><div class="num">9</div><div style="flex:1">
+<div class="title">Stripe test mode <span class="badge" style="background:#d97706">waiting</span></div>
+<div class="meta">Manus · Manus task</div>
+<div class="detail">Checkout, webhooks, subscription state. No live payments yet.</div><div class="blocker">Waiting on: Step 8</div></div></div>
+<div class="step"><div class="num">10</div><div style="flex:1">
+<div class="title">Restore reminders as separate scheduled service <span class="badge" style="background:#d97706">waiting</span></div>
+<div class="meta">Manus · Manus task</div>
+<div class="detail">DigitalOcean scheduled service. Validate independently.</div><div class="blocker">Waiting on: Step 9 (Resend)</div></div></div>
+<div class="step"><div class="num">11</div><div style="flex:1">
+<div class="title">Production test accounts (all 5 roles) + launch checklist <span class="badge" style="background:#d97706">waiting</span></div>
+<div class="meta">Darius · 2 hours</div>
+<div class="detail">Through the live invite flow. Then end-to-end run.</div><div class="blocker">Waiting on: Step 8</div></div></div>
+<div class="step"><div class="num">12</div><div style="flex:1">
+<div class="title">Fix database certificate check (rejectUnauthorized) <span class="badge" style="background:#d97706">waiting</span></div>
+<div class="meta">Manus · Manus task</div>
+<div class="detail">Found by Claude&#x27;s review. Goes into the production security plan.</div><div class="blocker">Waiting on: Production security plan drafted, awaiting Doug&#x27;s review and a test Spaces bucket; also waiting on IT to confirm the new HIPAA-eligible database (fix targets the new DB, not the old one)</div></div></div>
+<h2>Parked (not now)</h2><ul>
+<li>Passkeys / managed identity provider</li>
+<li>Support role with ticket-scoped access</li>
+<li>Real account deletion and data export</li>
+<li>Phase 2 AI Workout Builder</li>
+<li>TestFlight / mobile release</li>
+<li>HIPAA and AWS migration: Darius handles with Kurt, separate track, not on this list</li>
+</ul></div>
+<div class="card"><h2 style="margin-top:0">Everything else</h2>
+<div class="proj"><div class="title">Stairway to Health <span class="badge" style="background:#dc2626">stalled</span></div><div class="meta">Darius</div><div class="detail">Next: Ship the current version. No restarts.</div><div class="blocker">Blocker: Perfectionism, restarts</div></div>
+<div class="proj"><div class="title">Sales reporting automation <span class="badge" style="background:#6b7280">handed off</span></div><div class="meta">Skyler + Darius</div><div class="detail">Next: Skyler builds; Darius hands off Daily RIS Sales.</div></div>
+<div class="proj"><div class="title">HP Partnership <span class="badge" style="background:#16a34a">active</span></div><div class="meta">Darius</div><div class="detail">Next: Agreements + Addendum 1 to DocuSign (Doug signs). Build no-show waitlist.</div><div class="blocker">Blocker: Doug signature</div></div>
+<div class="proj"><div class="title">Formula and Marketing Mastery seminar <span class="badge" style="background:#16a34a">active</span></div><div class="meta">Darius</div><div class="detail">Next: Merge the master deck. Muscle testing flyer.</div></div>
+<div class="proj"><div class="title">GoHighLevel transition <span class="badge" style="background:#6b7280">long term</span></div><div class="meta">Darius</div><div class="detail">Next: Nothing this week.</div></div>
+<div class="proj"><div class="title">Raise the autoship floor <span class="badge" style="background:#16a34a">active</span></div><div class="meta">Leadership</div><div class="detail">Next: Joint growth and sales effort.</div></div>
+<div class="proj"><div class="title">Tumii (assistant) <span class="badge" style="background:#16a34a">active</span></div><div class="meta">Tumii</div><div class="detail">Next: Project dashboard v1 today. Hosted v2 later this week.</div></div>
+<div class="proj"><div class="title">School (ASU Kinesiology) <span class="badge" style="background:#16a34a">active</span></div><div class="meta">Darius</div><div class="detail">Next: Tuesday class 6 to 9 PM. Homework after family time.</div></div>
+</div>
+<div class="card"><h2 style="margin-top:0">Idea Parking Lot (Friday review)</h2><ul>
+<li>Project management tool v2: hosted web address, calendar fill, time estimates per step</li>
+<li>Five specialist bots or spaces</li>
+<li>Compare Grok bot setup with friend&#x27;s</li>
+<li>Docker sandbox so Tumii can code on Healthy Habits</li>
+<li>Connect Tumii to Doug&#x27;s Manus</li>
+<li>Automate the monthly reporting spreadsheet</li>
+<li>Daily Floor (work must-do + home must-do + workout check)</li>
+<li>Onboarding automation for new clients and Health Professionals</li>
+</ul></div></body></html>
