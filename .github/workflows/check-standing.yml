@@ -1,0 +1,21 @@
+name: Check standing.json
+
+on:
+  push:
+    paths:
+      - standing.json
+      - scripts/check-standing.mjs
+  pull_request:
+    paths:
+      - standing.json
+      - scripts/check-standing.mjs
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/check-standing.mjs

@@ -396,10 +396,28 @@ input.g-in.dur{width:52px;text-align:right}
 .attn .why{grid-column:1/-1;font-size:13px;color:var(--muted)}
 .cal-days{display:flex;gap:6px;flex-wrap:wrap}
 .cal-days label{display:flex;gap:5px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:13px;cursor:pointer}
+.stand{margin:0 0 22px}
+.stand-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.stand-head h2{font-stretch:118%;font-weight:800;font-size:22px;margin:0;letter-spacing:-.02em}
+.stand-time{font-size:13px;color:var(--muted);font-weight:600}
+.stand-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stand-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 14px 10px;min-width:0}
+.stand-k{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px}
+.stand-k h3{margin:0;font-size:13px;font-weight:700;color:var(--muted)}
+.stand-count{font-stretch:115%;font-weight:800;font-size:22px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
+.stand-list{max-height:220px;overflow:auto;margin:0;padding:0;list-style:none}
+.stand-list li{padding:8px 0;border-top:1px solid var(--line-soft);font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+.stand-list li:first-child{border-top:0;padding-top:0}
+.stand-line{font-weight:600}
+.stand-meta{display:block;margin-top:3px;font-size:12px;color:var(--muted);font-weight:500}
+.stand-card a{color:var(--ice);font-weight:650}
+.stand-empty{color:var(--muted);font-size:14px;padding:2px 0 6px}
+.needs-edit{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;line-height:1.6;color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 55%,transparent);border-radius:20px;padding:0 6px;vertical-align:middle}
 @media (max-width:980px){
   .today-grid{grid-template-columns:1fr}
   .pf-row{grid-template-columns:1fr;gap:12px}
   .lots,.bb-list{grid-template-columns:1fr}
+  .stand-grid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:640px){
   .top{flex-wrap:wrap;padding:10px 14px;gap:10px}
@@ -409,6 +427,8 @@ input.g-in.dur{width:52px;text-align:right}
   .sync .label{display:none}
   .hero{padding:22px 20px}
   .tl-scroll{max-height:calc(100vh - 250px)}
+  .stand-grid{grid-template-columns:1fr}
+  .stand-head h2{font-size:20px}
 }
 </style>
 </head>
@@ -836,6 +856,157 @@ function renderToday(){
     </div>
   </div>`;
 }
+const STAND_BOTS=['Client Ops Router','Fleet Coordinator','Thought Bot','DEEDEE','Tumii','Tumi','Router','Testes','Brandi','Commie','Logi','Stair','Nutri','Manus','Imp','EXO'];
+let standingState='loading', standingData=null, standingStarted=false;
+function standPatterns(){
+  const escRe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return {
+    bot:new RegExp('(?<![A-Za-z0-9_])(?:'+STAND_BOTS.map(escRe).join('|')+')(?![A-Za-z0-9_-])','gi'),
+    id:/\b[a-z]{2,6}-(?:m)?\d+\b/gi
+  };
+}
+function scrubText(s){
+  let hidden=false;
+  let out=String(s??'').replace(/\u2014/g,' - ');
+  const p=standPatterns();
+  out=out.replace(p.bot,()=>{hidden=true;return ''});
+  out=out.replace(p.id,()=>{hidden=true;return ''});
+  out=out.replace(/[ \t]{2,}/g,' ').replace(/\s+([,.;:!?])/g,'$1').trim();
+  return {text:out,hidden};
+}
+function phoenixDay(iso){
+  const d=new Date(iso);
+  if(Number.isNaN(d.getTime())) return '';
+  return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Phoenix',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
+}
+function phoenixClock(iso){
+  const d=new Date(iso);
+  if(Number.isNaN(d.getTime())) return '';
+  return new Intl.DateTimeFormat('en-US',{timeZone:'America/Phoenix',hour:'numeric',minute:'2-digit'}).format(d).replace(/[\u202f\u00a0]/g,' ');
+}
+function phoenixToday(){
+  return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Phoenix',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+}
+function standDate(s){
+  if(typeof s!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(s)) return '';
+  try{return fmt(s)}catch(e){return ''}
+}
+function standingShapeOk(j){
+  if(!j||typeof j!=='object'||Array.isArray(j)) return false;
+  const textOk=o=>!!(o&&typeof o==='object'&&!Array.isArray(o)&&typeof o.text==='string'&&o.text.trim());
+  if(j.oneThing!=null&&!textOk(j.oneThing)) return false;
+  for(const key of ['waitingOnDarius','waitingOnOthers','doneToday']){
+    if(j[key]==null) continue;
+    if(!Array.isArray(j[key])||j[key].some(item=>!textOk(item))) return false;
+  }
+  return true;
+}
+function loadStanding(){
+  if(standingStarted) return;
+  standingStarted=true;
+  fetch('standing.json',{cache:'no-store'}).then(r=>{
+    if(!r.ok) throw new Error('missing');
+    return r.text();
+  }).then(text=>{
+    const j=JSON.parse(text);
+    if(!standingShapeOk(j)) throw new Error('invalid');
+    standingData=j;
+    standingState='ok';
+  }).catch(()=>{
+    standingData=null;
+    standingState='bad';
+  }).then(()=>{
+    if(data&&ui.view==='portfolio') render();
+  });
+}
+function standPiece(value){
+  if(value==null||value==='') return '';
+  const s=scrubText(value);
+  if(!s.text&&!s.hidden) return '';
+  const mark=s.hidden?'<span class="needs-edit owner-only">needs edit</span>':'';
+  return `${esc(s.text)}${mark}`;
+}
+function standLink(url){
+  if(typeof url!=='string') return '';
+  const raw=url.trim();
+  if(!/^https?:\/\//i.test(raw)) return '';
+  const s=scrubText(raw);
+  if(s.hidden||s.text!==raw) return '';
+  return `<a href="${esc(raw)}" target="_blank" rel="noopener">Open</a>`;
+}
+function standMeta(parts){
+  const bits=parts.filter(Boolean);
+  return bits.length?`<div class="stand-meta">${bits.join(', ')}</div>`:'';
+}
+function standLi(item, parts){
+  return `<li><div class="stand-line">${standPiece(item&&item.text)}</div>${standMeta(parts)}</li>`;
+}
+function standCard(title, count, body){
+  return `<article class="stand-card"><div class="stand-k"><h3>${esc(title)}</h3><span class="stand-count">${count}</span></div>${body}</article>`;
+}
+function standEmpty(msg){return `<div class="stand-empty">${esc(msg)}</div>`}
+function standingEmptyCards(){
+  return standCard("Today's One Thing",0,standEmpty('Not set'))
+    +standCard('Waiting on Darius',0,standEmpty('Nothing waiting.'))
+    +standCard('Waiting on others',0,standEmpty('Nothing waiting.'))
+    +standCard('Done today',0,standEmpty('Nothing yet today'));
+}
+function standingFrame(time, cards){
+  const when=time?`<div class="stand-time">${esc(time)}</div>`:'';
+  return `<section class="stand" aria-label="Where things stand"><div class="stand-head"><h2>Where things stand</h2>${when}</div><div class="stand-grid">${cards}</div></section>`;
+}
+function fallbackOneThing(){
+  if(!data||!Array.isArray(data.tasks)) return null;
+  const o=data.today||{};
+  const linked=o.taskId?T(o.taskId):null;
+  const text=linked&&linked.title?linked.title:(o.text||'');
+  if(!String(text).trim()) return null;
+  const project=linked?(P(linked.project)?.name||''):'';
+  return {text, project, doneLooksLike:o.doneLooksLike||''};
+}
+function oneThingCard(item){
+  if(!item) return standCard("Today's One Thing",0,standEmpty('Not set'));
+  const main=standPiece(item.text);
+  const proj=standPiece(item.project);
+  const done=standPiece(item.doneLooksLike);
+  let body=`<div class="stand-line">${main}</div>`;
+  if(proj) body+=`<div class="stand-meta">${proj}</div>`;
+  if(done) body+=`<div class="stand-meta">Done looks like: ${done}</div>`;
+  return standCard("Today's One Thing",1,body);
+}
+function listCard(title, items, row){
+  const list=Array.isArray(items)?items:[];
+  if(!list.length) return standCard(title,0,standEmpty('Nothing waiting.'));
+  return standCard(title, list.length, `<ul class="stand-list">${list.map(row).join('')}</ul>`);
+}
+function standingHtml(){
+  if(!standingStarted) loadStanding();
+  if(standingState==='loading') return standingFrame('', standingEmptyCards());
+  if(standingState!=='ok'||!standingData) return standingFrame('Not updated yet', standingEmptyCards());
+  const clock=phoenixClock(standingData.updated);
+  const time=clock?`Updated ${clock} AZ`:'Not updated yet';
+  const one=standingData.oneThing!=null?standingData.oneThing:fallbackOneThing();
+  const darius=listCard('Waiting on Darius', standingData.waitingOnDarius, item=>standLi(item,[
+    standPiece(item.project),
+    standDate(item.due)?standPiece('due '+standDate(item.due)):'',
+    standLink(item.link)
+  ]));
+  const others=listCard('Waiting on others', standingData.waitingOnOthers, item=>standLi(item,[
+    standPiece(item.who),
+    standPiece(item.project),
+    standDate(item.since)?standPiece('since '+standDate(item.since)):''
+  ]));
+  const updatedToday=phoenixDay(standingData.updated)===phoenixToday();
+  const doneItems=updatedToday&&Array.isArray(standingData.doneToday)?standingData.doneToday:[];
+  const done=doneItems.length
+    ? standCard('Done today', doneItems.length, `<ul class="stand-list">${doneItems.map(item=>standLi(item,[standPiece(item.project)])).join('')}</ul>`)
+    : standCard('Done today', 0, standEmpty('Nothing yet today'));
+  return standingFrame(time, oneThingCard(one)+darius+others+done);
+}
+function standingPanel(){
+  try{return standingHtml()}
+  catch(e){return standingFrame('Not updated yet', standingEmptyCards())}
+}
 function renderPortfolio(){
   const td=todayStr();
   const rows=data.projects.map(p=>{
@@ -854,6 +1025,7 @@ function renderPortfolio(){
   const act=data.projects.filter(p=>p.status==='active').length, st=data.projects.filter(p=>p.status==='stalled').length;
   const wt=data.tasks.filter(t=>t.status==='waiting').length;
   document.getElementById('v-portfolio').innerHTML=`
+    ${standingPanel()}
     <div class="pf-head"><h1>Every project, one screen</h1>
       <div class="pf-sum"><span><b>${act}</b>active</span><span><b style="color:${st?'var(--coral)':''}">${st}</b>stalled</span><span><b>${wt}</b>waiting on others</span>
       <button class="btn" id="addProj">Add project</button></div></div>
@@ -1437,6 +1609,7 @@ window.addEventListener('resize',()=>{if(ui.view==='timeline')render()});
 window.addEventListener('online',()=>{if(apiMode&&dirty)queueSave()});
 window.addEventListener('beforeunload',e=>{if(dirty&&(gh.token||apiMode)){e.preventDefault();e.returnValue=''}});
 setTheme(localStorage.getItem('dp.theme')||'dark');
+loadStanding();
 load();
 </script>
 </body>
