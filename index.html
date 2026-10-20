@@ -276,7 +276,8 @@ table.sheet-t{width:100%;border-collapse:collapse;font-size:14px;background:var(
 .sheet-t td.num{color:var(--faint);width:34px}
 .sheet-t td.nm{font-weight:600;min-width:220px}
 .sheet-t tr.is-done td.nm{color:var(--muted);text-decoration:line-through}
-.sheet-t tr.is-crit td.num{color:var(--amber);font-weight:800}
+.sheet-t tr.is-crit:not(.is-done) td.nm{color:var(--amber)}
+.sheet-t td.preds{white-space:normal}
 .sheet-t .nowrap{white-space:nowrap}
 .tbl-wrap{overflow-x:auto;border-radius:10px}
 .st{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}
@@ -328,15 +329,18 @@ table.grid{border-collapse:separate;border-spacing:0;width:100%;font-size:14px;m
 .grid th{position:sticky;top:0;z-index:2;background:var(--raised);text-align:left;font-size:12px;color:var(--muted);font-weight:700;padding:10px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
 .grid td{padding:7px 10px;border-bottom:1px solid var(--line-soft);vertical-align:middle;white-space:nowrap}
 .grid td.c-num{color:var(--faint);width:36px;font-size:13px}
+.tid{margin-left:6px;font-size:11px;font-weight:600;color:var(--faint);white-space:nowrap}
+.sh-title .tid{font-size:13px;font-weight:650}
 .grid td.c-name{white-space:normal;min-width:280px}
 .grid tr.r-proj td{background:color-mix(in srgb,var(--pc) 10%,var(--surface));font-weight:800}
 .grid tr.r-ph td{background:var(--raised);font-weight:700}
 .grid tr.r-task td.c-name{padding-left:38px}
 .grid tr.r-task:hover td{background:color-mix(in srgb,var(--blue) 5%,transparent)}
 .grid tr.r-task.is-done .nm{color:var(--muted);text-decoration:line-through}
-.grid tr.r-task.h-behind td.c-num{box-shadow:inset 3px 0 0 var(--coral)}
-.grid tr.r-task.h-blocked td.c-num{box-shadow:inset 3px 0 0 var(--violet)}
-.grid tr.r-task.h-risk td.c-num{box-shadow:inset 3px 0 0 var(--amber)}
+.grid tr.r-task.h-behind td.c-name{box-shadow:inset 3px 0 0 var(--coral)}
+.grid tr.r-task.h-blocked td.c-name{box-shadow:inset 3px 0 0 var(--violet)}
+.grid tr.r-task.h-risk td.c-name{box-shadow:inset 3px 0 0 var(--amber)}
+.grid td.c-deps{white-space:normal;min-width:220px;max-width:420px}
 .grid .nm{cursor:pointer;font-weight:600}
 .grid .nm:hover{color:var(--ice)}
 .caret{border:0;background:none;cursor:pointer;color:var(--muted);padding:0 6px 0 0;font-size:12px;width:18px;display:inline-block;text-align:center}
@@ -344,7 +348,7 @@ table.grid{border-collapse:separate;border-spacing:0;width:100%;font-size:14px;m
 .circ.on{background:var(--mint);border-color:var(--mint)}
 .circ.on::after{content:"";width:5px;height:9px;border:solid #0b1a14;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
 .circ:disabled{cursor:default}
-.dchip{display:inline-block;min-width:24px;text-align:center;padding:1px 6px;margin-right:3px;border-radius:5px;background:var(--raised);border:1px solid var(--line);font-size:12px;cursor:pointer}
+.dchip{display:inline-block;text-align:left;padding:2px 6px;margin:0 3px 3px 0;border-radius:5px;background:var(--raised);border:1px solid var(--line);font-size:12px;cursor:pointer;white-space:normal;line-height:1.35;max-width:100%}
 .dchip:hover{border-color:var(--ice)}
 .dchip.open{border-color:color-mix(in srgb,var(--violet) 60%,transparent)}
 .grid select.g-in,.grid input.g-in{background:transparent;border:1px solid transparent;border-radius:6px;padding:4px 6px;font-size:13px;width:auto}
@@ -919,7 +923,7 @@ const successors=id=>data.tasks.filter(t=>(t.deps||[]).includes(id));
 function feedsMs(id){const out=new Map(),seen=new Set();const walk=i=>successors(i).forEach(s=>{if(seen.has(s.id))return;seen.add(s.id);if(s.milestone)out.set(s.id,s);walk(s.id)});walk(id);return [...out.values()].sort((a,b)=>toD(a.end)-toD(b.end))}
 const critOf=id=>milestones().filter(m=>!done(m)&&m.id!==id&&chainFor(m.id).includes(id));
 const projOrder=pid=>projRows(pid).flatMap(g=>g.tasks);
-const rowNum=id=>{const t=T(id);return projOrder(t?.project).findIndex(x=>x.id===id)+1};
+const taskRef=t=>`${t.milestone?'◆ ':''}${esc(t.title)}<small class="tid">${esc(t.id)}</small>`;
 function taskPct(t){if(done(t))return 100;const c=t.checklist||[];if(c.length)return Math.round(c.filter(x=>x.done).length/c.length*100);return +t.pct||0}
 const stHtml=t=>`<span class="st ${t.status}"><i></i>${STATUS[t.status]}</span>`;
 const durTxt=t=>t.milestone?'Milestone':(()=>{const w=t.dur||workDays(t.start,t.end)||1;return `${w} working day${w===1?'':'s'}`})();
@@ -935,11 +939,11 @@ function timingLine(t){
 }
 function depTable(list,mode,t){
   if(!list.length) return `<p class="prose empty-p">${mode==='pred'?'Nothing has to finish first. This can start any time.':'Nothing waits on this directly.'}</p>`;
-  return `<div class="tbl-wrap"><table class="sheet-t"><thead><tr><th>#</th><th>Task</th><th>Owner</th><th>${mode==='pred'?'Finish':'Start'}</th><th>Status</th><th>Gap</th></tr></thead><tbody>${list.map(x=>{
+  return `<div class="tbl-wrap"><table class="sheet-t"><thead><tr><th>Task</th><th>Owner</th><th>${mode==='pred'?'Finish':'Start'}</th><th>Status</th><th>Gap</th></tr></thead><tbody>${list.map(x=>{
     const gap=mode==='pred'?diff(x.end,t.start):diff(t.end,x.start);
     const g=x.milestone&&mode==='pred'?diff(x.end,t.start)+1:gap;
     const gapTxt=done(mode==='pred'?x:t)&&mode==='pred'?'<span class="muted">Done</span>':g<0?`<span class="pos">Overlaps ${-g}d</span>`:g<=1?'<span class="muted">Back to back</span>':`${g-1}d slack`;
-    return `<tr data-detail="${x.id}"><td class="num">${rowNum(x.id)}</td><td class="nm">${x.milestone?'◆ ':''}${esc(x.title)}</td><td class="nowrap">${whoHtml(x.owner)}</td><td class="nowrap">${fmt(mode==='pred'?x.end:x.start)}</td><td>${stHtml(x)}</td><td class="nowrap">${gapTxt}</td></tr>`}).join('')}</tbody></table></div>`;
+    return `<tr data-detail="${x.id}"><td class="nm">${taskRef(x)}</td><td class="nowrap">${whoHtml(x.owner)}</td><td class="nowrap">${fmt(mode==='pred'?x.end:x.start)}</td><td>${stHtml(x)}</td><td class="nowrap">${gapTxt}</td></tr>`}).join('')}</tbody></table></div>`;
 }
 function openDetail(id,tab){
   const t=T(id); if(!t) return; const p=P(t.project)||{};
@@ -996,8 +1000,8 @@ function openDetail(id,tab){
     ${log.length?`<div class="log">${log.map(e=>`<div class="log-e"><div class="lm">${e.date?fmtLong(e.date):''}, ${esc(e.by||'')}</div><p>${esc(e.text)}</p></div>`).join('')}</div>`:'<p class="prose empty-p">No updates yet.</p>'}`;
   layer.innerHTML=`<div class="scrim" data-close></div><aside class="sheet" role="dialog" aria-modal="true" aria-label="${esc(t.title)}" style="--pc:${p.color||'var(--blue)'}">
     <div class="sh-top">
-      <div class="sh-crumb"><button data-pdetail="${p.id}">${esc(p.name||'')}</button><span>Task ${rowNum(t.id)}</span><button class="icon-btn sh-close" data-close aria-label="Close">✕</button></div>
-      <h2 class="sh-title">${esc(t.title)}</h2>${chips}
+      <div class="sh-crumb"><button data-pdetail="${p.id}">${esc(p.name||'')}</button><button class="icon-btn sh-close" data-close aria-label="Close">✕</button></div>
+      <h2 class="sh-title">${esc(t.title)}<small class="tid">${esc(t.id)}</small></h2>${chips}
       <div class="sh-actions owner-only">${t.milestone?'':`<button class="btn ${done(t)?'':'primary'}" id="dDone">${done(t)?'Reopen':'Mark done'}</button>`}<button class="btn" id="dEdit">Edit</button>${!t.milestone&&data.today?.taskId!==t.id?'<button class="btn ghost" id="dOne">Make it today\'s one thing</button>':''}</div>
       <div class="sh-tabs" role="tablist">${tabs.map(([k,l,n])=>`<button role="tab" data-stab="${k}" aria-selected="${sheetTab===k}">${l}${n!==''&&n!==undefined&&n!==0?`<span class="n">${n}</span>`:''}</button>`).join('')}</div>
     </div>
@@ -1057,9 +1061,9 @@ function openProjectDetail(pid,tab){
     <div class="sh-sec links"><h4>Links</h4>${links.length?links.map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label||l.url)}</a>`).join(''):'<p class="prose empty-p">No links yet.</p>'}</div>`;
   if(pTab==='sheet'){
     const ordered=projOrder(pid);
-    body=ordered.length?`<p class="muted" style="font-size:13px;margin:0 0 10px">Amber numbers are on the critical path to an open milestone. Click any row for full details.</p><div class="tbl-wrap"><table class="sheet-t"><thead><tr><th>#</th><th>Task name</th><th>Duration</th><th>Start</th><th>Finish</th><th>Predecessors</th><th>Resource</th><th>% done</th><th>Status</th></tr></thead><tbody>${ordered.map(t=>`<tr data-detail="${t.id}" class="${done(t)?'is-done':''} ${critSet.has(t.id)&&!done(t)?'is-crit':''}">
-      <td class="num">${rowNum(t.id)}</td><td class="nm">${t.milestone?'◆ ':''}${esc(t.title)}</td><td class="nowrap">${t.milestone?'0 days':(()=>{const w=workDays(t.start,t.end)||1;return w+(w===1?' day':' days')})()}</td><td class="nowrap">${fmt(t.start)}</td><td class="nowrap">${fmt(t.end)}</td>
-      <td class="nowrap">${(t.deps||[]).map(d=>T(d)?.project===pid?rowNum(d):'').filter(Boolean).join(', ')}</td><td class="nowrap">${whoHtml(t.owner)}</td><td>${t.milestone?'':taskPct(t)+'%'}</td><td>${stHtml(t)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="prose empty-p">No tasks on this project yet.</p>';
+    body=ordered.length?`<p class="muted" style="font-size:13px;margin:0 0 10px">Amber names are on the critical path to an open milestone. Click any row for full details.</p><div class="tbl-wrap"><table class="sheet-t"><thead><tr><th>Task name</th><th>Duration</th><th>Start</th><th>Finish</th><th>Predecessors</th><th>Resource</th><th>% done</th><th>Status</th></tr></thead><tbody>${ordered.map(t=>`<tr data-detail="${t.id}" class="${done(t)?'is-done':''} ${critSet.has(t.id)&&!done(t)?'is-crit':''}">
+      <td class="nm">${taskRef(t)}</td><td class="nowrap">${t.milestone?'0 days':(()=>{const w=workDays(t.start,t.end)||1;return w+(w===1?' day':' days')})()}</td><td class="nowrap">${fmt(t.start)}</td><td class="nowrap">${fmt(t.end)}</td>
+      <td class="preds">${(t.deps||[]).map(T).filter(Boolean).map(taskRef).join('<br>')}</td><td class="nowrap">${whoHtml(t.owner)}</td><td>${t.milestone?'':taskPct(t)+'%'}</td><td>${stHtml(t)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="prose empty-p">No tasks on this project yet.</p>';
   }
   layer.innerHTML=`<div class="scrim" data-close></div><aside class="sheet" role="dialog" aria-modal="true" aria-label="${esc(p.name)}" style="--pc:${p.color||'var(--blue)'}">
     <div class="sh-top">
@@ -1090,31 +1094,30 @@ function renderGrid(){
   const filt=t=>(!ui.hideDone||!done(t))&&(!ui.problems||['behind','blocked','risk'].includes(health(t).k));
   const pr=rollup(all);
   const rowsHtml=[];
-  rowsHtml.push(`<tr class="r-proj" style="--pc:${p.color||'var(--blue)'}"><td class="c-num">0</td><td></td><td class="c-name">${esc(p.name||'')}</td><td></td><td>${pr?hpHtml(pr.h):''}</td><td>${whoHtml(p.owner)}</td><td>${pr?pr.dur+' days':''}</td><td>${pr?fmt(pr.start):''}</td><td>${pr?fmt(pr.end):''}</td><td></td><td>${pr?`<span class="minibar"><i style="width:${pr.pct}%"></i></span>${pr.pct}%`:''}</td><td>${pr?pr.left+' h':''}</td></tr>`);
+  rowsHtml.push(`<tr class="r-proj" style="--pc:${p.color||'var(--blue)'}"><td></td><td class="c-name">${esc(p.name||'')}</td><td></td><td>${pr?hpHtml(pr.h):''}</td><td>${whoHtml(p.owner)}</td><td>${pr?pr.dur+' days':''}</td><td>${pr?fmt(pr.start):''}</td><td>${pr?fmt(pr.end):''}</td><td></td><td>${pr?`<span class="minibar"><i style="width:${pr.pct}%"></i></span>${pr.pct}%`:''}</td><td>${pr?pr.left+' h':''}</td></tr>`);
   groups.forEach(g=>{
     const key=pid+':'+(g.ph?g.ph.id:'_'), col=!!ui.collapsed[key], ru=rollup(g.tasks);
-    if(g.ph) rowsHtml.push(`<tr class="r-ph"><td class="c-num"></td><td></td><td class="c-name"><button class="caret" data-collapse="${key}" aria-label="${col?'Expand':'Collapse'} ${esc(g.ph.name)}">${col?'▸':'▾'}</button><span ${g.ph.id&&!V?`data-editphase="${g.ph.id}" style="cursor:pointer"`:''}>${esc(g.ph.name)}</span></td><td></td><td>${ru?hpHtml(ru.h):''}</td><td></td><td>${ru?ru.dur+' days':''}</td><td>${ru?fmt(ru.start):''}</td><td>${ru?fmt(ru.end):''}</td><td></td><td>${ru?`<span class="minibar"><i style="width:${ru.pct}%"></i></span>${ru.pct}%`:''}</td><td>${ru?ru.left+' h':''}</td></tr>`);
+    if(g.ph) rowsHtml.push(`<tr class="r-ph"><td></td><td class="c-name"><button class="caret" data-collapse="${key}" aria-label="${col?'Expand':'Collapse'} ${esc(g.ph.name)}">${col?'▸':'▾'}</button><span ${g.ph.id&&!V?`data-editphase="${g.ph.id}" style="cursor:pointer"`:''}>${esc(g.ph.name)}</span></td><td></td><td>${ru?hpHtml(ru.h):''}</td><td></td><td>${ru?ru.dur+' days':''}</td><td>${ru?fmt(ru.start):''}</td><td>${ru?fmt(ru.end):''}</td><td></td><td>${ru?`<span class="minibar"><i style="width:${ru.pct}%"></i></span>${ru.pct}%`:''}</td><td>${ru?ru.left+' h':''}</td></tr>`);
     if(col) return;
     g.tasks.filter(filt).forEach(t=>{
       const h=health(t), pct=taskPct(t);
-      const deps=(t.deps||[]).map(T).filter(Boolean).map(d=>`<span class="dchip ${done(d)?'':'open'}" data-open="${d.id}" title="${esc(d.title)}">${d.project===pid?rowNum(d.id):'↗'}</span>`).join('');
+      const deps=(t.deps||[]).map(T).filter(Boolean).map(d=>`<span class="dchip ${done(d)?'':'open'}" data-open="${d.id}">${taskRef(d)}</span>`).join('');
       rowsHtml.push(`<tr class="r-task h-${h.k} ${done(t)?'is-done':''}">
-        <td class="c-num">${rowNum(t.id)}</td>
         <td>${t.milestone?'':`<button class="circ ${done(t)?'on':''}" data-toggle="${t.id}" ${V?'disabled':''} aria-label="Mark ${esc(t.title)} ${done(t)?'not done':'done'}"></button>`}</td>
-        <td class="c-name"><span class="nm" data-open="${t.id}">${t.milestone?'◆ ':''}${esc(t.title)}</span></td>
+        <td class="c-name"><span class="nm" data-open="${t.id}">${taskRef(t)}</span></td>
         <td>${t.milestone?'':V?priHtml(t):`<select class="g-in" data-gpri="${t.id}" aria-label="Priority">${opts([['1','P1'],['2','P2'],['3','P3'],['4','P4']],String(t.priority||3))}</select>`}</td>
         <td>${hpHtml(h)}</td>
         <td>${V?whoHtml(t.owner):`<select class="g-in" data-gown="${t.id}" aria-label="Owner">${opts(data.people.map(x=>[x.id,x.name]),t.owner)}</select>`}</td>
         <td>${t.milestone?'0 days':V||!isAuto(t)||done(t)?`${t.dur||1} days`:`<input class="g-in dur" type="number" min="1" data-gdur="${t.id}" value="${t.dur||1}" aria-label="Duration in working days"> d`}</td>
         <td>${fmt(t.start)}${t.notBefore&&isAuto(t)?'<span class="pin" title="Start no earlier than this date">📌</span>':!isAuto(t)&&!t.milestone?'<span class="pin" title="Manually scheduled">✎</span>':''}</td>
         <td>${fmt(t.end)}</td>
-        <td>${deps}</td>
+        <td class="c-deps">${deps}</td>
         <td>${t.milestone?'':`<span class="minibar"><i style="width:${pct}%"></i></span>${pct}%`}</td>
         <td>${t.milestone?'':Math.round((+t.est||0)*(1-pct/100)*10)/10+' h'}</td></tr>`);
     });
-    if(!V) rowsHtml.push(`<tr class="g-add"><td colspan="12"><input type="text" data-gadd="${g.ph?g.ph.id:''}" placeholder="Add a task${g.ph?' to '+esc(g.ph.name):''}, press Enter"></td></tr>`);
+    if(!V) rowsHtml.push(`<tr class="g-add"><td colspan="11"><input type="text" data-gadd="${g.ph?g.ph.id:''}" placeholder="Add a task${g.ph?' to '+esc(g.ph.name):''}, press Enter"></td></tr>`);
   });
-  if(!groups.length&&!V) rowsHtml.push(`<tr class="g-add"><td colspan="12"><input type="text" data-gadd="" placeholder="Add the first task, press Enter"></td></tr>`);
+  if(!groups.length&&!V) rowsHtml.push(`<tr class="g-add"><td colspan="11"><input type="text" data-gadd="" placeholder="Add the first task, press Enter"></td></tr>`);
   document.getElementById('v-grid').innerHTML=`
     <div class="g-bar">
       <select id="gProj" aria-label="Project">${opts(data.projects.map(x=>[x.id,x.name]),pid)}</select>
@@ -1125,7 +1128,7 @@ function renderGrid(){
       <button class="btn owner-only" id="gCal">Work calendar</button>
       <button class="btn owner-only" id="gPhase">Add phase</button>
     </div>
-    <div class="g-wrap"><table class="grid"><thead><tr><th>#</th><th></th><th>Task name</th><th>Priority</th><th>Health</th><th>Assigned to</th><th>Duration</th><th>Start</th><th>Finish</th><th>Depends on</th><th>% done</th><th>Work left</th></tr></thead><tbody>${rowsHtml.join('')}</tbody></table></div>
+    <div class="g-wrap"><table class="grid"><thead><tr><th></th><th>Task name</th><th>Priority</th><th>Health</th><th>Assigned to</th><th>Duration</th><th>Start</th><th>Finish</th><th>Depends on</th><th>% done</th><th>Work left</th></tr></thead><tbody>${rowsHtml.join('')}</tbody></table></div>
     <div class="legend" style="border:0;padding:10px 2px">
       <span>Durations are working days. Start and finish dates calculate from dependencies, your work calendar, and days off.</span>
       <span>📌 pinned start date</span><span>✎ manually scheduled</span></div>`;
