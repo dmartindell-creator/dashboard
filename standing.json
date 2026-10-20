@@ -1,0 +1,175 @@
+{
+  "updated": "2026-10-20T21:44:00Z",
+  "oneThing": {
+    "text": "Approve the My Stairway copy-pass version before Thursday's freeze",
+    "project": "Stairway to Health",
+    "doneLooksLike": "The copy-pass version is approved, and Dr. Ridgeway is asked to sign off on the clinical wording."
+  },
+  "waitingOnDarius": [
+    {
+      "text": "Approve the My Stairway copy-pass version, and say who asks Dr. Ridgeway to sign off on the clinical wording.",
+      "project": "Stairway to Health",
+      "due": "2026-10-22"
+    },
+    {
+      "text": "Approve this earnings qualifier under each stage: take-home is an estimate, about 35% of revenue impact, wholesale margins vary, and it is not a guarantee.",
+      "project": "Stairway to Health",
+      "due": "2026-10-22"
+    },
+    {
+      "text": "Decide whether to drop $100,000 from the Multiply goal line.",
+      "project": "Stairway to Health",
+      "due": "2026-10-22"
+    },
+    {
+      "text": "Before launch, should named Health Professionals' revenue show on the leaderboard?",
+      "project": "Stairway to Health"
+    },
+    {
+      "text": "The live site card \"Heart Disease: Protecting your body's engine\" reads as a disease claim. Should Dr. Ridgeway review it?",
+      "project": "Stairway to Health"
+    },
+    {
+      "text": "Is Optimal DNA live? If not, it stays \"coming soon\" and comes off the lab list and the Value Ladder.",
+      "project": "Stairway to Health"
+    },
+    {
+      "text": "Who is the developer building My Stairway into the site?",
+      "project": "Stairway to Health"
+    },
+    {
+      "text": "Is the Pro Dashboard a Shopify app or a separate build?",
+      "project": "Stairway to Health"
+    },
+    {
+      "text": "For Friday Oct 23, is a shared link to the current preview enough, or should it be a page on the public site?",
+      "project": "Stairway to Health",
+      "due": "2026-10-23"
+    },
+    {
+      "text": "Confirm the workbook count. The preview has 20 sheets.",
+      "project": "Stairway to Health"
+    },
+    {
+      "text": "Did the Stairway roadmap go to Doug today? The board marks it done.",
+      "project": "Stairway to Health",
+      "due": "2026-10-20"
+    },
+    {
+      "text": "Default leg lift: barbell or goblet squat, with belt squat optional where a gym has one.",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "Intermediate 3-day plan: keep push, pull, and legs, or use full body A and B?",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "OK the swaps to moves that already have a video, and adding a straight-leg deadlift on Client E's leg day.",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "Where are the label print files: Becky, Boyd, or Tate?",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "Mass Mafia calories: keep the scaled formula, use a fixed 5,000 for all men, or raise the multipliers so men around 200 lb reach 5,000?",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "Replace the Optimal 2 disease wording on the store page with the support lines and the FDA disclaimer. Who edits the page?",
+      "project": "Supplement Compare tool"
+    },
+    {
+      "text": "Mass Mafia: keep the 2 plyo days, or follow the ebook's 3 training days?",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "Mass Mafia: one program, or a separate women's version?",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "Mass Mafia rest: 2 to 3 minutes on the big lifts and 90 seconds on the lighter lifts. OK?",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "Home program: a beginner who picks 5 or 6 days gets the 4-day plan plus light activity. OK?",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "Stock exercise videos cannot be used in the app, so they do not cut the filming list. Confirm?",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "Level table follows the house style with the small evidence tweaks. OK?",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "After beta: a home version with a doorway pull-up bar or band, so home clients get a real pulling move?",
+      "project": "Nutri-Strength (Healthy Habits)"
+    },
+    {
+      "text": "After beta: add 6 no-equipment moves to the home program. They would join the filming list of 17.",
+      "project": "Nutri-Strength (Healthy Habits)"
+    }
+  ],
+  "waitingOnOthers": [
+    {
+      "text": "Sign off on the Multiply stage's $50,000 goal.",
+      "who": "Doug",
+      "project": "Stairway to Health",
+      "since": "2026-10-20"
+    },
+    {
+      "text": "Send the study behind \"up to 300% better absorption\", including which product it tested and whether it was done on people. If there is no source, the line comes off every page.",
+      "who": "Doug",
+      "project": "Nutri-Strength (Healthy Habits)",
+      "since": "2026-10-20"
+    },
+    {
+      "text": "Settle the ebook chart: the weeks 3 to 6 squat and deadlift pyramid, and how many sets the bench 21s use.",
+      "who": "Doug",
+      "project": "Nutri-Strength (Healthy Habits)",
+      "since": "2026-10-20"
+    },
+    {
+      "text": "Superset rest and size: 1 minute and 3 moves, or 90 seconds and 4 moves?",
+      "who": "Doug",
+      "project": "Nutri-Strength (Healthy Habits)",
+      "since": "2026-10-20"
+    },
+    {
+      "text": "Starting weight: if the test set is under about 12 to 15 reps, lower the load. Limit that program to Intermediate and Advanced?",
+      "who": "Doug",
+      "project": "Nutri-Strength (Healthy Habits)",
+      "since": "2026-10-20"
+    },
+    {
+      "text": "Muscle gain and weight gain, Intermediate: keep 6 strength days or cap at 5?",
+      "who": "Doug",
+      "project": "Nutri-Strength (Healthy Habits)",
+      "since": "2026-10-20"
+    },
+    {
+      "text": "Ebook wording for teens, and supplement claims, get rewritten with Dr. Ridgeway and the attorney before any of it goes in the app.",
+      "who": "Doug",
+      "project": "Nutri-Strength (Healthy Habits)",
+      "since": "2026-10-20"
+    },
+    {
+      "text": "In progress: the Supplement Compare tool, a staff-only first version. Doug signs off at the end.",
+      "who": "Doug",
+      "project": "Supplement Compare tool",
+      "since": "2026-10-20"
+    }
+  ],
+  "doneToday": [
+    {
+      "text": "Retired the old 2025 income figures.",
+      "project": "Stairway to Health"
+    },
+    {
+      "text": "Sent Doug the five protein and fat questions.",
+      "project": "Nutri-Strength (Healthy Habits)"
+    }
+  ]
+}
