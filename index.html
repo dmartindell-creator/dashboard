@@ -848,7 +848,7 @@ function renderToday(){
     </div>
   </div>`;
 }
-const IDEA_BOTS=['Client Ops Router','Fleet Coordinator','Thought Bot','DEEDEE','Tumii','Tumi','Router','Testes','Brandi','Commie','Logi','Stair','Nutri','Manus','Imp','EXO'];
+const IDEA_BOTS=['Client Ops Router','Fleet Coordinator','Thought Bot','DEEDEE','Tumii','Tumi','Router','Testes','Brandi','Commie','Logi','Stair','Nutri','Manus','Grok','Imp','EXO'];
 function ideaPatterns(){
   const escRe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
   return {bot:new RegExp('(?<![A-Za-z0-9_])(?:'+IDEA_BOTS.map(escRe).join('|')+')(?![A-Za-z0-9_-])','gi'), id:/\b[a-z]{2,6}-(?:m)?\d+\b/gi};
