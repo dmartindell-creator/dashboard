@@ -396,10 +396,22 @@ input.g-in.dur{width:52px;text-align:right}
 .attn .why{grid-column:1/-1;font-size:13px;color:var(--muted)}
 .cal-days{display:flex;gap:6px;flex-wrap:wrap}
 .cal-days label{display:flex;gap:5px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:13px;cursor:pointer}
+.idea-sec{margin-top:22px}
+.idea-sec h2{font-stretch:118%;font-weight:800;font-size:22px;margin:0 0 4px;letter-spacing:-.02em}
+.idea-group{margin-top:14px}
+.idea-group h3{margin:0 0 8px;font-size:13px;font-weight:700;color:var(--muted)}
+.idea-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.idea-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.idea-card h4{margin:0 0 6px;font-size:16px;overflow-wrap:anywhere}
+.idea-note{margin:0 0 10px;color:var(--muted);font-size:14px;line-height:1.45;overflow-wrap:anywhere}
+.idea-links{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:10px}
+.idea-links a{color:var(--ice);font-weight:650;font-size:14px}
+.needs-edit{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;line-height:1.6;color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 55%,transparent);border-radius:20px;padding:0 6px;vertical-align:middle}
+.lot li span{min-width:0;overflow-wrap:anywhere}
 @media (max-width:980px){
   .today-grid{grid-template-columns:1fr}
   .pf-row{grid-template-columns:1fr;gap:12px}
-  .lots,.bb-list{grid-template-columns:1fr}
+  .lots,.bb-list,.idea-list{grid-template-columns:1fr}
 }
 @media (max-width:640px){
   .top{flex-wrap:wrap;padding:10px 14px;gap:10px}
@@ -836,6 +848,74 @@ function renderToday(){
     </div>
   </div>`;
 }
+const IDEA_BOTS=['Client Ops Router','Fleet Coordinator','Thought Bot','DEEDEE','Tumii','Tumi','Router','Testes','Brandi','Commie','Logi','Stair','Nutri','Manus','Imp','EXO'];
+function ideaPatterns(){
+  const escRe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return {bot:new RegExp('(?<![A-Za-z0-9_])(?:'+IDEA_BOTS.map(escRe).join('|')+')(?![A-Za-z0-9_-])','gi'), id:/\b[a-z]{2,6}-(?:m)?\d+\b/gi};
+}
+function ideaScrub(s){
+  let hidden=false;
+  let out=String(s??'').replace(/\u2014/g,' - ');
+  const p=ideaPatterns();
+  out=out.replace(p.bot,()=>{hidden=true;return ''});
+  out=out.replace(p.id,()=>{hidden=true;return ''});
+  out=out.replace(/[ \t]{2,}/g,' ').replace(/\s+([,.;:!?])/g,'$1').trim();
+  return {text:out, hidden};
+}
+function ideaHtml(s){
+  const r=ideaScrub(s);
+  return esc(r.text)+(r.hidden?' <span class="needs-edit owner-only">needs edit</span>':'');
+}
+function ideaNorm(x){
+  if(typeof x==='string') return {title:x, category:'', suggestedBy:'', posted:'', status:'', due:'', slack:'', note:'', links:[]};
+  const o=x||{};
+  const links=Array.isArray(o.links)?o.links.slice():[];
+  if(o.example) links.push({label:'Example', url:o.example});
+  return {title:o.title||o.text||'', category:o.category||'', suggestedBy:o.suggestedBy||o.who||'', posted:o.posted||o.date||'', status:o.status||'', due:o.due||'', slack:o.slack||'', note:o.note||'', links};
+}
+function ideaWhen(value){
+  if(!value) return 'Date not set';
+  if(typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)){
+    try{return fmt(value,{month:'short',day:'numeric',year:'numeric'})}catch(e){return 'Date not set'}
+  }
+  return String(value);
+}
+function ideaPerson(value){
+  if(!value) return 'Not recorded';
+  const known=(data.people||[]).find(p=>p.id===value);
+  return known?known.name:String(value);
+}
+function ideaAnchor(url, label){
+  if(typeof url!=='string') return '';
+  const raw=url.trim();
+  if(!/^https?:\/\//i.test(raw)) return '';
+  const s=ideaScrub(raw);
+  if(s.hidden||s.text!==raw) return '';
+  return `<a href="${esc(raw)}" target="_blank" rel="noopener">${esc(label)}</a>`;
+}
+function ideasBacklog(){
+  try{
+    const groups=new Map();
+    (data.ideas||[]).map(ideaNorm).forEach(item=>{
+      const cat=(item.category||'').trim()||'Uncategorized';
+      if(!groups.has(cat)) groups.set(cat, []);
+      groups.get(cat).push(item);
+    });
+    const names=[...groups.keys()].filter(n=>n!=='Uncategorized').sort((a,b)=>a.localeCompare(b,'en'));
+    if(groups.has('Uncategorized')) names.push('Uncategorized');
+    const body=names.map(name=>{
+      const cards=groups.get(name).map(item=>{
+        const links=[ideaAnchor(item.slack,'Slack post'), ...item.links.map(l=>ideaAnchor(l.url, l.label||'Example'))].filter(Boolean);
+        const note=item.note?`<p class="idea-note">${ideaHtml(item.note)}</p>`:'';
+        return `<article class="idea-card"><h4>${ideaHtml(item.title)}</h4>${note}<div class="bb-meta"><span>Category <b>${ideaHtml(name)}</b></span><span>Suggested by <b>${ideaHtml(ideaPerson(item.suggestedBy))}</b></span><span>Posted <b>${esc(ideaWhen(item.posted))}</b></span><span>Status <b>${ideaHtml(item.status||'Not recorded')}</b></span><span>Due <b>${esc(item.due?ideaWhen(item.due):'Date not set')}</b></span></div>${links.length?`<div class="idea-links">${links.join('')}</div>`:''}</article>`;
+      }).join('');
+      return `<div class="idea-group"><h3>${ideaHtml(name)}</h3><div class="idea-list">${cards}</div></div>`;
+    }).join('');
+    return `<section class="idea-sec" aria-label="Ideas backlog"><h2>Ideas backlog</h2><p class="bb-note">Grouped by category. Every idea is listed here.</p>${body||'<div class="empty">No ideas yet.</div>'}</section>`;
+  }catch(e){
+    return `<section class="idea-sec" aria-label="Ideas backlog"><h2>Ideas backlog</h2><p class="bb-note">Grouped by category. Every idea is listed here.</p></section>`;
+  }
+}
 function renderPortfolio(){
   const td=todayStr();
   const rows=data.projects.map(p=>{
@@ -868,10 +948,11 @@ function renderPortfolio(){
         return `<article class="bb-card"><h3>${esc(b.name)}</h3><p>${esc(b.description||'')}</p><div class="bb-meta"><span>Raised by ${who}</span><span>Added <b>${esc(added)}</b></span><span>Promote to main project? <b>${esc(b.promote||'')}</b></span></div></article>`;
       }).join('')||'<div class="empty">Nothing on the back burner.</div>'}</div>
     </section>
+    ${ideasBacklog()}
     <div class="lots">
       <div class="panel lot"><h2>Idea parking lot <small>reviewed Fridays, not before</small></h2>
         <div class="add-row"><input type="text" id="ideaIn" placeholder="Park an idea so it stops pulling at you"><button class="btn" id="ideaAdd">Park it</button></div>
-        <ul>${data.ideas.map((x,i)=>`<li><span>${esc(x)}</span><button class="x" data-delidea="${i}" aria-label="Remove idea">✕</button></li>`).join('')}</ul></div>
+        <ul>${data.ideas.map((x,i)=>`<li><span>${ideaHtml(typeof x==='string'?x:(x&&(x.title||x.text))||'')}</span><button class="x" data-delidea="${i}" aria-label="Remove idea">✕</button></li>`).join('')}</ul></div>
       <div class="panel lot"><h2>Parked <small>deliberately not now</small></h2>
         <ul>${data.parked.map((x,i)=>`<li><span>${esc(x)}</span><button class="x" data-delpark="${i}" aria-label="Remove">✕</button></li>`).join('')}</ul></div>
     </div>`;
