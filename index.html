@@ -598,8 +598,8 @@ function worst(ts){const open=ts.filter(t=>!done(t));if(!ts.length)return {k:'id
   const hs=open.map(health).sort((a,b)=>HRANK[b.k]-HRANK[a.k]);const w=hs[0];const n=hs.filter(h=>h.k===w.k).length;
   const lbl={behind:'Behind',blocked:'Blocked',risk:'At risk',ok:'On track'}[w.k];return {k:w.k,label:lbl+(w.k!=='ok'&&n>1?` (${n})`:''),why:w.why}}
 function projRows(pid){
-  const p=P(pid)||{}, ts=data.tasks.filter(t=>t.project===pid&&!isShelved(t)), phs=p.phases||[];
-  const so=a=>a.slice().sort((x,y)=>toD(x.start)-toD(y.start)||(x.milestone?1:0)-(y.milestone?1:0));
+  const p=P(pid)||{}, ts=data.tasks.filter(t=>t.project===pid&&(!isShelved(t)||t.dateUnset)), phs=p.phases||[];
+  const so=a=>a.slice().sort((x,y)=>(x.dateUnset?1:0)-(y.dateUnset?1:0)||toD(x.start)-toD(y.start)||(x.milestone?1:0)-(y.milestone?1:0));
   const out=phs.map(ph=>({ph,tasks:so(ts.filter(t=>t.phase===ph.id))}));
   const rest=so(ts.filter(t=>!t.phase||!phs.some(ph=>ph.id===t.phase)));
   if(rest.length) out.push({ph:phs.length?{id:'',name:'Other'}:null,tasks:rest});
@@ -608,10 +608,11 @@ function projRows(pid){
 function rollup(ts){
   if(!ts.length)return null;
   const w=t=>Math.max(+t.est||0,0.25), work=ts.filter(t=>!t.milestone);
-  const start=ts.map(t=>t.start).sort()[0], end=ts.map(t=>t.end).sort().pop();
+  const dated=ts.filter(t=>!t.dateUnset);
+  const start=dated.length?dated.map(t=>t.start).sort()[0]:null, end=dated.length?dated.map(t=>t.end).sort().pop():null;
   const tot=work.reduce((a,t)=>a+w(t),0), dn=work.reduce((a,t)=>a+w(t)*taskPct(t)/100,0);
   const left=work.reduce((a,t)=>a+(+t.est||0)*(1-taskPct(t)/100),0);
-  return {start,end,dur:workDays(start,end),pct:tot?Math.round(dn/tot*100):0,left:Math.round(left*10)/10,h:worst(ts)};
+  return {start,end,dur:start&&end?workDays(start,end):0,pct:tot?Math.round(dn/tot*100):0,left:Math.round(left*10)/10,h:worst(ts)};
 }
 function moveTask(t,n){const ns=addDays(t.start,n);
   if(t.milestone){t.start=t.end=ns}else if(!isAuto(t)){t.start=ns;t.end=addDays(t.end,n)}else{t.notBefore=ns;t.start=ns}}
@@ -922,7 +923,7 @@ function renderTimeline(){
   const pos={}; rows.forEach((r,i)=>{if(r.t)pos[r.t.id]=i});
   let bars='',paths='';
   rows.forEach((r,i)=>{
-    if(r.ph){const ru=rollup(r.phTasks);if(ru)bars+=`<div class="sumbar" style="left:${x(ru.start)+2}px;top:${i*RH+RH/2-6}px;width:${(diff(ru.start,ru.end)+1)*dw-4}px" title="${esc(r.ph.name)}: ${ru.pct}% done, ${fmt(ru.start)} to ${fmt(ru.end)}"><i style="width:${ru.pct}%"></i></div>`;return}
+    if(r.ph){const ru=rollup(r.phTasks);if(ru&&ru.start)bars+=`<div class="sumbar" style="left:${x(ru.start)+2}px;top:${i*RH+RH/2-6}px;width:${(diff(ru.start,ru.end)+1)*dw-4}px" title="${esc(r.ph.name)}: ${ru.pct}% done, ${fmt(ru.start)} to ${fmt(ru.end)}"><i style="width:${ru.pct}%"></i></div>`;return}
     if(!r.t)return; const t=r.t, y=i*RH, p=person(ownersOf(t)[0]), isC=crit.has(t.id), bad=conflict(t);
     if(ui.base&&t.baselineStart&&!t.milestone) bars+=`<div class="base" style="left:${x(t.baselineStart)+2}px;top:${y+RH-7}px;width:${(diff(t.baselineStart,t.baselineEnd||t.baselineStart)+1)*dw-4}px" title="Baseline ${fmt(t.baselineStart)} to ${fmt(t.baselineEnd)}"></div>`;
     if(t.milestone){
@@ -999,10 +1000,11 @@ const projOrder=pid=>projRows(pid).flatMap(g=>g.tasks);
 const taskRef=t=>`${t.milestone?'◆ ':''}${esc(t.title)}<small class="tid">${esc(t.id)}</small>`;
 function taskPct(t){if(done(t))return 100;const c=t.checklist||[];if(c.length)return Math.round(c.filter(x=>x.done).length/c.length*100);return +t.pct||0}
 const stHtml=t=>`<span class="st ${t.status}"><i></i>${STATUS[t.status]}</span>`;
-const durTxt=t=>t.milestone?'Milestone':(()=>{const w=t.dur||workDays(t.start,t.end)||1;return `${w} working day${w===1?'':'s'}`})();
+const durTxt=t=>t.dateUnset?'Date not set':t.milestone?'Milestone':(()=>{const w=t.dur||workDays(t.start,t.end)||1;return `${w} working day${w===1?'':'s'}`})();
 const fmtLong=s=>fmt(s,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
 let sheetTab='general';
 function timingLine(t){
+  if(t.dateUnset) return 'Date not set';
   const td=todayStr(); if(done(t)) return `Finished${t.doneAt?' '+fmt(t.doneAt):''}`;
   const toStart=diff(td,t.start), toEnd=diff(td,t.end);
   if(toEnd<0) return `<span class="pos">${-toEnd} day${toEnd===-1?'':'s'} overdue</span>`;
@@ -1104,12 +1106,13 @@ let pTab='overview';
 function openProjectDetail(pid,tab){
   const p=P(pid); if(!p) return; if(tab) pTab=tab;
   const ts=data.tasks.filter(t=>t.project===pid), s=projStats(pid), td=todayStr();
-  const ms=ts.filter(t=>t.milestone).sort((a,b)=>toD(a.end)-toD(b.end));
+  const ms=ts.filter(t=>t.milestone&&(!isShelved(t)||t.dateUnset)).sort((a,b)=>(a.dateUnset?1:0)-(b.dateUnset?1:0)||toD(a.end)-toD(b.end));
   const critSet=new Set(); ms.filter(m=>!done(m)).forEach(m=>chainFor(m.id).forEach(i=>critSet.add(i)));
   const open=ts.filter(t=>!done(t)&&!t.milestone), hrs=open.reduce((a,t)=>a+(+t.est||0),0);
   const waiting=ts.filter(t=>t.status==='waiting');
-  const span=ts.length?[ts.map(t=>t.start).sort()[0],ts.map(t=>t.end).sort().pop()]:null;
-  const nextMs=ms.find(m=>!done(m));
+  const dated=ts.filter(t=>!t.dateUnset&&!isShelved(t));
+  const span=dated.length?[dated.map(t=>t.start).sort()[0],dated.map(t=>t.end).sort().pop()]:null;
+  const nextMs=ms.find(m=>!done(m)&&!m.dateUnset);
   const links=p.links||[];
   let body='';
   if(pTab==='overview') body=`
@@ -1131,13 +1134,13 @@ function openProjectDetail(pid,tab){
       <div class="fact"><span>Next deadline</span><b>${nextMs?`${fmt(nextMs.end)} <small>${diff(td,nextMs.end)} days</small>`:'<small>None</small>'}</b></div>
       <div class="fact"><span>Waiting on others</span><b>${waiting.length}</b></div>
     </div></div>
-    ${ms.length?`<div class="sh-sec"><h4>Milestones</h4><div class="feeds">${ms.map(m=>`<button class="feed ${critSet.has(m.id)?'crit':''}" data-detail="${m.id}"><span class="dia" ${done(m)?'style="background:var(--mint)"':''}></span><span class="ft">${esc(m.title)}</span><span class="fd">${fmtLong(m.end)}${done(m)?', done':`, ${diff(td,m.end)} days`}</span></button>`).join('')}</div></div>`:''}
+    ${ms.length?`<div class="sh-sec"><h4>Milestones</h4><div class="feeds">${ms.map(m=>`<button class="feed ${critSet.has(m.id)?'crit':''}" data-detail="${m.id}"><span class="dia" ${done(m)?'style="background:var(--mint)"':''}></span><span class="ft">${esc(m.title)}</span><span class="fd">${m.dateUnset?'Date not set':`${fmtLong(m.end)}${done(m)?', done':`, ${diff(td,m.end)} days`}`}</span></button>`).join('')}</div></div>`:''}
     ${waiting.length?`<div class="sh-sec"><h4>Waiting on others</h4><div class="feeds">${waiting.map(w=>`<button class="feed" data-detail="${w.id}"><span class="ft">${esc(w.title)}</span><span class="fd">${esc(w.waitingOn||person(w.owner).name)}, ${w.waitingSince?diff(w.waitingSince,td):0}d</span></button>`).join('')}</div></div>`:''}
     <div class="sh-sec links"><h4>Links</h4>${links.length?links.map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label||l.url)}</a>`).join(''):'<p class="prose empty-p">No links yet.</p>'}</div>`;
   if(pTab==='sheet'){
     const ordered=projOrder(pid);
     body=ordered.length?`<p class="muted" style="font-size:13px;margin:0 0 10px">Amber names are on the critical path to an open milestone. Click any row for full details.</p><div class="tbl-wrap"><table class="sheet-t"><thead><tr><th>Task name</th><th>Duration</th><th>Start</th><th>Finish</th><th>Predecessors</th><th>Resource</th><th>% done</th><th>Status</th></tr></thead><tbody>${ordered.map(t=>`<tr data-detail="${t.id}" class="${done(t)?'is-done':''} ${critSet.has(t.id)&&!done(t)?'is-crit':''}">
-      <td class="nm">${taskRef(t)}</td><td class="nowrap">${t.milestone?'0 days':(()=>{const w=workDays(t.start,t.end)||1;return w+(w===1?' day':' days')})()}</td><td class="nowrap">${fmt(t.start)}</td><td class="nowrap">${fmt(t.end)}</td>
+      <td class="nm">${taskRef(t)}</td><td class="nowrap">${t.dateUnset?'Date not set':t.milestone?'0 days':(()=>{const w=workDays(t.start,t.end)||1;return w+(w===1?' day':' days')})()}</td><td class="nowrap">${t.dateUnset?'Date not set':fmt(t.start)}</td><td class="nowrap">${t.dateUnset?'Date not set':fmt(t.end)}</td>
       <td class="preds">${(t.deps||[]).map(T).filter(Boolean).map(taskRef).join('<br>')}</td><td class="nowrap">${ownersHtml(t)}</td><td>${t.milestone?'':taskPct(t)+'%'}</td><td>${stHtml(t)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="prose empty-p">No tasks on this project yet.</p>';
   }
   layer.innerHTML=`<div class="scrim" data-close></div><aside class="sheet" role="dialog" aria-modal="true" aria-label="${esc(p.name)}" style="--pc:${p.color||'var(--blue)'}">
@@ -1169,10 +1172,10 @@ function renderGrid(){
   const filt=t=>(!ui.hideDone||!done(t))&&(!ui.problems||['behind','blocked','risk'].includes(health(t).k));
   const pr=rollup(all);
   const rowsHtml=[];
-  rowsHtml.push(`<tr class="r-proj" style="--pc:${p.color||'var(--blue)'}"><td></td><td class="c-name">${esc(p.name||'')}</td><td></td><td>${pr?hpHtml(pr.h):''}</td><td>${whoHtml(p.owner)}</td><td>${pr?pr.dur+' days':''}</td><td>${pr?fmt(pr.start):''}</td><td>${pr?fmt(pr.end):''}</td><td></td><td>${pr?`<span class="minibar"><i style="width:${pr.pct}%"></i></span>${pr.pct}%`:''}</td><td>${pr?pr.left+' h':''}</td></tr>`);
+  rowsHtml.push(`<tr class="r-proj" style="--pc:${p.color||'var(--blue)'}"><td></td><td class="c-name">${esc(p.name||'')}</td><td></td><td>${pr?hpHtml(pr.h):''}</td><td>${whoHtml(p.owner)}</td><td>${pr&&pr.start?pr.dur+' days':''}</td><td>${pr&&pr.start?fmt(pr.start):''}</td><td>${pr&&pr.end?fmt(pr.end):''}</td><td></td><td>${pr?`<span class="minibar"><i style="width:${pr.pct}%"></i></span>${pr.pct}%`:''}</td><td>${pr?pr.left+' h':''}</td></tr>`);
   groups.forEach(g=>{
     const key=pid+':'+(g.ph?g.ph.id:'_'), col=!!ui.collapsed[key], ru=rollup(g.tasks);
-    if(g.ph) rowsHtml.push(`<tr class="r-ph"><td></td><td class="c-name"><button class="caret" data-collapse="${key}" aria-label="${col?'Expand':'Collapse'} ${esc(g.ph.name)}">${col?'▸':'▾'}</button><span ${g.ph.id&&!V?`data-editphase="${g.ph.id}" style="cursor:pointer"`:''}>${esc(g.ph.name)}</span></td><td></td><td>${ru?hpHtml(ru.h):''}</td><td></td><td>${ru?ru.dur+' days':''}</td><td>${ru?fmt(ru.start):''}</td><td>${ru?fmt(ru.end):''}</td><td></td><td>${ru?`<span class="minibar"><i style="width:${ru.pct}%"></i></span>${ru.pct}%`:''}</td><td>${ru?ru.left+' h':''}</td></tr>`);
+    if(g.ph) rowsHtml.push(`<tr class="r-ph"><td></td><td class="c-name"><button class="caret" data-collapse="${key}" aria-label="${col?'Expand':'Collapse'} ${esc(g.ph.name)}">${col?'▸':'▾'}</button><span ${g.ph.id&&!V?`data-editphase="${g.ph.id}" style="cursor:pointer"`:''}>${esc(g.ph.name)}</span></td><td></td><td>${ru?hpHtml(ru.h):''}</td><td></td><td>${ru&&ru.start?ru.dur+' days':''}</td><td>${ru&&ru.start?fmt(ru.start):''}</td><td>${ru&&ru.end?fmt(ru.end):''}</td><td></td><td>${ru?`<span class="minibar"><i style="width:${ru.pct}%"></i></span>${ru.pct}%`:''}</td><td>${ru?ru.left+' h':''}</td></tr>`);
     if(col) return;
     g.tasks.filter(filt).forEach(t=>{
       const h=health(t), pct=taskPct(t);
@@ -1183,9 +1186,9 @@ function renderGrid(){
         <td>${t.milestone?'':V?priHtml(t):`<select class="g-in" data-gpri="${t.id}" aria-label="Priority">${opts([['1','P1'],['2','P2'],['3','P3'],['4','P4']],String(t.priority||3))}</select>`}</td>
         <td>${hpHtml(h)}</td>
         <td>${ownersHtml(t)}</td>
-        <td>${t.milestone?'0 days':V||!isAuto(t)||done(t)?`${t.dur||1} days`:`<input class="g-in dur" type="number" min="1" data-gdur="${t.id}" value="${t.dur||1}" aria-label="Duration in working days"> d`}</td>
-        <td>${fmt(t.start)}${t.notBefore&&isAuto(t)?'<span class="pin" title="Start no earlier than this date">📌</span>':!isAuto(t)&&!t.milestone?'<span class="pin" title="Manually scheduled">✎</span>':''}</td>
-        <td>${fmt(t.end)}</td>
+        <td>${t.dateUnset?'Date not set':t.milestone?'0 days':V||!isAuto(t)||done(t)?`${t.dur||1} days`:`<input class="g-in dur" type="number" min="1" data-gdur="${t.id}" value="${t.dur||1}" aria-label="Duration in working days"> d`}</td>
+        <td>${t.dateUnset?'Date not set':fmt(t.start)+(t.notBefore&&isAuto(t)?'<span class="pin" title="Start no earlier than this date">📌</span>':!isAuto(t)&&!t.milestone?'<span class="pin" title="Manually scheduled">✎</span>':'')}</td>
+        <td>${t.dateUnset?'Date not set':fmt(t.end)}</td>
         <td class="c-deps">${deps}</td>
         <td>${t.milestone?'':`<span class="minibar"><i style="width:${pct}%"></i></span>${pct}%`}</td>
         <td>${t.milestone?'':Math.round((+t.est||0)*(1-pct/100)*10)/10+' h'}</td></tr>`);
