@@ -112,8 +112,23 @@ main{padding:24px;max-width:1440px;margin:0 auto}
 .t-title{font-weight:600;cursor:pointer}
 .t-title:hover{color:var(--ice)}
 .t-meta{font-size:13px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
-.who{display:inline-flex;align-items:center;gap:5px}
-.who i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.whos{display:inline-flex;gap:4px;flex-wrap:wrap;align-items:center}
+.who{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:1px 7px 1px 5px;border-radius:20px;background:var(--raised);border:1px solid var(--line);color:var(--text);line-height:1.4}
+.who i{width:8px;height:8px;border-radius:50%;display:inline-block;flex:0 0 8px}
+.who small{font-weight:500;color:var(--muted);font-size:10px}
+.tools{display:inline-flex;gap:4px;flex-wrap:wrap}
+.toolchip{display:inline-flex;font-size:11px;font-weight:600;padding:1px 6px;border-radius:20px;border:1px solid var(--line);color:var(--ice);white-space:nowrap}
+.status-detail{display:block;font-size:12px;font-weight:500;color:var(--text);margin-top:4px;max-width:42ch;white-space:normal;line-height:1.4}
+.status-detail b{font-weight:700}
+.bb{margin-top:22px}
+.bb h2{font-stretch:118%;font-weight:800;font-size:22px;margin:0 0 4px;letter-spacing:-.02em}
+.bb-note{color:var(--muted);font-size:13px;margin:0 0 12px}
+.bb-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bb-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.bb-card h3{margin:0 0 6px;font-size:16px}
+.bb-card p{margin:0 0 10px;color:var(--muted);font-size:14px;line-height:1.45}
+.bb-meta{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:12px;color:var(--muted)}
+.bb-meta b{color:var(--text);font-weight:600}
 .age{font-weight:700;font-size:13px;padding:2px 8px;border-radius:20px;background:var(--raised);white-space:nowrap}
 .age.warn{color:var(--amber)}
 .age.bad{color:var(--coral)}
@@ -325,13 +340,14 @@ body.viewer .owner-only{display:none!important}
 .g-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
 .g-bar select{width:auto;padding:6px 8px;font-size:13px}
 .g-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:calc(100vh - 200px)}
-table.grid{border-collapse:separate;border-spacing:0;width:100%;font-size:14px;min-width:1100px}
+table.grid{border-collapse:separate;border-spacing:0;width:100%;font-size:14px;min-width:1280px}
 .grid th{position:sticky;top:0;z-index:2;background:var(--raised);text-align:left;font-size:12px;color:var(--muted);font-weight:700;padding:10px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
 .grid td{padding:7px 10px;border-bottom:1px solid var(--line-soft);vertical-align:middle;white-space:nowrap}
 .grid td.c-num{color:var(--faint);width:36px;font-size:13px}
 .tid{margin-left:6px;font-size:11px;font-weight:600;color:var(--faint);white-space:nowrap}
 .sh-title .tid{font-size:13px;font-weight:650}
 .grid td.c-name{white-space:normal;min-width:280px}
+.grid td.c-tools,.grid td.c-status{white-space:normal;min-width:120px}
 .grid tr.r-proj td{background:color-mix(in srgb,var(--pc) 10%,var(--surface));font-weight:800}
 .grid tr.r-ph td{background:var(--raised);font-weight:700}
 .grid tr.r-task td.c-name{padding-left:38px}
@@ -381,7 +397,7 @@ input.g-in.dur{width:52px;text-align:right}
 @media (max-width:980px){
   .today-grid{grid-template-columns:1fr}
   .pf-row{grid-template-columns:1fr;gap:12px}
-  .lots{grid-template-columns:1fr}
+  .lots,.bb-list{grid-template-columns:1fr}
 }
 @media (max-width:640px){
   .top{flex-wrap:wrap;padding:10px 14px;gap:10px}
@@ -453,7 +469,7 @@ input.g-in.dur{width:52px;text-align:right}
 <script>
 const SEED = {"meta":{"version":3,"updated":"2026-10-15T23:30:00Z","by":"Darius"},"today":{"taskId":"ns-03","text":"Meet Doug: define 'fully live' for November 2","doneLooksLike":"Exact beta feature list written down. It becomes the launch checklist.","done":false},"people":[{"id":"darius","name":"Darius","kind":"human","color":"#5B9BFF"},{"id":"manus","name":"Manus","kind":"ai","color":"#A78BFA"},{"id":"claude","name":"Claude","kind":"ai","color":"#E879A6"},{"id":"tumii","name":"Tumii","kind":"ai","color":"#2DD4BF"},{"id":"doug","name":"Doug","kind":"human","color":"#9BD25E"},{"id":"skyler","name":"Skyler","kind":"human","color":"#38BDF8"},{"id":"it","name":"IT","kind":"human","color":"#94A3B8"},{"id":"kurt","name":"Kurt","kind":"human","color":"#C084FC"},{"id":"leadership","name":"Leadership","kind":"human","color":"#7DD3FC"}],"projects":[{"id":"ns","name":"Nutri-Strength (Healthy Habits)","status":"active","owner":"darius","color":"#5B9BFF","next":"Meet Doug to define 'fully live' for November 2.","blocker":"IT choosing the HIPAA-eligible database","shipLock":false,"summary":"The Healthy Habits app, renamed Nutri-Strength. Being treated as HIPAA-regulated. Beta launches November 2 on a new HIPAA-eligible database; full build by January 15.","links":[{"label":"Build Log","url":"https://docs.google.com/document/d/180HSWNTkPHI3gppeAVogNeltFUyvkucxoEPTxJECP5o/edit"}],"phases":[{"id":"ph-legal","name":"Legal and compliance"},{"id":"ph-db","name":"Database"},{"id":"ph-app","name":"Launch features"},{"id":"ph-beta","name":"Beta launch"},{"id":"ph-full","name":"Full build"}]},{"id":"sw","name":"Stairway to Health","status":"stalled","owner":"darius","color":"#FF8A65","next":"Ship the current version. No restarts.","blocker":"Perfectionism, restarts","shipLock":true,"summary":"Stairway to Health. The current version is close; it has been restarted several times to match where the team is. The goal now is to ship it as is.","phases":[{"id":"ph-sw-build","name":"Build"},{"id":"ph-sw-ship","name":"Ship"}]},{"id":"sr","name":"Sales reporting automation","status":"handed-off","owner":"skyler","color":"#38BDF8","next":"Skyler builds; Darius hands off Daily RIS Sales.","blocker":"","shipLock":false,"summary":"Automating Optimal Health Systems sales reporting by moving the manual HP RIS data sheet into the reports dashboard."},{"id":"fl","name":"Raise the autoship floor","status":"active","owner":"leadership","color":"#A3E635","next":"Joint growth and sales effort.","blocker":"","shipLock":false,"summary":"A Q4 leadership rock: raise the autoship floor."},{"id":"ghl","name":"GoHighLevel transition","status":"long-term","owner":"darius","color":"#64748B","next":"Nothing this week.","blocker":"","shipLock":false,"summary":"Long-term move from Marketing Rx to Optimal Health Systems' own GoHighLevel."}],"tasks":[{"id":"ns-01","project":"ns","title":"Preview sign-in test (client + Health Professional)","owner":"darius","status":"done","start":"2026-10-13","end":"2026-10-13","est":0.5,"deps":[],"doneAt":"2026-10-14","note":"Terms screen shows for client and Health Professional.","description":"Sign in to the preview app as a client and as a Health Professional to confirm the Terms screen (v0.2 text, HP checkbox, footer) and the Request data copy buttons.","doneWhen":"Both roles tested, gaps written in the Build Log.","phase":"ph-app","priority":3,"dur":1,"baselineStart":"2026-10-13","baselineEnd":"2026-10-13"},{"id":"ns-02","project":"ns","title":"Send Claude's 4 decisions to Manus","owner":"darius","status":"done","start":"2026-10-13","end":"2026-10-13","est":0.2,"deps":[],"doneAt":"2026-10-13","phase":"ph-app","priority":3,"dur":1,"baselineStart":"2026-10-13","baselineEnd":"2026-10-13"},{"id":"ns-07","project":"ns","title":"Write Privacy Policy + Health Data Privacy Policy","owner":"claude","status":"done","start":"2026-10-13","end":"2026-10-14","est":1,"deps":["ns-02"],"doneAt":"2026-10-14","description":"Claude drafted the Privacy Policy and the Consumer Health Data Privacy Policy.","log":[{"date":"2026-10-14","by":"Claude","text":"v0.2 of both policies delivered to the inbox."}],"phase":"ph-legal","priority":3,"dur":2,"baselineStart":"2026-10-13","baselineEnd":"2026-10-14"},{"id":"ns-03","project":"ns","title":"Meet Doug: define 'fully live' for Nov 2","owner":"darius","status":"todo","start":"2026-10-16","end":"2026-10-16","est":0.75,"deps":[],"baselineStart":"2026-10-14","baselineEnd":"2026-10-14","note":"Exact feature list beta testers need. Becomes the launch checklist.","description":"Sit down with Doug and agree on exactly what 'fully live' means for the November 2 beta: which features beta testers need on day one, and which can wait. Manus can't push the Terms gate until this is settled, so the rest of the launch chain waits on it.","doneWhen":"A written beta feature list Doug agrees with, added here as the launch checklist.","checklist":[{"text":"Book 45 minutes with Doug","done":false},{"text":"List every feature testers touch on day one","done":false},{"text":"Mark each one: needed for Nov 2, or can wait","done":false},{"text":"Get Doug's yes on the list","done":false},{"text":"Add the list as the launch checklist","done":false}],"log":[{"date":"2026-10-15","by":"Tumii","text":"Set as today's one thing. It drives the Nov 2 chain."},{"date":"2026-10-14","by":"Tumii","text":"Moved from Oct 14 to Oct 16 to fit Doug's calendar."}],"phase":"ph-app","priority":1,"slips":[{"date":"2026-10-14","days":2,"reason":"Waiting on someone","note":"Moved to fit Doug's calendar","by":"Tumii"}],"notBefore":"2026-10-16","dur":1},{"id":"ns-04","project":"ns","title":"Send privacy policies + Terms v0.3 to Manus","owner":"darius","status":"todo","start":"2026-10-16","end":"2026-10-16","est":0.2,"deps":["ns-07"],"note":"Preview only. Replace the /privacy and /health-data-privacy placeholder pages.","description":"Replace the /privacy and /health-data-privacy placeholder pages in the preview app and update the Terms text to the org-access fix version. Newer v0.3 documents for the HIPAA-regulated decision are drafted and not yet sent.","doneWhen":"Manus confirms the preview shows the new pages and Terms text.","checklist":[{"text":"Privacy Policy","done":false},{"text":"Consumer Health Data Privacy Policy","done":false},{"text":"Terms with the org-access fix","done":false}],"phase":"ph-legal","priority":2,"notBefore":"2026-10-16","dur":1,"baselineStart":"2026-10-16","baselineEnd":"2026-10-16"},{"id":"ns-06","project":"ns","title":"Fill in names: breach plan + retention policy","owner":"darius","status":"todo","start":"2026-10-16","end":"2026-10-16","est":0.2,"deps":[],"description":"Fill in the people for the breach response plan and the data retention policy.","doneWhen":"Every role has a name and a backup.","checklist":[{"text":"Incident lead","done":false},{"text":"Technical lead","done":false},{"text":"Decision maker","done":false},{"text":"Communications","done":false},{"text":"Policy owner","done":false},{"text":"Backups for each role","done":false}],"phase":"ph-legal","priority":3,"notBefore":"2026-10-16","dur":1,"baselineStart":"2026-10-16","baselineEnd":"2026-10-16"},{"id":"ns-15","project":"ns","title":"Add Stripe test-mode key to preview server","owner":"darius","status":"todo","start":"2026-10-19","end":"2026-10-19","est":0.25,"deps":[],"note":"Add the key directly on the server. Never paste keys into chat, this plan, or the Build Log.","description":"Manus finished the approved preview-only secret rotation (database password, JWT secret, data request outbox key) and both preview health checks pass. It's now blocked until a Stripe test-mode secret key is added to the preview server by hand, so it can run the two fake-client subscription cancellation and deletion tests.","doneWhen":"Key is on the preview server and Manus reports both Stripe tests passing.","phase":"ph-app","priority":1,"needs":"Stripe test-mode secret key and access to the preview server","notBefore":"2026-10-17","dur":1,"baselineStart":"2026-10-19","baselineEnd":"2026-10-19"},{"id":"ns-16","project":"ns","title":"Attorney review of the legal packet","owner":"kurt","status":"doing","start":"2026-10-13","end":"2026-10-27","est":0,"deps":[],"description":"Kurt is scheduling the attorney. The packet holds Terms v0.3 (Beta), Privacy Policy v0.3, and the Consumer Health Data Privacy Policy v0.3 with in-app consent text. Two placeholders remain: the HIPAA-eligible database provider name, and the attorney's confirmation of Optimal Health Systems' HIPAA role.","doneWhen":"Written feedback back from the attorney.","checklist":[{"text":"Packet sent","done":true},{"text":"Database provider name filled in","done":false},{"text":"Attorney confirms Optimal Health Systems' HIPAA role","done":false},{"text":"Feedback received","done":false}],"phase":"ph-legal","priority":2,"statusHistory":[{"status":"doing","at":"2026-10-13"}],"dur":11,"baselineStart":"2026-10-13","baselineEnd":"2026-10-27"},{"id":"ns-m1","project":"ns","title":"Attorney feedback due","owner":"kurt","status":"todo","start":"2026-10-28","end":"2026-10-28","est":0,"deps":["ns-16"],"milestone":true,"description":"Attorney feedback on the Nutri-Strength legal packet is requested by this date.","phase":"ph-legal","baselineStart":"2026-10-28","baselineEnd":"2026-10-28"},{"id":"ns-13","project":"ns","title":"IT picks HIPAA-eligible database","owner":"it","status":"waiting","start":"2026-10-13","end":"2026-10-22","est":0,"deps":[],"waitingOn":"IT decision","waitingSince":"2026-10-12","description":"Nutri-Strength is being treated as HIPAA-regulated, so it needs a HIPAA-eligible database. IT is choosing the provider. Its name is also one of the two placeholders left in the legal packet, and Manus is holding all database security work until IT confirms.","doneWhen":"Provider chosen, named in the legal packet, and confirmed to Manus.","log":[{"date":"2026-10-12","by":"Darius","text":"Asked IT for a HIPAA-eligible database pick."},{"date":"2026-10-14","by":"Tumii","text":"Manus drafted an IT-facing database handoff spec."}],"phase":"ph-db","priority":1,"statusHistory":[{"status":"todo","at":"2026-10-08"},{"status":"waiting","at":"2026-10-12"}],"notBefore":"2026-10-13","dur":8,"baselineStart":"2026-10-13","baselineEnd":"2026-10-22"},{"id":"ns-14","project":"ns","title":"Migrate to the new database","owner":"it","status":"todo","start":"2026-10-23","end":"2026-10-29","est":8,"deps":["ns-13"],"note":"Beta launches on the new database so real client data never touches the old one.","description":"Move the app to the new HIPAA-eligible database before beta, so real client data never touches the old one. Targeted for the end of October.","doneWhen":"Preview and production both run on the new database; health checks pass.","phase":"ph-db","priority":1,"needs":"HIPAA-eligible database account (IT)","notBefore":"2026-10-23","dur":5,"baselineStart":"2026-10-23","baselineEnd":"2026-10-29"},{"id":"ns-05","project":"ns","title":"Push Terms gate to production","owner":"manus","status":"todo","start":"2026-10-19","end":"2026-10-20","est":2,"deps":["ns-01","ns-03"],"baselineStart":"2026-10-15","baselineEnd":"2026-10-16","note":"About 150 Manus credits. Beta users are on the live app with no terms acceptance.","description":"Beta users are on the live app with no Terms acceptance. This puts the Terms acceptance screen in front of every client and Health Professional on production.","doneWhen":"Every live user must accept the current Terms before using the app, verified with a test client and a test Health Professional.","checklist":[{"text":"Preview sign-in test is clean","done":true},{"text":"Doug scope meeting done","done":false},{"text":"Run the Manus task (about 150 credits)","done":false},{"text":"Verify on production in both roles","done":false}],"log":[{"date":"2026-10-15","by":"Tumii","text":"Moved from Oct 15 to Oct 19 while it waits on the Doug scope meeting."}],"phase":"ph-app","priority":1,"needs":"About 150 Manus credits","slips":[{"date":"2026-10-15","days":2,"reason":"Waiting on a decision","note":"Can't push until Doug defines 'fully live'","by":"Tumii"}],"notBefore":"2026-10-19","dur":2},{"id":"ns-08","project":"ns","title":"Resend email: invites + password reset","owner":"manus","status":"todo","start":"2026-10-21","end":"2026-10-22","est":2,"deps":["ns-05"],"description":"Set up Resend for invitation and password reset emails.","doneWhen":"Invites and resets arrive from the right sender for controlled test accounts.","checklist":[{"text":"Sender domain","done":false},{"text":"Invitation email","done":false},{"text":"Password reset email","done":false},{"text":"Test with controlled accounts","done":false}],"phase":"ph-app","priority":2,"notBefore":"2026-10-21","dur":2,"baselineStart":"2026-10-21","baselineEnd":"2026-10-22"},{"id":"ns-09","project":"ns","title":"Stripe test mode: checkout, webhooks, subscriptions","owner":"manus","status":"todo","start":"2026-10-23","end":"2026-10-26","est":3,"deps":["ns-08","ns-15"],"note":"No live payments yet.","description":"Get Stripe working in test mode. No live payments yet.","doneWhen":"A test subscription moves through checkout, webhooks, and cancellation correctly.","checklist":[{"text":"Checkout","done":false},{"text":"Webhooks","done":false},{"text":"Subscription state","done":false}],"phase":"ph-app","priority":2,"needs":"Stripe test-mode key on the preview server","notBefore":"2026-10-23","dur":2,"baselineStart":"2026-10-23","baselineEnd":"2026-10-26"},{"id":"ns-10","project":"ns","title":"Restore reminders as a scheduled service","owner":"manus","status":"todo","start":"2026-10-27","end":"2026-10-28","est":2,"deps":["ns-09"],"description":"Bring reminders back as their own DigitalOcean scheduled service, validated on its own.","doneWhen":"Reminders fire on schedule in production.","phase":"ph-app","priority":2,"notBefore":"2026-10-27","dur":2,"baselineStart":"2026-10-27","baselineEnd":"2026-10-28"},{"id":"ns-12","project":"ns","title":"Fix database certificate check","owner":"manus","status":"todo","start":"2026-10-30","end":"2026-10-30","est":1,"deps":["ns-14"],"note":"Targets the new database, not the old one.","description":"Found in Claude's review. Part of the production security plan, which is waiting on Doug's review, a test storage bucket, and IT's database pick. The fix targets the new database, not the old one.","phase":"ph-db","priority":2,"notBefore":"2026-10-30","dur":1,"baselineStart":"2026-10-30","baselineEnd":"2026-10-30"},{"id":"ns-11","project":"ns","title":"Production test accounts (all 5 roles) + launch checklist","owner":"darius","status":"todo","start":"2026-10-29","end":"2026-10-30","est":2,"deps":["ns-08","ns-10"],"description":"Create test accounts for all 5 roles through the live invite flow, then run the whole app end to end.","doneWhen":"Every role works end to end and the launch checklist is signed off.","checklist":[{"text":"Create all 5 role accounts via invite","done":false},{"text":"End-to-end run","done":false},{"text":"Launch checklist signed off","done":false}],"phase":"ph-beta","priority":1,"notBefore":"2026-10-29","dur":2,"baselineStart":"2026-10-29","baselineEnd":"2026-10-30"},{"id":"ns-m2","project":"ns","title":"Beta live with testers","owner":"doug","status":"todo","start":"2026-11-02","end":"2026-11-02","est":0,"deps":["ns-05","ns-11","ns-12","ns-14"],"milestone":true,"description":"Beta testers start using Nutri-Strength (Doug's date).","doneWhen":"Beta testers are signed in on the new database with Terms acceptance in place.","phase":"ph-beta","baselineStart":"2026-11-02","baselineEnd":"2026-11-02"},{"id":"ns-17","project":"ns","title":"Full build: post-beta features","owner":"manus","status":"todo","start":"2026-11-03","end":"2027-01-12","est":40,"deps":["ns-m2"],"description":"Everything after beta through the full build. Parked items (passkeys, support role, data export, AI Workout Builder, TestFlight) are deliberately not in here yet.","phase":"ph-full","priority":3,"notBefore":"2026-11-03","dur":46,"baselineStart":"2026-11-03","baselineEnd":"2027-01-12"},{"id":"ns-m3","project":"ns","title":"Full build complete","owner":"darius","status":"todo","start":"2027-01-15","end":"2027-01-15","est":0,"deps":["ns-17"],"milestone":true,"description":"Full build of the app complete.","phase":"ph-full","baselineStart":"2027-01-15","baselineEnd":"2027-01-15"},{"id":"sw-01","project":"sw","title":"Build current page flow","owner":"darius","status":"done","start":"2026-09-29","end":"2026-10-08","est":12,"deps":[],"doneAt":"2026-10-08","description":"Built the current Stairway to Health page flow.","phase":"ph-sw-build","priority":3,"dur":8,"baselineStart":"2026-09-29","baselineEnd":"2026-10-08"},{"id":"sw-02","project":"sw","title":"Final copy pass (no new sections)","owner":"darius","status":"todo","start":"2026-10-19","end":"2026-10-20","est":2,"deps":["sw-01"],"description":"Wording fixes only. Any new section idea goes to the idea parking lot, not into this version.","doneWhen":"Copy reads clean; no new sections added.","phase":"ph-sw-ship","priority":1,"notBefore":"2026-10-19","dur":2,"baselineStart":"2026-10-19","baselineEnd":"2026-10-20"},{"id":"sw-03","project":"sw","title":"Ship current version to the team","owner":"darius","status":"todo","start":"2026-10-21","end":"2026-10-21","est":1,"deps":["sw-02"],"description":"Ship the current version to the team. No restarts.","doneWhen":"The team has the link and is using it.","phase":"ph-sw-ship","priority":1,"notBefore":"2026-10-21","dur":1,"baselineStart":"2026-10-21","baselineEnd":"2026-10-21"},{"id":"sw-m1","project":"sw","title":"Stairway shipped","owner":"darius","status":"todo","start":"2026-10-23","end":"2026-10-23","est":0,"deps":["sw-03"],"milestone":true,"description":"Stairway to Health is in the team's hands.","phase":"ph-sw-ship","baselineStart":"2026-10-23","baselineEnd":"2026-10-23"},{"id":"sr-01","project":"sr","title":"Move HP RIS data into the reports dashboard","owner":"skyler","status":"doing","start":"2026-10-13","end":"2026-10-30","est":12,"deps":[],"description":"Skyler moves the manual HP RIS data sheet into the reports dashboard.","priority":3,"statusHistory":[{"status":"doing","at":"2026-10-13"}],"dur":14,"baselineStart":"2026-10-13","baselineEnd":"2026-10-30"},{"id":"sr-02","project":"sr","title":"Hand off Daily RIS Sales","owner":"darius","status":"todo","start":"2026-10-20","end":"2026-10-20","est":1,"deps":[],"description":"Hand the Daily RIS Sales report off to Skyler.","priority":2,"notBefore":"2026-10-20","dur":1,"baselineStart":"2026-10-20","baselineEnd":"2026-10-20"},{"id":"fl-01","project":"fl","title":"Joint growth and sales plan","owner":"leadership","status":"doing","start":"2026-10-12","end":"2026-10-30","est":6,"deps":[],"description":"Leadership's joint growth and sales effort to raise the autoship floor.","priority":2,"dur":15,"baselineStart":"2026-10-12","baselineEnd":"2026-10-30"}],"parked":["Passkeys / managed identity provider","Support role with ticket-scoped access","Real account deletion and data export","Phase 2 AI Workout Builder","TestFlight / mobile release","HIPAA and AWS migration: Darius handles with Kurt, separate track","Project app, after Nov 2: multiple logins with roles. Skyler and Doug update their own tasks and change their own passwords","Project app, after Nov 2: auto-schedule tasks onto dmartindell@optimalhealthsystems.com Google Calendar (Motion-style)"],"ideas":["Five specialist bots or spaces","Compare Grok bot setup with friend's","Docker sandbox so Tumii can code on Healthy Habits","Connect Tumii to Doug's Manus","Automate the monthly reporting spreadsheet","Daily Floor (work must-do + home must-do + workout check)","Onboarding automation for new clients and Health Professionals"],"calendar":{"workdays":[1,2,3,4,5],"daysOff":[{"date":"2026-11-26","label":"Thanksgiving"},{"date":"2026-11-27","label":"Day after Thanksgiving"},{"date":"2026-12-24","label":"Christmas Eve"},{"date":"2026-12-25","label":"Christmas"},{"date":"2027-01-01","label":"New Year's Day"}]}};
 const LS_DATA='dp.data.v1', LS_GH='dp.github.v1', LS_UI='dp.ui.v1';
-const DAY=86400000, RH=40, STATUS={todo:'To do',doing:'In progress',waiting:'Waiting',done:'Done'};
+const DAY=86400000, RH=40, STATUS={todo:'To do',doing:'In progress',waiting:'Waiting',done:'Done',cancelled:'Cancelled'};
 const PSTATUS={active:'Active',stalled:'Stalled','handed-off':'Handed off','long-term':'Long term',paused:'Paused',done:'Done'};
 
 let data=null, dirty=false, sha=null, source='seed', syncErr='';
@@ -463,7 +479,7 @@ let gh={owner:'dmartindell-creator',repo:'dashboard',branch:'main',path:'project
 let apiMode=false, role=null, version=null, shareUrl='', saveTimer=null, saving=false;
 const shareKey=new URLSearchParams(location.search).get('key');
 const viewer=()=>apiMode?role!=='owner':(!gh.token&&!gh.local);
-const EMPTY=()=>({meta:{},today:{},people:[],projects:[],tasks:[],parked:[],ideas:[],calendar:{workdays:[1,2,3,4,5],daysOff:[]}});
+const EMPTY=()=>({meta:{},today:{},people:[],projects:[],tasks:[],parked:[],ideas:[],backBurner:[],calendar:{workdays:[1,2,3,4,5],daysOff:[]}});
 try{Object.assign(gh,JSON.parse(localStorage.getItem(LS_GH)||'{}'))}catch(e){}
 
 /* ---------- dates ---------- */
@@ -481,10 +497,18 @@ const T=id=>data.tasks.find(t=>t.id===id);
 const P=id=>data.projects.find(p=>p.id===id);
 const person=id=>data.people.find(p=>p.id===id)||{id,name:id||'Unassigned',color:'#94A3B8'};
 const done=t=>t&&t.status==='done';
-const depsOpen=t=>(t.deps||[]).map(T).filter(d=>d&&!done(d));
-const conflict=t=>(t.deps||[]).map(T).some(d=>d&&!done(d)&&toD(d.end)>toD(t.start)&&!(d.milestone&&d.end===t.start));
+function ownersOf(t){
+  if(!t) return [];
+  if(Array.isArray(t)) return t.filter(Boolean);
+  const ids=Array.isArray(t.owners)&&t.owners.length?t.owners:(t.owner?[t.owner]:[]);
+  return ids.filter(Boolean);
+}
+const isShelved=t=>!!(t&&(t.shelved||t.status==='cancelled'));
+const ownerNames=t=>ownersOf(t).map(id=>person(id).name).join(', ')||'Unassigned';
+const depsOpen=t=>(t.deps||[]).map(T).filter(d=>d&&!done(d)&&!isShelved(d)&&!d.dateUnset);
+const conflict=t=>(t.deps||[]).map(T).some(d=>d&&!done(d)&&!isShelved(d)&&!d.dateUnset&&toD(d.end)>toD(t.start)&&!(d.milestone&&d.end===t.start));
 function projStats(pid){
-  const ts=data.tasks.filter(t=>t.project===pid&&!t.milestone);
+  const ts=data.tasks.filter(t=>t.project===pid&&!t.milestone&&!isShelved(t));
   const w=t=>Math.max(+t.est||0,0.25);
   const total=ts.reduce((a,t)=>a+w(t),0), dn=ts.filter(done).reduce((a,t)=>a+w(t),0);
   const lastDone=ts.filter(t=>t.doneAt).map(t=>t.doneAt).sort().pop()||null;
@@ -495,7 +519,7 @@ function chainFor(id,seen=new Set()){
   const preds=depsOpen(t).sort((a,b)=>toD(b.end)-toD(a.end));
   return [id,...(preds.length?chainFor(preds[0].id,seen):[])];
 }
-const milestones=()=>data.tasks.filter(t=>t.milestone).sort((a,b)=>toD(a.end)-toD(b.end));
+const milestones=()=>data.tasks.filter(t=>t.milestone&&!isShelved(t)).sort((a,b)=>toD(a.end)-toD(b.end));
 
 /* ---------- v3: calendar, scheduling engine, health ---------- */
 const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -515,15 +539,17 @@ function schedule(){
   const visit=t=>{if(st[t.id])return;st[t.id]=1;(t.deps||[]).map(T).filter(Boolean).forEach(visit);order.push(t)};
   data.tasks.forEach(visit);
   order.forEach(t=>{
+    if(isShelved(t)||t.dateUnset) return;
     if(!t.milestone&&!t.dur) t.dur=Math.max(1,workDays(t.start,t.end)||1);
     if(!isAuto(t)||done(t)) return;
     let s;
     if(t.status==='doing') s=t.start;
     else{
-      const preds=(t.deps||[]).map(T).filter(Boolean);
+      const preds=(t.deps||[]).map(T).filter(p=>p&&!isShelved(p)&&!p.dateUnset);
       s=t.notBefore||(preds.length?null:t.start);
       preds.forEach(p=>{const c=addDays(p.end,1);if(!s||toD(c)>toD(s))s=c});
     }
+    if(!s) return;
     t.start=nextWork(s); t.end=addWork(t.start,t.dur);
   });
 }
@@ -542,6 +568,7 @@ function timeInStatus(t){
 }
 function health(t){
   const td=todayStr();
+  if(t.dateUnset) return {k:'ok',label:'Date not set',why:'No date yet.'};
   if(done(t)) return {k:'done',label:'Done',why:t.doneAt?`Finished ${fmt(t.doneAt)}`:'Finished'};
   if(t.milestone){
     const late=(t.deps||[]).map(T).filter(d=>d&&!done(d)&&toD(d.end)>toD(t.end)).sort((a,b)=>toD(b.end)-toD(a.end))[0];
@@ -550,8 +577,8 @@ function health(t){
     return {k:'ok',label:'On track',why:'Everything feeding it finishes in time'};
   }
   const open=depsOpen(t);
-  if(t.status==='waiting'){const a=t.waitingSince?diff(t.waitingSince,td):0;return {k:'blocked',label:'Blocked',why:`Waiting on ${t.waitingOn||person(t.owner).name}${a?` for ${a} day${a===1?'':'s'}`:''}`}}
-  if(open.length&&toD(t.start)<=toD(td)) return {k:'blocked',label:'Blocked',why:`Can't start until "${open[0].title}" (${person(open[0].owner).name}) is done`};
+  if(t.status==='waiting'){const a=t.waitingSince?diff(t.waitingSince,td):0;return {k:'blocked',label:'Blocked',why:`Waiting on ${t.waitingOn||ownerNames(t)}${a?` for ${a} day${a===1?'':'s'}`:''}`}}
+  if(open.length&&toD(t.start)<=toD(td)) return {k:'blocked',label:'Blocked',why:`Can't start until "${open[0].title}" (${ownerNames(open[0])}) is done`};
   if(toD(t.end)<toD(td)){const n=workDays(addDays(t.end,1),td);return {k:'behind',label:`${n||1}d late`,why:`Was due ${fmt(t.end)} and is still open`,days:n}}
   if(t.status==='todo'&&toD(t.start)<toD(td)&&!open.length) return {k:'risk',label:'Not started',why:`Should have started ${fmt(t.start)}`};
   if(t.status==='doing'){const d=t.dur||1,el=workDays(t.start,td<t.end?td:t.end),exp=Math.min(1,el/d),pct=taskPct(t)/100;
@@ -568,7 +595,7 @@ function worst(ts){const open=ts.filter(t=>!done(t));if(!ts.length)return {k:'id
   const hs=open.map(health).sort((a,b)=>HRANK[b.k]-HRANK[a.k]);const w=hs[0];const n=hs.filter(h=>h.k===w.k).length;
   const lbl={behind:'Behind',blocked:'Blocked',risk:'At risk',ok:'On track'}[w.k];return {k:w.k,label:lbl+(w.k!=='ok'&&n>1?` (${n})`:''),why:w.why}}
 function projRows(pid){
-  const p=P(pid)||{}, ts=data.tasks.filter(t=>t.project===pid), phs=p.phases||[];
+  const p=P(pid)||{}, ts=data.tasks.filter(t=>t.project===pid&&!isShelved(t)), phs=p.phases||[];
   const so=a=>a.slice().sort((x,y)=>toD(x.start)-toD(y.start)||(x.milestone?1:0)-(y.milestone?1:0));
   const out=phs.map(ph=>({ph,tasks:so(ts.filter(t=>t.phase===ph.id))}));
   const rest=so(ts.filter(t=>!t.phase||!phs.some(ph=>ph.id===t.phase)));
@@ -606,7 +633,7 @@ function askSlip(t,oldEnd){
 /* ---------- storage + sync ---------- */
 function saveUI(){try{localStorage.setItem(LS_UI,JSON.stringify(ui))}catch(e){}}
 function persistLocal(){try{localStorage.setItem(LS_DATA,JSON.stringify({data,dirty,sha,version,api:apiMode,ts:Date.now()}))}catch(e){}}
-function touch(){data.meta=data.meta||{};data.meta.updated=new Date().toISOString();data.meta.by='Darius';dirty=true;persistLocal();render();queueSave()}
+function touch(){data.meta=data.meta||{};data.meta.updated=new Date().toISOString();data.meta.lastUpdated=data.meta.updated;data.meta.by='Darius';dirty=true;persistLocal();render();queueSave()}
 const b64e=s=>btoa(unescape(encodeURIComponent(s)));
 const b64d=s=>decodeURIComponent(escape(atob(s.replace(/\n/g,''))));
 const ghUrl=()=>`https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/${gh.path}`;
@@ -628,7 +655,7 @@ async function loadApi(){
   if(!role){data=EMPTY();render();openLogin();return true}
   try{const r=await apiFetch('/api/plan');if(!r.ok)throw new Error('Server said '+r.status);const j=await r.json();data=j.data;version=j.version;syncErr=''}
   catch(e){syncErr='Offline';let local=null;try{local=JSON.parse(localStorage.getItem(LS_DATA)||'null')}catch(_){}data=(local&&local.data)||EMPTY()}
-  data.parked=data.parked||[];data.ideas=data.ideas||[];
+  data.parked=data.parked||[];data.ideas=data.ideas||[];data.backBurner=data.backBurner||[];
   let local=null;try{local=JSON.parse(localStorage.getItem(LS_DATA)||'null')}catch(_){}
   if(role==='owner'&&local&&local.dirty&&local.api&&local.data){data=local.data;version=local.version;dirty=true;queueSave()}
   render(); return true;
@@ -639,7 +666,7 @@ async function saveApi(force){
   try{
     const r=await apiFetch('/api/plan',{method:'PUT',body:JSON.stringify({data,version:force?null:version})});
     if(r.status===409){const j=await r.json();saving=false;
-      const c=await ask('The plan changed on the server','Someone (probably Tumii) saved a newer version while you were editing. Keep yours and overwrite theirs, or load theirs and drop your last edits?',[['theirs','Load theirs'],['mine','Keep mine','primary']]);
+      const c=await ask('The plan changed on the server','Someone else saved a newer version while you were editing. Keep yours and overwrite theirs, or load theirs and drop your last edits?',[['theirs','Load theirs'],['mine','Keep mine','primary']]);
       if(c==='mine'){version=j.version;return saveApi(true)} data=j.data;version=j.version;dirty=false;persistLocal();render();toast('Loaded the newer plan');return}
     if(r.status===401){saving=false;openLogin('Your session ended. Log in again to save.');return}
     if(!r.ok)throw new Error('Server said '+r.status);
@@ -667,7 +694,7 @@ async function load(){
   if(local&&local.dirty&&local.data){data=local.data;dirty=true;if(!sha)sha=local.sha||null}
   else data=remote||(local&&local.data)||structuredClone(SEED);
   if(!remote&&source!=='github') source=local&&local.data?'local':'seed';
-  data.parked=data.parked||[];data.ideas=data.ideas||[];
+  data.parked=data.parked||[];data.ideas=data.ideas||[];data.backBurner=data.backBurner||[];
   render();
 }
 async function saveGitHub(){
@@ -676,7 +703,7 @@ async function saveGitHub(){
   try{
     let current=null; try{current=await ghGet()}catch(e){if(!/404/.test(e.message))throw e}
     if(current&&sha&&current.sha!==sha){
-      const choice=await ask('The plan changed on GitHub','Someone (probably Tumii) saved a newer version since you loaded this page. Overwrite it with your version, or load theirs and drop your unsaved edits?',[['cancel','Cancel'],['theirs','Load theirs'],['mine','Overwrite with mine','primary']]);
+      const choice=await ask('The plan changed on GitHub','Someone else saved a newer version since you loaded this page. Overwrite it with your version, or load theirs and drop your unsaved edits?',[['cancel','Cancel'],['theirs','Load theirs'],['mine','Overwrite with mine','primary']]);
       if(choice==='theirs'){data=current.data;sha=current.sha;dirty=false;persistLocal();render();toast('Loaded the newer plan from GitHub');return}
       if(choice!=='mine'){render();return}
     }
@@ -715,24 +742,29 @@ function render(){
   if(ui.view==='timeline') renderTimeline();
   if(ui.view==='grid') renderGrid();
 }
-const whoHtml=id=>{const p=person(id);return `<span class="who"><i style="background:${p.color}"></i>${esc(p.name)}</span>`};
+const whoHtml=id=>{const p=person(id);const title=p.title?` <small>${esc(p.title)}</small>`:'';return `<span class="who"><i style="background:${p.color}"></i>${esc(p.name)}${title}</span>`};
+function ownersHtml(t){const ids=ownersOf(t);if(!ids.length)return '<span class="who">Unassigned</span>';return `<span class="whos">${ids.map(whoHtml).join('')}</span>`}
+function toolsHtml(t){const tools=(t&&t.tools)||[];if(!tools.length)return '';return `<span class="tools">${tools.map(x=>`<span class="toolchip">${esc(x)}</span>`).join('')}</span>`}
+function statusDetailHtml(t){if(!t||!t.statusDetail)return '';const about=t.statusDetailAbout?`<b>${esc(t.statusDetailAbout)}. </b>`:'';return `<div class="status-detail">${about}${esc(t.statusDetail)}</div>`}
+function showEnd(t){if(!t)return '';if(t.dateUnset)return 'Date not set';if(t.openEnded)return 'Not set';return fmt(t.end)}
+function showRange(t){if(t.dateUnset)return 'Date not set';if(t.openEnded)return fmt(t.start)+', finish not set';return t.start===t.end?fmt(t.end):fmt(t.start)+' to '+fmt(t.end)}
 function taskRow(t,extra=''){
   const pr=P(t.project);
   return `<div class="task-row">
     <button class="check ${done(t)?'on':''}" data-toggle="${t.id}" aria-label="Mark ${esc(t.title)} ${done(t)?'not done':'done'}"></button>
     <div><div class="t-title" data-open="${t.id}">${esc(t.title)}</div>${t.description?`<div class="t-desc">${esc(t.description)}</div>`:''}
-      <div class="t-meta">${priHtml(t)}${(()=>{const h=health(t);return h.k==='ok'||h.k==='done'?'':hpHtml(h)})()}${whoHtml(t.owner)}<span>${esc(pr?.name||'')}</span>${t.est?`<span>${t.est<1?Math.round(t.est*60)+' min':t.est+' h'}</span>`:''}<span>${t.start===t.end?fmt(t.end):fmt(t.start)+' to '+fmt(t.end)}</span></div></div>
+      <div class="t-meta">${priHtml(t)}${stHtml(t)}${(()=>{const h=health(t);return h.k==='ok'||h.k==='done'?'':hpHtml(h)})()}${ownersHtml(t)}${toolsHtml(t)}<span>${esc(pr?.name||'')}</span>${t.est?`<span>${t.est<1?Math.round(t.est*60)+' min':t.est+' h'}</span>`:''}<span>${showRange(t)}</span></div>${statusDetailHtml(t)}</div>
     ${extra}</div>`;
 }
 function renderToday(){
   const td=todayStr(), o=data.today||{};
   const linked=o.taskId?T(o.taskId):null;
   const isDone=linked?done(linked):!!o.done;
-  const ms=milestones().filter(m=>!done(m)).slice(0,4);
-  const ready=data.tasks.filter(t=>!t.milestone&&!done(t)&&t.status!=='waiting'&&t.owner==='darius'&&!depsOpen(t).length&&t.id!==o.taskId)
+  const ms=milestones().filter(m=>!done(m)&&!m.dateUnset).slice(0,4);
+  const ready=data.tasks.filter(t=>!isShelved(t)&&!t.dateUnset&&!t.milestone&&!done(t)&&t.status!=='waiting'&&ownersOf(t).includes('darius')&&!depsOpen(t).length&&t.id!==o.taskId)
     .sort((a,b)=>toD(a.end)-toD(b.end)).slice(0,5);
-  const waiting=data.tasks.filter(t=>!done(t)&&t.status==='waiting').map(t=>({t,age:t.waitingSince?diff(t.waitingSince,td):0})).sort((a,b)=>b.age-a.age);
-  const others=data.tasks.filter(t=>!done(t)&&!t.milestone&&t.owner!=='darius'&&t.status==='doing');
+  const waiting=data.tasks.filter(t=>!isShelved(t)&&!t.dateUnset&&!done(t)&&t.status==='waiting').map(t=>({t,age:t.waitingSince?diff(t.waitingSince,td):0})).sort((a,b)=>b.age-a.age);
+  const others=data.tasks.filter(t=>!isShelved(t)&&!t.dateUnset&&!done(t)&&!t.milestone&&!ownersOf(t).includes('darius')&&t.status==='doing');
 
   const dl=ms.map(m=>{
     const left=diff(td,m.end), ch=chainFor(m.id).slice(1), root=ch.length?T(ch[ch.length-1]):null;
@@ -742,7 +774,7 @@ function renderToday(){
       <div class="days ${left<0?'late':left<=14?'soon':''}">${Math.abs(left)}<small>${left<0?'days late':left===1?'day':'days'}</small></div>
       <div><div class="dl-title t-title" data-open="${m.id}">${esc(m.title)}</div><div class="dl-date">${fmt(m.end,{weekday:'short',month:'short',day:'numeric',year:'numeric'})} · ${esc(P(m.project)?.name||'')}</div>
       <div class="meter" title="${Math.round(pct*100)}% of the work feeding this deadline is done"><i style="width:${pct*100}%"></i></div>
-      ${root?`<div class="dl-hold">Holding it up: <b data-open="${root.id}" style="cursor:pointer">${esc(root.title)}</b> (${esc(person(root.owner).name)}), ${ch.length} step${ch.length>1?'s':''} in the chain</div>`:''}</div></div>`;
+      ${root?`<div class="dl-hold">Holding it up: <b data-open="${root.id}" style="cursor:pointer">${esc(root.title)}</b> (${esc(ownerNames(root))}), ${ch.length} step${ch.length>1?'s':''} in the chain</div>`:''}</div></div>`;
   }).join('').replace(/ · /g,', ');
 
   document.getElementById('v-today').innerHTML=`
@@ -764,11 +796,11 @@ function renderToday(){
         ${others.map(t=>taskRow(t)).join('')||'<div class="empty">No one else has work in progress.</div>'}</div>
     </div>
     <div class="stack">
-      ${(()=>{const at=data.tasks.filter(t=>!done(t)).map(t=>({t,h:health(t)})).filter(x=>x.h.k!=='ok').sort((a,b)=>HRANK[b.h.k]-HRANK[a.h.k]||(a.t.priority||3)-(b.t.priority||3)).slice(0,6);
-        return `<div class="panel"><h2>Needs attention <small>behind, blocked, at risk</small></h2>${at.map(({t,h})=>`<div class="attn"><div class="t-title" data-open="${t.id}">${esc(t.title)}</div>${hpHtml(h,false)}<div class="why">${esc(h.why)}. ${esc(P(t.project)?.name||'')}, ${esc(person(t.owner).name)}</div></div>`).join('')||'<div class="empty">Everything is on track.</div>'}</div>`})()}
+      ${(()=>{const at=data.tasks.filter(t=>!isShelved(t)&&!t.dateUnset&&!done(t)).map(t=>({t,h:health(t)})).filter(x=>x.h.k!=='ok').sort((a,b)=>HRANK[b.h.k]-HRANK[a.h.k]||(a.t.priority||3)-(b.t.priority||3)).slice(0,6);
+        return `<div class="panel"><h2>Needs attention <small>behind, blocked, at risk</small></h2>${at.map(({t,h})=>`<div class="attn"><div class="t-title" data-open="${t.id}">${esc(t.title)}</div>${hpHtml(h,false)}<div class="why">${esc(h.why)}. ${esc(P(t.project)?.name||'')}, ${esc(ownerNames(t))}</div></div>`).join('')||'<div class="empty">Everything is on track.</div>'}</div>`})()}
       <div class="panel"><h2>Deadlines</h2>${dl||'<div class="empty">No milestones yet. Add one on the Timeline.</div>'}</div>
       <div class="panel"><h2>Waiting on others <small>oldest first</small></h2>
-        ${waiting.map(({t,age})=>taskRow(t,`<span class="age ${age>=14?'bad':age>=7?'warn':''}" title="Waiting on ${esc(t.waitingOn||person(t.owner).name)}">${age}d</span>`)).join('')||'<div class="empty">Nothing is stuck on anyone.</div>'}</div>
+        ${waiting.map(({t,age})=>taskRow(t,`<span class="age ${age>=14?'bad':age>=7?'warn':''}" title="Waiting on ${esc(t.waitingOn||ownerNames(t))}">${age}d</span>`)).join('')||'<div class="empty">Nothing is stuck on anyone.</div>'}</div>
     </div>
   </div>`;
 }
@@ -794,6 +826,16 @@ function renderPortfolio(){
       <div class="pf-sum"><span><b>${act}</b>active</span><span><b style="color:${st?'var(--coral)':''}">${st}</b>stalled</span><span><b>${wt}</b>waiting on others</span>
       <button class="btn" id="addProj">Add project</button></div></div>
     <div class="pf-list">${rows}</div>
+    <section class="bb">
+      <h2>Back Burner</h2>
+      <p class="bb-note">Not active. Separate from the projects above.</p>
+      <div class="bb-list">${(data.backBurner||[]).map(b=>{
+        const known=data.people.find(p=>p.id===b.raisedBy);
+        const who=known?whoHtml(b.raisedBy):esc(b.raisedBy||'Not recorded');
+        const added=b.added?fmt(b.added):'Date not recorded';
+        return `<article class="bb-card"><h3>${esc(b.name)}</h3><p>${esc(b.description||'')}</p><div class="bb-meta"><span>Raised by ${who}</span><span>Added <b>${esc(added)}</b></span><span>Promote to main project? <b>${esc(b.promote||'')}</b></span></div></article>`;
+      }).join('')||'<div class="empty">Nothing on the back burner.</div>'}</div>
+    </section>
     <div class="lots">
       <div class="panel lot"><h2>Idea parking lot <small>reviewed Fridays, not before</small></h2>
         <div class="add-row"><input type="text" id="ideaIn" placeholder="Park an idea so it stops pulling at you"><button class="btn" id="ideaAdd">Park it</button></div>
@@ -817,7 +859,7 @@ function renderTimeline(){
   document.querySelectorAll('#groupSeg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.g===ui.group));
   document.querySelectorAll('#zoomSeg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.z==ui.zoom));
 
-  const tasks=data.tasks.filter(t=>ui.proj==='all'||t.project===ui.proj);
+  const tasks=data.tasks.filter(t=>!isShelved(t)&&!t.dateUnset&&(ui.proj==='all'||t.project===ui.proj));
   const crit=new Set(ui.crit&&ui.critTarget?chainFor(ui.critTarget):[]);
   const rows=[];
   const sortT=a=>a.slice().sort((x,y)=>toD(x.start)-toD(y.start)||(x.milestone?1:0)-(y.milestone?1:0));
@@ -825,7 +867,7 @@ function renderTimeline(){
     data.projects.forEach(p=>{const ts=tasks.filter(t=>t.project===p.id);if(!ts.length)return;rows.push({g:true,label:p.name,color:p.color,pid:p.id});
       projRows(p.id).forEach(g=>{const gt=g.tasks.filter(t=>ts.includes(t));if(!gt.length)return;if(g.ph){rows.push({ph:g.ph,phTasks:gt})}gt.forEach(t=>rows.push({t,ind:!!g.ph}))})});
   }else{
-    data.people.forEach(p=>{const ts=tasks.filter(t=>t.owner===p.id&&!t.milestone);if(!ts.length)return;
+    data.people.forEach(p=>{const ts=tasks.filter(t=>ownersOf(t).includes(p.id)&&!t.milestone);if(!ts.length)return;
       const hrs=ts.filter(t=>!done(t)).reduce((a,t)=>a+(+t.est||0),0);
       rows.push({g:true,label:`${p.name}${hrs?`, ${hrs} h open`:''}`,color:p.color});sortT(ts).forEach(t=>rows.push({t}))});
   }
@@ -850,7 +892,7 @@ function renderTimeline(){
   let bars='',paths='';
   rows.forEach((r,i)=>{
     if(r.ph){const ru=rollup(r.phTasks);if(ru)bars+=`<div class="sumbar" style="left:${x(ru.start)+2}px;top:${i*RH+RH/2-6}px;width:${(diff(ru.start,ru.end)+1)*dw-4}px" title="${esc(r.ph.name)}: ${ru.pct}% done, ${fmt(ru.start)} to ${fmt(ru.end)}"><i style="width:${ru.pct}%"></i></div>`;return}
-    if(!r.t)return; const t=r.t, y=i*RH, p=person(t.owner), isC=crit.has(t.id), bad=conflict(t);
+    if(!r.t)return; const t=r.t, y=i*RH, p=person(ownersOf(t)[0]), isC=crit.has(t.id), bad=conflict(t);
     if(ui.base&&t.baselineStart&&!t.milestone) bars+=`<div class="base" style="left:${x(t.baselineStart)+2}px;top:${y+RH-7}px;width:${(diff(t.baselineStart,t.baselineEnd||t.baselineStart)+1)*dw-4}px" title="Baseline ${fmt(t.baselineStart)} to ${fmt(t.baselineEnd)}"></div>`;
     if(t.milestone){
       bars+=`<div class="ms ${isC?'crit':''} ${done(t)?'done':''}" data-bar="${t.id}" style="left:${x(t.end)+dw/2-8}px;top:${y+RH/2-8}px" title="${esc(t.title)}, ${fmt(t.end)}" tabindex="0" role="button" aria-label="${esc(t.title)}"></div>`;
@@ -858,7 +900,7 @@ function renderTimeline(){
     }else{
       const w=(diff(t.start,t.end)+1)*dw-4, inside=w>=120;
       const hh=health(t);
-      bars+=`<div class="bar s-${t.status} ${isC?'crit':''} ${bad?'conflict':''}" data-bar="${t.id}" style="left:${x(t.start)+2}px;top:${y+(RH-24)/2}px;width:${w}px;--pcol:${p.color}" tabindex="0" role="button" aria-label="${esc(t.title)}, ${fmt(t.start)} to ${fmt(t.end)}" title="${esc(t.title)}\n${esc(p.name)}, ${fmt(t.start)} to ${fmt(t.end)}${bad?'\nStarts before a dependency ends':''}">
+      bars+=`<div class="bar s-${t.status} ${isC?'crit':''} ${bad?'conflict':''}" data-bar="${t.id}" style="left:${x(t.start)+2}px;top:${y+(RH-24)/2}px;width:${w}px;--pcol:${p.color}" tabindex="0" role="button" aria-label="${esc(t.title)}, ${esc(showRange(t))}" title="${esc(t.title)}\n${esc(ownerNames(t))}, ${esc(showRange(t))}${bad?'\nStarts before a dependency ends':''}">
         <span class="av">${esc(p.name[0])}</span>${inside?`<span class="bt">${esc(t.title)}</span>`:''}<span class="rz" data-rz="1"></span></div>`;
     }
     if(ui.deps)(t.deps||[]).forEach(did=>{
@@ -943,7 +985,7 @@ function depTable(list,mode,t){
     const gap=mode==='pred'?diff(x.end,t.start):diff(t.end,x.start);
     const g=x.milestone&&mode==='pred'?diff(x.end,t.start)+1:gap;
     const gapTxt=done(mode==='pred'?x:t)&&mode==='pred'?'<span class="muted">Done</span>':g<0?`<span class="pos">Overlaps ${-g}d</span>`:g<=1?'<span class="muted">Back to back</span>':`${g-1}d slack`;
-    return `<tr data-detail="${x.id}"><td class="nm">${taskRef(x)}</td><td class="nowrap">${whoHtml(x.owner)}</td><td class="nowrap">${fmt(mode==='pred'?x.end:x.start)}</td><td>${stHtml(x)}</td><td class="nowrap">${gapTxt}</td></tr>`}).join('')}</tbody></table></div>`;
+    return `<tr data-detail="${x.id}"><td class="nm">${taskRef(x)}</td><td class="nowrap">${ownersHtml(x)}</td><td class="nowrap">${x.dateUnset||x.openEnded?showEnd(x):fmt(mode==='pred'?x.end:x.start)}</td><td>${stHtml(x)}</td><td class="nowrap">${gapTxt}</td></tr>`}).join('')}</tbody></table></div>`;
 }
 function openDetail(id,tab){
   const t=T(id); if(!t) return; const p=P(t.project)||{};
@@ -961,19 +1003,21 @@ function openDetail(id,tab){
     <div class="why-box">${hpHtml(H,false)}<div><b>${esc({ok:'On track',done:'Done',risk:'At risk',behind:'Behind',blocked:'Blocked'}[H.k]||H.label)}</b><span class="sub">${esc(H.why)}.</span></div></div>
     ${bad?`<div class="warn-box bad-box">This starts before something it depends on is finished. Move it later or adjust the dependency.</div>`:''}
     ${crit.length?`<div class="warn-box">On the critical path to ${crit.map(m=>`<b>${esc(m.title)}</b> (${fmt(m.end)})`).join(' and ')}. A day lost here is a day lost there.</div>`:''}
-    <div class="sh-sec"><h4>What this is</h4>${t.description?`<p class="prose">${esc(t.description)}</p>`:`<p class="prose empty-p">No description yet.<span class="owner-only"> Add one with Edit, or ask Tumii to fill it in.</span></p>`}</div>
+    <div class="sh-sec"><h4>What this is</h4>${t.description?`<p class="prose">${esc(t.description)}</p>`:`<p class="prose empty-p">No description yet.<span class="owner-only"> Add one with Edit.</span></p>`}</div>
     ${t.doneWhen?`<div class="sh-sec"><div class="done-box"><b>Done when</b>${esc(t.doneWhen)}</div></div>`:''}
     <div class="sh-sec"><h4>Schedule and work</h4><div class="facts">
-      <div class="fact"><span>Owner</span><b>${whoHtml(t.owner)}</b></div>
+      <div class="fact"><span>Owners</span><b>${ownersHtml(t)}</b></div>
+      <div class="fact"><span>Status</span><b>${stHtml(t)}${statusDetailHtml(t)}</b></div>
+      ${(t.tools||[]).length?`<div class="fact"><span>Tools / systems</span><b>${toolsHtml(t)}</b></div>`:''}
       ${t.milestone?'':`<div class="fact"><span>Priority</span><b>${PRI[t.priority||3]}</b></div>`}
-      <div class="fact"><span>Start</span><b>${fmtLong(t.start)}${isAuto(t)?` <small>${t.notBefore?'not before '+fmt(t.notBefore):'auto'}</small>`:''}</b></div>
-      <div class="fact"><span>Finish</span><b>${fmtLong(t.end)}</b></div>
+      <div class="fact"><span>Start</span><b>${t.dateUnset?'Date not set':fmtLong(t.start)+(isAuto(t)?` <small>${t.notBefore?'not before '+fmt(t.notBefore):'auto'}</small>`:'')}</b></div>
+      <div class="fact"><span>Finish</span><b>${t.dateUnset?'Date not set':t.openEnded?'Not set':fmtLong(t.end)}</b></div>
       <div class="fact"><span>Duration</span><b>${durTxt(t)}</b></div>
       <div class="fact"><span>Work</span><b>${t.est?(t.est<1?Math.round(t.est*60)+' min':t.est+' h'):'Not estimated'}</b></div>
       <div class="fact"><span>Timing</span><b>${timingLine(t)}</b></div>
       ${t.milestone?'':`<div class="fact"><span>Complete</span><b>${pct}%${chk.length&&!done(t)?' <small>from checklist</small>':''}</b></div>`}
       <div class="fact"><span>Baseline finish</span><b>${t.baselineEnd?`${fmt(t.baselineEnd)} <small class="${varDays>0?'pos':varDays<0?'neg':''}">${varDays>0?varDays+'d late':varDays<0?(-varDays)+'d early':'on plan'}</small>`:'<small>Not set</small>'}</b></div>
-      ${t.status==='waiting'?`<div class="fact"><span>Waiting on</span><b>${esc(t.waitingOn||person(t.owner).name)} <small>since ${fmt(t.waitingSince||todayStr())}</small></b></div>`:''}
+      ${t.status==='waiting'?`<div class="fact"><span>Waiting on</span><b>${esc(t.waitingOn||ownerNames(t))} <small>since ${fmt(t.waitingSince||todayStr())}</small></b></div>`:''}
     </div></div>
     ${t.needs?`<div class="sh-sec"><h4>Needs (tools, access, money)</h4><p class="prose">${esc(t.needs)}</p></div>`:''}
     <div class="sh-sec"><h4>Why it matters</h4>${feeds.length?`<div class="feeds">${feeds.map(m=>`<button class="feed ${crit.includes(m)?'crit':''}" data-detail="${m.id}"><span class="dia"></span><span class="ft">${esc(m.title)}</span><span class="fd">${fmtLong(m.end)}, ${diff(todayStr(),m.end)} days</span></button>`).join('')}</div><p class="muted" style="font-size:13px;margin:8px 0 0">${succ.length} task${succ.length===1?'':'s'} wait${succ.length===1?'s':''} directly on this one.</p>`:`<p class="prose empty-p">Doesn't feed a deadline yet. Link it to a milestone with Edit so you can see what it holds up.</p>`}</div>`;
@@ -1001,7 +1045,7 @@ function openDetail(id,tab){
   layer.innerHTML=`<div class="scrim" data-close></div><aside class="sheet" role="dialog" aria-modal="true" aria-label="${esc(t.title)}" style="--pc:${p.color||'var(--blue)'}">
     <div class="sh-top">
       <div class="sh-crumb"><button data-pdetail="${p.id}">${esc(p.name||'')}</button><button class="icon-btn sh-close" data-close aria-label="Close">✕</button></div>
-      <h2 class="sh-title">${esc(t.title)}<small class="tid">${esc(t.id)}</small></h2>${chips}
+      <h2 class="sh-title">${esc(t.title)}<small class="tid">${esc(t.id)}</small></h2>${chips}${statusDetailHtml(t)}
       <div class="sh-actions owner-only">${t.milestone?'':`<button class="btn ${done(t)?'':'primary'}" id="dDone">${done(t)?'Reopen':'Mark done'}</button>`}<button class="btn" id="dEdit">Edit</button>${!t.milestone&&data.today?.taskId!==t.id?'<button class="btn ghost" id="dOne">Make it today\'s one thing</button>':''}</div>
       <div class="sh-tabs" role="tablist">${tabs.map(([k,l,n])=>`<button role="tab" data-stab="${k}" aria-selected="${sheetTab===k}">${l}${n!==''&&n!==undefined&&n!==0?`<span class="n">${n}</span>`:''}</button>`).join('')}</div>
     </div>
@@ -1063,7 +1107,7 @@ function openProjectDetail(pid,tab){
     const ordered=projOrder(pid);
     body=ordered.length?`<p class="muted" style="font-size:13px;margin:0 0 10px">Amber names are on the critical path to an open milestone. Click any row for full details.</p><div class="tbl-wrap"><table class="sheet-t"><thead><tr><th>Task name</th><th>Duration</th><th>Start</th><th>Finish</th><th>Predecessors</th><th>Resource</th><th>% done</th><th>Status</th></tr></thead><tbody>${ordered.map(t=>`<tr data-detail="${t.id}" class="${done(t)?'is-done':''} ${critSet.has(t.id)&&!done(t)?'is-crit':''}">
       <td class="nm">${taskRef(t)}</td><td class="nowrap">${t.milestone?'0 days':(()=>{const w=workDays(t.start,t.end)||1;return w+(w===1?' day':' days')})()}</td><td class="nowrap">${fmt(t.start)}</td><td class="nowrap">${fmt(t.end)}</td>
-      <td class="preds">${(t.deps||[]).map(T).filter(Boolean).map(taskRef).join('<br>')}</td><td class="nowrap">${whoHtml(t.owner)}</td><td>${t.milestone?'':taskPct(t)+'%'}</td><td>${stHtml(t)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="prose empty-p">No tasks on this project yet.</p>';
+      <td class="preds">${(t.deps||[]).map(T).filter(Boolean).map(taskRef).join('<br>')}</td><td class="nowrap">${ownersHtml(t)}</td><td>${t.milestone?'':taskPct(t)+'%'}</td><td>${stHtml(t)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="prose empty-p">No tasks on this project yet.</p>';
   }
   layer.innerHTML=`<div class="scrim" data-close></div><aside class="sheet" role="dialog" aria-modal="true" aria-label="${esc(p.name)}" style="--pc:${p.color||'var(--blue)'}">
     <div class="sh-top">
@@ -1107,7 +1151,7 @@ function renderGrid(){
         <td class="c-name"><span class="nm" data-open="${t.id}">${taskRef(t)}</span></td>
         <td>${t.milestone?'':V?priHtml(t):`<select class="g-in" data-gpri="${t.id}" aria-label="Priority">${opts([['1','P1'],['2','P2'],['3','P3'],['4','P4']],String(t.priority||3))}</select>`}</td>
         <td>${hpHtml(h)}</td>
-        <td>${V?whoHtml(t.owner):`<select class="g-in" data-gown="${t.id}" aria-label="Owner">${opts(data.people.map(x=>[x.id,x.name]),t.owner)}</select>`}</td>
+        <td>${ownersHtml(t)}</td>
         <td>${t.milestone?'0 days':V||!isAuto(t)||done(t)?`${t.dur||1} days`:`<input class="g-in dur" type="number" min="1" data-gdur="${t.id}" value="${t.dur||1}" aria-label="Duration in working days"> d`}</td>
         <td>${fmt(t.start)}${t.notBefore&&isAuto(t)?'<span class="pin" title="Start no earlier than this date">📌</span>':!isAuto(t)&&!t.milestone?'<span class="pin" title="Manually scheduled">✎</span>':''}</td>
         <td>${fmt(t.end)}</td>
@@ -1143,7 +1187,7 @@ function renderGrid(){
 document.addEventListener('change',e=>{
   const d=e.target.dataset||{}; if(viewer())return;
   if(d.gpri){T(d.gpri).priority=+e.target.value;touch()}
-  if(d.gown){T(d.gown).owner=e.target.value;touch()}
+  if(d.gown){const task=T(d.gown); task.owner=e.target.value; task.owners=[e.target.value]; touch()}
   if(d.gdur){const t=T(d.gdur),old=t.end;t.dur=Math.max(1,parseInt(e.target.value)||1);touch();askSlip(t,old)}
 });
 document.addEventListener('keydown',e=>{
@@ -1227,7 +1271,7 @@ function openTask(id,isNew){
   const $=s=>layer.querySelector(s); const v=s=>$(s)?$(s).value:undefined;
   const apply=()=>{
     const oldEnd=t.end;
-    t.title=$('#fTitle').value.trim()||'Untitled'; t.owner=v('#fOwner'); t.phase=v('#fPhase')||undefined; t.priority=+v('#fPri');
+    t.title=$('#fTitle').value.trim()||'Untitled'; t.owner=v('#fOwner'); t.owners=[t.owner]; t.phase=v('#fPhase')||undefined; t.priority=+v('#fPri');
     const ns=v('#fStatus'); if(ns!==t.status) setStatus(t,ns);
     if(t.milestone){t.start=t.end=v('#fStart')||t.start}
     else if($('#fDur')){t.dur=Math.max(1,parseInt(v('#fDur'))||1);const nb=v('#fNotBefore');if(nb)t.notBefore=nb;else delete t.notBefore}
@@ -1302,7 +1346,7 @@ function openSettings(note){
     return;
   }
   layer.innerHTML=`<div class="scrim" data-close></div><div class="modal" role="dialog" aria-modal="true"><h3>Settings</h3>
-    <p>${esc(note||'Edits save to projects.json in your GitHub repo, the same file Tumii updates. The token stays in this browser only.')}</p>
+    <p>${esc(note||'Edits save to projects.json in your GitHub repo, the same file the plan uses. The token stays in this browser only.')}</p>
     <div class="grid">
       <div class="two"><label class="f">GitHub owner<input type="text" id="sOwner" value="${esc(gh.owner)}"></label><label class="f">Repo<input type="text" id="sRepo" value="${esc(gh.repo)}"></label></div>
       <div class="two"><label class="f">Branch<input type="text" id="sBranch" value="${esc(gh.branch)}"></label><label class="f">File<input type="text" id="sPath" value="${esc(gh.path)}"></label></div>
