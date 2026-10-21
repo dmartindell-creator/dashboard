@@ -1,4 +1,4 @@
-# Tumii: how to manage Darius Projects (v3, GitHub Pages)
+# How to manage Darius Projects (v3, GitHub Pages)
 
 ## Feature freeze (set by Darius, Oct 15 2026)
 The app is finished for now. Until the Nov 2 beta ships, do not change index.html or any app feature. After Nov 2, a change is allowed only if it directly helps Darius finish projects; park feature ideas in `ideas` for the Friday review. Updating projects.json (tasks, dates, statuses) is normal work.
@@ -12,8 +12,8 @@ You only ever edit `projects.json`. Never edit `index.html`.
 ## Before every edit
 1. Pull the latest `projects.json` from GitHub. Darius edits it from the app too.
 2. Make your change.
-3. Set `meta.updated` to the current ISO time and `meta.by` to `"Tumii"`.
-4. Commit with a short message, for example: `Tumii: Manus finished Resend email`.
+3. Set `meta.updated` to the current ISO time and `"by": "<your name>"`.
+4. Commit with a short message, for example: `Update: Manus finished Resend email`.
 
 ## How scheduling works (important)
 The app calculates dates itself. For normal tasks you set **duration and dependencies**, not dates.
@@ -56,12 +56,12 @@ Workdays use 0 = Sunday through 6 = Saturday. Add Darius's days off here when he
 - `est`: hours of work. `actual`: hours actually spent, when known. `pct`: percent complete if there's no checklist.
 - `description`: two or three plain sentences anyone could follow. `doneWhen`: one sentence. `needs`: tools, access, or money required.
 - `checklist`: `[{"text": "Sender domain", "done": false}]`. Percent complete comes from this.
-- `log`: updates, `{"date": "...", "by": "Tumii", "text": "..."}`.
+- `log`: updates, `{"date": "...", "by": "<your name>", "text": "..."}`.
 
 ## When a finish date slips (always do this)
 If you change something that makes a task finish later (bigger `dur`, later `notBefore`, new dependency), add a slip:
 ```json
-"slips": [{ "date": "2026-10-15", "days": 2, "reason": "Waiting on a decision", "note": "Doug scope meeting moved", "by": "Tumii" }]
+"slips": [{ "date": "2026-10-15", "days": 2, "reason": "Waiting on a decision", "note": "Doug scope meeting moved", "by": "<your name>" }]
 ```
 `reason` must be one of: Waiting on someone, Waiting on a decision, Scope grew, Underestimated, Interrupted by other work, Restarted or redone, Missing tool or access, Days off, Other.
 This powers "Where the time went". Ask Darius for the reason if you don't know it.
